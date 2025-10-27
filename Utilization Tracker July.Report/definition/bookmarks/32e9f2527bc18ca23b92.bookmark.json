@@ -134,128 +134,6 @@
               "objects": {}
             }
           },
-          "67676f4faaffe72d9307": {
-            "singleVisual": {
-              "visualType": "textbox",
-              "objects": {}
-            }
-          },
-          "26bfe354c8f7136d03db": {
-            "filters": {
-              "byExpr": [
-                {
-                  "name": "b82d05bcace1a7baa330",
-                  "type": "Categorical",
-                  "expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "Time Entry"
-                        }
-                      },
-                      "Property": "Team.Country"
-                    }
-                  },
-                  "howCreated": 0
-                }
-              ]
-            },
-            "singleVisual": {
-              "visualType": "slicer",
-              "objects": {
-                "merge": {
-                  "data": [
-                    {
-                      "properties": {
-                        "mode": {
-                          "expr": {
-                            "Literal": {
-                              "Value": "'Dropdown'"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              "activeProjections": {
-                "Values": [
-                  {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "Time Entry"
-                        }
-                      },
-                      "Property": "Team.Country"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "f9c29693cf3b3e111212": {
-            "singleVisual": {
-              "visualType": "textbox",
-              "objects": {}
-            }
-          },
-          "99886bb6ce7f1cd84060": {
-            "filters": {
-              "byExpr": [
-                {
-                  "name": "3bb30e59116beca9a334",
-                  "type": "Categorical",
-                  "expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "Time Entry"
-                        }
-                      },
-                      "Property": "Team.City"
-                    }
-                  },
-                  "howCreated": 0
-                }
-              ]
-            },
-            "singleVisual": {
-              "visualType": "slicer",
-              "objects": {
-                "merge": {
-                  "data": [
-                    {
-                      "properties": {
-                        "mode": {
-                          "expr": {
-                            "Literal": {
-                              "Value": "'Dropdown'"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              "activeProjections": {
-                "Values": [
-                  {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "Time Entry"
-                        }
-                      },
-                      "Property": "Team.City"
-                    }
-                  }
-                ]
-              }
-            }
-          },
           "2665e0ca294aac3b83f2": {
             "singleVisual": {
               "visualType": "textbox",
@@ -2229,19 +2107,7 @@
               }
             }
           },
-          "bbb3da045fc289d86ce9": {
-            "singleVisual": {
-              "visualType": "image",
-              "objects": {}
-            }
-          },
           "1fe7878a698b0ad54d7e": {
-            "singleVisual": {
-              "visualType": "image",
-              "objects": {}
-            }
-          },
-          "1057dc0ebcad3810e36c": {
             "singleVisual": {
               "visualType": "image",
               "objects": {}
