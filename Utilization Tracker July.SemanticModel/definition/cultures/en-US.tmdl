@@ -28801,7 +28801,7 @@ cultureInfo en-US
 			          }
 			        },
 			        {
-			          "Country": {
+			          "Location": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -28811,7 +28811,7 @@ cultureInfo en-US
 			          }
 			        },
 			        {
-			          "Location": {
+			          "Country": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
