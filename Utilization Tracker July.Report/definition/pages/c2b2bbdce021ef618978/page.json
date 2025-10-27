@@ -44,11 +44,5 @@
       }
     ]
   },
-  "visualInteractions": [
-    {
-      "source": "99886bb6ce7f1cd84060",
-      "target": "26bfe354c8f7136d03db",
-      "type": "DataFilter"
-    }
-  ]
+  "visualInteractions": []
 }
