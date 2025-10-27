@@ -1,0 +1,1510 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "72ff93a522ec70d50a47",
+  "position": {
+    "x": 172.89937854905443,
+    "y": 341.68210522789326,
+    "z": 47000,
+    "height": 378.73197205983354,
+    "width": 1060.7239652255482,
+    "tabOrder": 40000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Time Entry"
+                    }
+                  },
+                  "Property": "Team.Employee"
+                }
+              },
+              "queryRef": "Time Entry.Team.Employee",
+              "nativeQueryRef": "Team Member",
+              "displayName": "Team Member"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Time Entry"
+                    }
+                  },
+                  "Property": "Team.Country"
+                }
+              },
+              "queryRef": "Time Entry.Team.Country",
+              "nativeQueryRef": "Location",
+              "displayName": "Location"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Time Entry"
+                    }
+                  },
+                  "Property": "Team.Band"
+                }
+              },
+              "queryRef": "Time Entry.Team.Band",
+              "nativeQueryRef": "Role1",
+              "displayName": "Role"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Time Entry"
+                    }
+                  },
+                  "Property": "Team.Function"
+                }
+              },
+              "queryRef": "Time Entry.Team.Function",
+              "nativeQueryRef": "Function",
+              "displayName": "Function"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Time Entry"
+                    }
+                  },
+                  "Property": "Working_Days"
+                }
+              },
+              "queryRef": "Time Entry.Working_Days",
+              "nativeQueryRef": "Working Days",
+              "displayName": "Working Days"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Time Entry"
+                    }
+                  },
+                  "Property": "Logged_Days"
+                }
+              },
+              "queryRef": "Time Entry.Logged_Days",
+              "nativeQueryRef": "Logged Days",
+              "displayName": "Logged Days"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Time Entry"
+                    }
+                  },
+                  "Property": "Test"
+                }
+              },
+              "queryRef": "Time Entry.Test",
+              "nativeQueryRef": "Expected Working Hours",
+              "displayName": "Expected Working Hours"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Time Entry"
+                    }
+                  },
+                  "Property": "Logged_Hours"
+                }
+              },
+              "queryRef": "Time Entry.Logged_Hours",
+              "nativeQueryRef": "Logged Hours",
+              "displayName": "Logged Hours"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Project Master"
+                    }
+                  },
+                  "Property": "BillableHoursSpent_M"
+                }
+              },
+              "queryRef": "Project Master.BillableHoursSpent_M",
+              "nativeQueryRef": "Billable Hours",
+              "displayName": "Billable Hours"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Project Master"
+                    }
+                  },
+                  "Property": "Billable Hours (%)"
+                }
+              },
+              "queryRef": "Project Master.Billable Hours (%)",
+              "nativeQueryRef": "Billable Hours (%)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Project Master"
+                    }
+                  },
+                  "Property": "UnbillableHoursSpent_M"
+                }
+              },
+              "queryRef": "Project Master.UnbillableHoursSpent_M",
+              "nativeQueryRef": "Unbillable Hours",
+              "displayName": "Unbillable Hours"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Project Master"
+                    }
+                  },
+                  "Property": "Unbillable Hours (%)"
+                }
+              },
+              "queryRef": "Project Master.Unbillable Hours (%)",
+              "nativeQueryRef": "Unbillable Hours (%)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Time Entry"
+                    }
+                  },
+                  "Property": "Work_Category_new"
+                }
+              },
+              "queryRef": "Time Entry.Work_Category_new",
+              "nativeQueryRef": "Work Category",
+              "displayName": "Work Category"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Time Entry"
+                  }
+                },
+                "Property": "Logged_Hours"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#8A74B3'"
+                    }
+                  }
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "270.27553875990884D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Geo_Level_Nm.Geo_Nm"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "307.96102608591997D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Geo_Level_Nm.Territory Name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "209.30537507356416D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Geo_Level_Nm.Geo_Lvl"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "162.47653213119702D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Seg_LvL_Market_Sales.Market_Sales_Units_MD"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "170.53997578895383D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(Seg_LvL_Market_Sales.TRx)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "200.4130797213173D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(Seg_LvL_Market_Sales.Repeat_Writers)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "228.15924038469112D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(Seg_LvL_Market_Sales.Writers)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "125.49973742673878D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Time Entry.Team.Band"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "91.8911142943506D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Time Entry.Team.Function"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "68.60072231444359D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Time Entry.Team.Country"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "158.80495596590436D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Time Entry.Team.Employee"
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "outlineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            },
+            "outlineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": -0.2
+                    }
+                  }
+                }
+              }
+            },
+            "gridVertical": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "imageWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "75D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EFE9FB'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnFormatting": [
+        {
+          "properties": {
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(Seg_LvL_Market_Sales.Writers)"
+          }
+        },
+        {
+          "properties": {
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(Seg_LvL_Market_Sales.Repeat_Writers)"
+          }
+        },
+        {
+          "properties": {
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(Seg_LvL_Market_Sales.TRx)"
+          }
+        },
+        {
+          "properties": {
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "1L"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Seg_LvL_Market_Sales.Market_Sales_Units_MD"
+          }
+        },
+        {
+          "properties": {
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Geo_Level_Nm.Geo_Lvl"
+          }
+        },
+        {
+          "properties": {
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Geo_Level_Nm.Geo_Nm"
+          }
+        },
+        {
+          "properties": {
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Geo_Level_Nm.Territory Name"
+          }
+        },
+        {
+          "properties": {
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Time Entry.Team.Employee"
+          }
+        },
+        {
+          "properties": {
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Time Entry.Team.Country"
+          }
+        },
+        {
+          "properties": {
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Time Entry.Team.Band"
+          }
+        },
+        {
+          "properties": {
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Time Entry.Team.Function"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'defaulter list table'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'left'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "16D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "stylePreset": [
+        {
+          "properties": {
+            "name": {
+              "expr": {
+                "Literal": {
+                  "Value": "'BoldHeader'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualTooltip": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "section": {
+              "expr": {
+                "Literal": {
+                  "Value": "'1b7680ecefeba62e6d83'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "5D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "5D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "b632856c37bd0a40a0a8",
+        "ordinal": 0,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Performance"
+              }
+            },
+            "Property": "SelectedWorkCategory_Multi"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "p",
+              "Entity": "Performance",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Comparison": {
+                  "ComparisonKind": 0,
+                  "Left": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Source": "p"
+                        }
+                      },
+                      "Property": "SelectedWorkCategory_Multi"
+                    }
+                  },
+                  "Right": {
+                    "Literal": {
+                      "Value": "1L"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      },
+      {
+        "name": "9869cd01980e607f8aba",
+        "ordinal": 1,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Team"
+              }
+            },
+            "Property": "Band"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "308d27362ea9e827e29a",
+        "ordinal": 2,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "IsActive"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "6d2ec2ac1915f09c0518",
+        "ordinal": 3,
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Time Entry"
+                  }
+                },
+                "Property": "Total Billable Hours_C"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "a37295082e572c844248",
+        "ordinal": 4,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Description"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "6ea6a33bcfe4a30f5334",
+        "ordinal": 5,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Team"
+              }
+            },
+            "Property": "Function"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "140d8a18f6b0d35f75d5",
+        "ordinal": 6,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Team"
+              }
+            },
+            "Property": "Country"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "c9f08465ac70764d69d6",
+        "ordinal": 7,
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Time Entry"
+                  }
+                },
+                "Property": "Monthly_Utilization(%)"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "a5669f409791af6114e4",
+        "ordinal": 8,
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Time Entry"
+                  }
+                },
+                "Property": "Total PUD Hours_C"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "561b86a80847f9fcd032",
+        "ordinal": 9,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Team"
+              }
+            },
+            "Property": "Employee"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "abee02481e0dd7c7035b",
+        "ordinal": 10,
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Time Entry"
+                  }
+                },
+                "Property": "Total Hours"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "2fd09fc38cfcc923e766",
+        "ordinal": 11,
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Time Entry"
+                  }
+                },
+                "Property": "Total UnBillable Hours_C"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "2b553fade8f8e3c4b02b",
+        "ordinal": 12,
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Time Entry"
+                  }
+                },
+                "Property": "Unbillable%"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "ec3546cdd016f670d08f",
+        "ordinal": 13,
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Time Entry"
+                  }
+                },
+                "Property": "Unbillable%"
+              }
+            },
+            "Function": 1
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "52d2e62ed635de52db39",
+        "ordinal": 14,
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Time Entry"
+                  }
+                },
+                "Property": "Monthly_Utilization(%)"
+              }
+            },
+            "Function": 1
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "93bbca5254e5ac1e763b",
+        "ordinal": 15,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Net Available 1"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "038125f06addb002e592",
+        "ordinal": 16,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Project Master"
+              }
+            },
+            "Property": "BillableHoursSpent_M"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "e8fde1c714ba72ec1a76",
+        "ordinal": 17,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Project Master"
+              }
+            },
+            "Property": "PUDHoursSpent_M"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "11c73dbac581622a9d58",
+        "ordinal": 18,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Project Master"
+              }
+            },
+            "Property": "UnbillableHoursSpent_M"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "78eed0b2e55da2004d10",
+        "ordinal": 19,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Project Master"
+              }
+            },
+            "Property": "Unbillable Hours (%)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "6956b5ad39c95647c839",
+        "ordinal": 20,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Project Master"
+              }
+            },
+            "Property": "Monthly Utilization (%)"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "c17eb64f5d9754363417",
+        "ordinal": 21,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Max band"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "c81dfc66ba582d060640",
+        "ordinal": 22,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Team.Employee"
+          }
+        },
+        "type": "Categorical",
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "f47633c640441e0d38e0",
+        "ordinal": 23,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Team.Country"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "8360faa1201095d0b9d0",
+        "ordinal": 24,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Team.Function"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "08df5f1200ec963acda7",
+        "ordinal": 25,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Project Master"
+              }
+            },
+            "Property": "Monthly Utilization Sample (%)"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "99e611d9011e6b22557e",
+        "ordinal": 26,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Net Available 1 sample"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "c685c1db2017cc881e96",
+        "ordinal": 27,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Team.Band"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "3a855a0fdb681b64dba4",
+        "ordinal": 28,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "LatestCountry"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "ef55b1b25725cce9335a",
+        "ordinal": 29,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "LatestFunction"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "bfcbbf902eaf529589ad",
+        "ordinal": 30,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Total Hours (With Leaves) final"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "4ca02708eb6626c9b763",
+        "ordinal": 31,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Total Hours(With Leaves)2 sample"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "ad055d81365649fe5ef2",
+        "ordinal": 32,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "IsActive"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "850745f448126428713c",
+        "ordinal": 33,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Test"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "3fcdb74612ee4d869009",
+        "ordinal": 34,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Working_Days"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "801452be2b53000c7a5d",
+        "ordinal": 35,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Logged_Days"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "95041f630a220eaea432",
+        "ordinal": 36,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Logged_Hours"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "7a8325ebb90a020922b6",
+        "ordinal": 37,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Work_Category_new"
+          }
+        },
+        "type": "Advanced"
+      }
+    ],
+    "filterSortOrder": "Custom"
+  },
+  "isHidden": true
+}

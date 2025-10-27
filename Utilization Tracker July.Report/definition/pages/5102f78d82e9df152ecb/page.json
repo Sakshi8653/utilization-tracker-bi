@@ -1,0 +1,153 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "5102f78d82e9df152ecb",
+  "displayName": "Team Tracker",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "30ad734a5f0cbc1e4a6c",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Activity Status"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      }
+    ]
+  },
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#E8EBFA'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "30D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "displayArea": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "7595a00e40dd539d0731",
+      "target": "4c32ced7616d3a66f93e",
+      "type": "DataFilter"
+    },
+    {
+      "source": "0fe56ba8428b81757afe",
+      "target": "4c32ced7616d3a66f93e",
+      "type": "DataFilter"
+    },
+    {
+      "source": "efe8b5d117da62fbebe3",
+      "target": "4c32ced7616d3a66f93e",
+      "type": "DataFilter"
+    },
+    {
+      "source": "efe8b5d117da62fbebe3",
+      "target": "79599524cde2e1dd82a6",
+      "type": "DataFilter"
+    },
+    {
+      "source": "efe8b5d117da62fbebe3",
+      "target": "fcf43ea400749a8e392c",
+      "type": "DataFilter"
+    },
+    {
+      "source": "efe8b5d117da62fbebe3",
+      "target": "4a878cab20b2d1f630ee",
+      "type": "DataFilter"
+    },
+    {
+      "source": "efe8b5d117da62fbebe3",
+      "target": "54ac5ed0b3c19d08ac51",
+      "type": "DataFilter"
+    },
+    {
+      "source": "54ac5ed0b3c19d08ac51",
+      "target": "4a878cab20b2d1f630ee",
+      "type": "DataFilter"
+    },
+    {
+      "source": "54ac5ed0b3c19d08ac51",
+      "target": "fcf43ea400749a8e392c",
+      "type": "DataFilter"
+    },
+    {
+      "source": "54ac5ed0b3c19d08ac51",
+      "target": "79599524cde2e1dd82a6",
+      "type": "DataFilter"
+    },
+    {
+      "source": "54ac5ed0b3c19d08ac51",
+      "target": "4c32ced7616d3a66f93e",
+      "type": "DataFilter"
+    },
+    {
+      "source": "4a878cab20b2d1f630ee",
+      "target": "fcf43ea400749a8e392c",
+      "type": "DataFilter"
+    },
+    {
+      "source": "4a878cab20b2d1f630ee",
+      "target": "79599524cde2e1dd82a6",
+      "type": "DataFilter"
+    },
+    {
+      "source": "4a878cab20b2d1f630ee",
+      "target": "4c32ced7616d3a66f93e",
+      "type": "DataFilter"
+    },
+    {
+      "source": "fcf43ea400749a8e392c",
+      "target": "79599524cde2e1dd82a6",
+      "type": "DataFilter"
+    },
+    {
+      "source": "fcf43ea400749a8e392c",
+      "target": "4c32ced7616d3a66f93e",
+      "type": "DataFilter"
+    },
+    {
+      "source": "79599524cde2e1dd82a6",
+      "target": "4c32ced7616d3a66f93e",
+      "type": "DataFilter"
+    }
+  ]
+}

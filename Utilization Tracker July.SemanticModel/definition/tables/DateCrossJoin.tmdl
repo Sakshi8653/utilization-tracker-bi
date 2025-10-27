@@ -1,0 +1,112 @@
+table DateCrossJoin
+	lineageTag: 7c9762e3-03cd-48a9-8f11-947648b221b9
+
+	column 'From Month'
+		dataType: dateTime
+		formatString: Mmm yyyy
+		lineageTag: c3112b4b-6520-438d-98de-7b52c7e1afef
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DimFromMonth[From Month]
+		sortByColumn: 'Month From Number'
+
+		variation Variation
+			isDefault
+			relationship: 43ce9be9-0b91-474b-a86a-209f734ae0b3
+			defaultHierarchy: LocalDateTable_ebfabc9d-a129-4245-908d-62209f2af0a1.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'Month From Number'
+		lineageTag: 4d29072b-fa15-4af4-9576-273b36a8526f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DimFromMonth[Month From Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column To_Month
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 838bc59f-d036-4c4b-83f7-febd9ad23e34
+		summarizeBy: none
+		sourceColumn: DimToMonth[To Month]
+		sortByColumn: 'Month To Number'
+
+		variation Variation
+			isDefault
+			relationship: d3303e24-bf10-49f9-b876-04b16e85a05e
+			defaultHierarchy: LocalDateTable_d85e356a-67b0-4fca-b34c-174aa5780c23.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Month To Number'
+		lineageTag: 4f352d05-f47e-4e46-946b-23d345816633
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: DimToMonth[Month To Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthYearNumber
+		lineageTag: 9b31eef5-9b8a-4ec1-91d0-5a890da431ba
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Period[MonthYearNumber]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthYearDate =
+			
+			VAR YearPart = DIVIDE('DateCrossJoin'[MonthYearNumber], 100, 0)
+			VAR MonthPart = MOD('DateCrossJoin'[MonthYearNumber], 100)
+			RETURN DATE(YearPart, MonthPart, 1)
+		formatString: Mmm'yy
+		lineageTag: 6f159431-6bc0-4843-809f-dd9af574aea6
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 1fc609ca-3b0d-4f76-bfb0-d109e35cd3f4
+			defaultHierarchy: LocalDateTable_9e9a0c89-33b2-4431-b248-44ee8a05f8e2.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'To Month'
+		formatString: Mmm yyyy
+		lineageTag: 5ed69467-ce76-4d2f-aa02-e7345e8fd1e9
+		summarizeBy: none
+		sourceColumn: DimToMonth[Last_date]
+
+		variation Variation
+			isDefault
+			relationship: 20210d64-f1bd-4254-a878-4d3caddac2ad
+			defaultHierarchy: LocalDateTable_ca49b333-e143-4808-bde2-daca89af94a0.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	partition DateCrossJoin = calculated
+		mode: import
+		source =
+				
+				FILTER(
+				    CROSSJOIN(DimFromMonth,DimToMonth,
+				    SUMMARIZE('Time Period','Time Period'[MonthYearNumber]))
+				    , 'Time Period'[MonthYearNumber] >= DimFromMonth[Month From Number] && 'Time Period'[MonthYearNumber] <= DimToMonth[Month To Number])
+
+	annotation PBI_Id = bb3e4430940e4c8b85de2748eb4d66dd
+

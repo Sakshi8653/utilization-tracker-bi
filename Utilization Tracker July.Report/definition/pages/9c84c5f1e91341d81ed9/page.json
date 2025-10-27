@@ -1,0 +1,168 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "9c84c5f1e91341d81ed9",
+  "displayName": "Project Tracker",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "Filter8cdda9f0313eb91c61db",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Entry"
+              }
+            },
+            "Property": "Month_Year_F"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User",
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#E8EBFA'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "displayArea": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "0e5e3094da304db29807",
+      "target": "61d48b1101174656d8ac",
+      "type": "DataFilter"
+    },
+    {
+      "source": "61d48b1101174656d8ac",
+      "target": "0e5e3094da304db29807",
+      "type": "DataFilter"
+    },
+    {
+      "source": "4d01e16ab7915e936d11",
+      "target": "7921e2f98290585b927a",
+      "type": "DataFilter"
+    },
+    {
+      "source": "4d01e16ab7915e936d11",
+      "target": "73cf45467bee384aec0a",
+      "type": "DataFilter"
+    },
+    {
+      "source": "4d01e16ab7915e936d11",
+      "target": "411b8c00785879aed038",
+      "type": "DataFilter"
+    },
+    {
+      "source": "73cf45467bee384aec0a",
+      "target": "411b8c00785879aed038",
+      "type": "DataFilter"
+    },
+    {
+      "source": "7921e2f98290585b927a",
+      "target": "73cf45467bee384aec0a",
+      "type": "DataFilter"
+    },
+    {
+      "source": "7921e2f98290585b927a",
+      "target": "411b8c00785879aed038",
+      "type": "DataFilter"
+    },
+    {
+      "source": "eeb2ff9ea58d5960014b",
+      "target": "671ef9534b4e5771e012",
+      "type": "DataFilter"
+    },
+    {
+      "source": "eeb2ff9ea58d5960014b",
+      "target": "4d01e16ab7915e936d11",
+      "type": "DataFilter"
+    },
+    {
+      "source": "eeb2ff9ea58d5960014b",
+      "target": "7921e2f98290585b927a",
+      "type": "DataFilter"
+    },
+    {
+      "source": "eeb2ff9ea58d5960014b",
+      "target": "73cf45467bee384aec0a",
+      "type": "DataFilter"
+    },
+    {
+      "source": "eeb2ff9ea58d5960014b",
+      "target": "411b8c00785879aed038",
+      "type": "DataFilter"
+    },
+    {
+      "source": "671ef9534b4e5771e012",
+      "target": "4d01e16ab7915e936d11",
+      "type": "DataFilter"
+    },
+    {
+      "source": "671ef9534b4e5771e012",
+      "target": "7921e2f98290585b927a",
+      "type": "DataFilter"
+    },
+    {
+      "source": "671ef9534b4e5771e012",
+      "target": "73cf45467bee384aec0a",
+      "type": "DataFilter"
+    },
+    {
+      "source": "671ef9534b4e5771e012",
+      "target": "411b8c00785879aed038",
+      "type": "DataFilter"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Utilization Tracker July"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5741832a-f095-4f0c-b98d-3b27d8619ca1"
+  }
+}

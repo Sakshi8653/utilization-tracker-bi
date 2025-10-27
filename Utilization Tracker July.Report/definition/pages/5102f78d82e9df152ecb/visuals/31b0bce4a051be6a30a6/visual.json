@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "31b0bce4a051be6a30a6",
+  "position": {
+    "x": 1040.7102392829966,
+    "y": 34.632620275640484,
+    "z": 32000,
+    "height": 96.971336771793347,
+    "width": 96.971336771793347,
+    "tabOrder": 5000
+  },
+  "visualGroup": {
+    "displayName": "i box hide team tracker",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

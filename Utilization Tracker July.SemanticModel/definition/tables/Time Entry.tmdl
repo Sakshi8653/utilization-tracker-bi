@@ -1,0 +1,2038 @@
+table 'Time Entry'
+	lineageTag: 421917b5-5b52-4c81-8c5d-3ac7ce09f2a5
+
+	measure 'today BLS' = TODAY()
+		formatString: General Date
+		lineageTag: dce10ef7-1730-4639-a31b-be21f434a0e1
+
+	measure MonthCalculate
+		lineageTag: 7b71306d-f919-44f4-9e40-49053ea41243
+
+	measure MinStartDate = MIN('Time Entry'[Month_Year_F])
+		lineageTag: 64983bf4-e5e0-4f9f-87a0-d05beaaae76f
+
+	measure MaxEndDate = MAX('Time Entry'[Month_Year_F])
+		lineageTag: fe493de7-a476-49f0-9b4f-04a7cf16e647
+
+	measure SpentHours(Monthly) = ```
+			
+			
+			
+			
+			    CALCULATE(
+			        SUM('Time Entry'[Duration (decimal)]),
+			        'Time Entry'[Month-Year-Start] >= SELECTEDVALUE(DateCrossJoin[From Month]),
+			        'Time Entry'[Month-Year-End] <=SELECTEDVALUE(DateCrossJoin[To Month])
+			    )
+			
+			
+			
+			```
+		lineageTag: fdd7ba52-c84d-483c-97b8-2606ec17181d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Duration' =
+			
+			SUM('Time Entry'[Duration (decimal)])
+		lineageTag: 54c92f21-db8a-4a97-ad9b-3169cbf338fa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Technology% =
+			
+			CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0), 'Time Entry'[Team.Function] = "Technology")
+		formatString: 0%;-0%;0%
+		lineageTag: 82dcf419-03a9-4e1d-ac2d-78af03f6a2db
+
+	measure TechServices% =
+			
+			CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0), 'Time Entry'[Team.Function] = "Tech Services")
+		formatString: 0%;-0%;0%
+		lineageTag: ffac32c4-ec15-4873-b91d-8f9d6a1e6883
+
+	measure Consulting% =
+			
+			IF(ISBLANK(CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0), 'Time Entry'[Team.Function] = "Consulting")),0,CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0), 'Time Entry'[Team.Function] = "Consulting"))
+		formatString: 0%;-0%;0%
+		lineageTag: b3ff67e3-cb56-42c8-9a53-94a70a30ac1d
+
+	measure GrandTotal% = CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0))
+		formatString: 0%;-0%;0%
+		lineageTag: afcda193-44de-4a49-a24c-11a7ad112bc8
+
+	measure Director% = ```
+			CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0), 
+			'Time Entry'[Designations(Group)] = "Director+")
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: f03dbbab-76f2-4a3b-bc58-9c72a4cff21a
+
+	measure EL-SEL% = ```
+			CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0), 
+			'Time Entry'[Designations(Group)]="EL-SEL")
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: f014458c-cd2d-447f-8f18-dfde7de36146
+
+	measure Associate% = ```
+			CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0), 
+			'Time Entry'[Designations(Group)] = "AEL and below")
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: b544d286-6954-4706-9d92-b666ab7a23a8
+
+	measure Auxo% = CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0),'Time Entry'[Team.Function] = "Auxo")
+		formatString: 0%;-0%;0%
+		lineageTag: 4b43aae2-b689-491e-81c6-b975975d5711
+
+	measure Avg_Monthly_Utilization =
+			
+			AVERAGE('Time Entry'[Monthly_Utilization(%)])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 0eeb776b-eb18-434d-86e1-71a92d7069f9
+
+	measure 'Measure 2'
+		lineageTag: f9d7d680-7b15-4cd8-8f8f-644bd7b6a249
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure 'Total Billable Hours_C1' = ```
+			
+			CALCULATE(
+			    SUM('Time Entry'[Duration (decimal)]),
+			    'Time Entry'[Billable] = "Yes"
+			)
+			
+			```
+		lineageTag: df291056-b942-4558-9083-0c5ce8b41f26
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Measure 4'
+		lineageTag: e2a8cee9-fda4-4f04-b1e3-a3919a635488
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure 'shailesh time' =
+			CALCULATE( SUM('Time Entry'[Duration (h)]),
+			FILTER('Time Entry', 'Time Entry'[User]="Shailesh Tiwari"))
+		formatString: General Date
+		lineageTag: d7097f97-f219-4ccc-ada3-2aca47e5d38c
+
+	measure '% time spent current project' = ```
+			
+			DIVIDE(
+			    SUM('Time Entry 2'[Duration (decimal)]), 
+			    CALCULATE(
+			        [Net available(new)]
+			    , ALL('Project Master'[Project Name])),
+			    0
+			)
+			
+			
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 83a2f23d-f513-40dd-834e-d9a743ee00ce
+
+	measure 'Duration Decimal' = ROUND(SUM('Time Entry'[Duration (decimal)]),2)
+		formatString: 0
+		lineageTag: dba1b394-9b8b-411c-9a39-078e85624a70
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Cost Rate 1' = CALCULATE(SUM('Time Entry'[Cost Rate]))
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: b51a5e33-d892-4010-96f1-53adac8d2278
+
+	measure 'Cost to Budget 1' = CALCULATE(SUM('Time Entry'[Cost to Budget]))
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 6ade1734-50af-463e-af5f-ae69ccf7c2a8
+
+	measure 'Billable Utilization %' = ```
+			
+			DIVIDE(
+			    SUM('Time Entry'[Total Billable Hours_C]), 
+			    CALCULATE(
+			        SUM('Time Entry'[Total Billable Hours_C]), 
+			        ALL('Time Entry')
+			    ), 
+			    0
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b0eeab78-43ed-4b3f-9796-d214baceda09
+
+	measure 'Associate% Auxo' =
+			
+			CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0),
+			    'Time Entry'[Designations(Group)] = "AEL and below"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: c0474080-dd9e-46ad-b3a5-293ff596ed76
+
+	measure 'EL-SEL Auxo%' =
+			
+			CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0),
+			    'Time Entry'[Designations(Group)] = "EL-SEL"
+			)
+		formatString: 0%;-0%;0%
+		lineageTag: e3b35ae9-43b9-41b9-a064-b0c96e67baa8
+
+	measure 'Director Auxo%' =
+			
+			CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0),
+			    'Time Entry'[Designations(Group)] = "Director+"
+			)
+		formatString: 0%;-0%;0%
+		lineageTag: f1578f5d-5dd9-48f3-81ff-d817dcfb1de3
+
+	measure 'GrandTotal Auxo%' = CALCULATE(DIVIDE([Total Billable Hours],[Total Net Available Sample],0))
+		formatString: 0%;-0%;0%
+		lineageTag: b9001a1a-19f1-4394-bbc0-6fb6b3368ec5
+
+	measure Auxo_Monthly_Utilization(%) = ```
+			
+			VAR TotalBillable = 
+			    CALCULATE(
+			        SUM('Time Entry'[Total Billable Hours_C]),
+			        'Time Entry'[Project Type] = "AUXO"
+			    )
+			
+			VAR NetAvailable = 
+			    CALCULATE(
+			        SUM('Time Entry'[Net Available]),
+			        'Time Entry'[Project Type] = "AUXO"
+			    )
+			
+			RETURN IF(
+			    NetAvailable = 0,
+			    BLANK(),
+			    (TotalBillable / NetAvailable) * 100
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 3471d13d-84d7-4149-9449-b927f9e62447
+
+	measure 'Auxo_Monthly_Utilization(%) 2' = ```
+			
+			VAR TotalBillable = 
+			        SUM('Time Entry'[Total Billable Hours_C])
+			
+			VAR NetAvailable = 
+			    CALCULATE(
+			        SUM('Time Entry'[Net Available]),
+			        'Time Entry'[Project Type] = "AUXO"
+			    )
+			
+			RETURN IF(
+			    NetAvailable = 0,
+			    BLANK(),
+			    (TotalBillable / NetAvailable) * 100
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: c871abd4-1bb3-408b-9292-0d786e4e194a
+
+	measure max = MAX([SpentHoursBudget],[CostToBudget])
+		lineageTag: 8940c4f2-123a-40bd-a4b9-becc1cbe6093
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Hours(With Leaves)' = ```
+			
+			VAR JoiningDate = MIN(Team[Min Joining Date]) -- Employee's Joining Date
+			VAR ExitDate = MAX(Team[Max Exit Date]) -- Employee's Exit Date
+			VAR FromMonth = SELECTEDVALUE(DateCrossJoin[From Month])
+			VAR ToMonth = SELECTEDVALUE(DateCrossJoin[To Month])
+			
+			-- Check if the dates are valid
+			VAR IsValidDateRange = NOT(ISBLANK(JoiningDate)) && NOT(ISBLANK(ToMonth))
+			
+			-- Calculate working days between JoiningDate and ToMonth (excluding weekends)
+			VAR WorkingDays = 
+			    IF(
+			        IsValidDateRange,
+			        COUNTROWS(
+			            FILTER(
+			                CALENDAR(JoiningDate, ToMonth), -- Creates a continuous table of dates between JoiningDate and ToMonth
+			                WEEKDAY([Date], 2) <= 5 -- Exclude weekends (Monday=1, Sunday=7)
+			            )
+			        ),
+			        0
+			    )
+			
+			-- Calculate total hours in the valid time period (from the 'Time Period' table)
+			VAR Other = 
+			    IF(
+			        IsValidDateRange,
+			        CALCULATE(
+			            SUM('Time Period'[Hours in Month]), 
+			            REMOVEFILTERS(Team), -- Remove all filters from the Team table (including employee and band)
+			            'Time Period'[Last_date] >= MAX(JoiningDate, FromMonth), 
+			            'Time Period'[First_date] <= MIN(ToMonth, ExitDate)
+			        ),
+			        0
+			    )
+			
+			-- Return total hours worked with leaves by multiplying the working days by 8 (assuming 8 hours per day),
+			-- or return the calculated sum from the 'Time Period' table
+			RETURN
+			    IF(
+			        JoiningDate > ToMonth, 
+			        0, 
+			        IF(
+			            JoiningDate > FromMonth, 
+			            CALCULATE(WorkingDays * 8, REMOVEFILTERS(Team)), -- Remove all filters on Team table
+			            Other
+			        )
+			    )
+			
+			```
+		lineageTag: 7d21f41b-d050-4fe8-a2f9-e9efe3f06b41
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Holiday Marked 1' = ```
+			
+			IF(
+			    ISBLANK(SELECTEDVALUE('Time Entry'[User])),
+			    0,
+			    CALCULATE(
+			        SUM('Time Entry'[Duration (decimal)]),
+			        'Time Entry'[Month-Year-Start] >= SELECTEDVALUE(DateCrossJoin[From Month]),
+			        'Time Entry'[Month-Year-End] <=SELECTEDVALUE(DateCrossJoin[To Month]),
+			        'Time Entry'[Project Type] = "Holiday",
+			         'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band])
+			    )
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: 8d85469a-f562-4cd0-a447-f599eda2fd63
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Net Available 1' = CALCULATE([Total Hours(With Leaves)2] - [Leave Marked 1] - [Holiday Marked 1], 'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band]))
+		formatString: #,0
+		lineageTag: bc4a9fcd-fb03-43dd-95cf-a01f4cd51280
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Hours(With Leaves)2' = ```
+			
+			VAR JoiningDate = MIN('Team'[Min Joining Date]) -- Employee's Joining Date
+			VAR ExitDate = MAX('Team'[Max Exit Date]) -- Employee's Exit Date
+			VAR FromMonth = SELECTEDVALUE(DateCrossJoin[From Month])
+			VAR ToMonth = SELECTEDVALUE(DateCrossJoin[To Month])
+			
+			-- Check if the dates are valid
+			VAR IsValidDateRange = NOT(ISBLANK(JoiningDate)) && NOT(ISBLANK(ToMonth))
+			
+			-- Calculate working days between JoiningDate and ToMonth (excluding weekends)
+			VAR WorkingDays = 
+			    IF(
+			        IsValidDateRange  && JoiningDate <= ToMonth,
+			        COUNTROWS(
+			            FILTER(
+			                CALENDAR(JoiningDate, ToMonth), -- Creates a continuous table of dates between JoiningDate and ToMonth
+			                WEEKDAY([Date], 1) <= 5 -- Exclude weekends (Monday=1, Sunday=7)
+			            )
+			        ),
+			        0
+			    )
+			
+			-- Calculate total hours in the valid time period (from the 'Time Period' table)
+			VAR Other = 
+			    IF(
+			        IsValidDateRange,
+			        CALCULATE(
+			            SUM('Time Period'[Hours in Month]), 
+			            REMOVEFILTERS('Time Entry 2'[Band]), -- Bypass the Team[Band] filter
+			            'Time Period'[Last_date] >= MAX(JoiningDate, FromMonth), 
+			            'Time Period'[First_date] <= MIN(ToMonth, ExitDate),
+			            FILTER(
+			                ALL('Time Entry 2'), -- Remove all filters on 'Time Entry 2'
+			                'Time Entry 2'[User] IN 
+			                SELECTCOLUMNS(
+			                    FILTER('Time Entry 2', 
+			                        'Time Entry 2'[Project Code] IN VALUES('Project Master'[Project Code]) -- Match selected project
+			                    ),
+			                    "Employee", 'Time Entry 2'[User] -- Get relevant employees for the selected project
+			                )
+			            )
+			        ),
+			        0
+			    )
+			
+			-- Return total hours worked with leaves by multiplying the working days by 8 (assuming 8 hours per day),
+			-- or return the calculated sum from the 'Time Period' table
+			RETURN
+			    IF(
+			        JoiningDate > ToMonth, 
+			        0, 
+			        IF(
+			            JoiningDate > FromMonth, 
+			            CALCULATE(WorkingDays * 8, ALL('Time Entry 2'[Band])), -- Bypass Team[Band] filter for this part
+			            Other
+			        )
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 2c3a71a7-f305-4bb9-b4d7-e83aea4cc002
+
+	measure 'Max band' = MAX('Time Entry'[Team.Band])
+		lineageTag: 815ce435-4df5-45b1-b446-217782b6b369
+
+	measure 'Total Net Available' = ```
+			
+			SUMX(
+			    VALUES('Time Entry'[Team.Employee]), -- Replace [Employee] with the column identifying individual rows
+			    [Net Available 1]
+			)
+			
+			```
+		lineageTag: 3f4cdc5a-0cd0-441f-8577-c63a77379cac
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Hours(with leaves)3' = ```
+			
+			SUMX(
+			    VALUES(Team[Employee]), -- Replace [Employee] with the column identifying individual rows
+			    [Total Hours(With Leaves)2]
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 3a3c506c-8bbf-4994-8df8-8e01678a61a7
+
+	measure 'Net Available (No Project Filter)' = ```
+			
+			    CALCULATE(
+			        [Net Available 1],
+			        all('Project Master'[Project Name])
+			    )
+			```
+		lineageTag: bb320394-501c-412c-8fcd-510ed7bba4e1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Leave Marked 1' = ```
+			
+			IF(
+			    ISBLANK(SELECTEDVALUE('Time Entry'[User])),
+			    0,
+			    CALCULATE(
+			        SUM('Time Entry'[Duration (decimal)]),
+			        'Time Entry'[Month-Year-Start] >= SELECTEDVALUE(DateCrossJoin[From Month]),
+			        'Time Entry'[Month-Year-End] <= SELECTEDVALUE(DateCrossJoin[To Month]),
+			        'Time Entry'[Project Type] = "Leave",
+			        'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band]) -- Ensure it matches the current band
+			    )
+			)
+			
+			```
+		lineageTag: 1436b1b5-e182-47ba-bfaf-c6de03e754c5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Billable Hours' = ```
+			
+			
+			VAR SelectedDate = SELECTEDVALUE(DateCrossJoin[To Month])
+			
+			RETURN
+			CALCULATE(
+			SUMX(
+			    VALUES('Time Entry'[Team.Employee]), -- Replace [Employee] with the column identifying individual rows
+			    [BillableHoursSpent_M]
+			),
+			 FILTER(
+			        'Time Entry',
+			        'Time Entry'[Team.Exit Date] = DATE(2050,12,31) ||
+			        'Time Entry'[Team.Exit Date] > SelectedDate
+			    ))
+			
+			```
+		formatString: #,0
+		lineageTag: ac931358-0cdf-4769-b9ef-01cc66e45c08
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total UnBillable Hours' = ```
+			
+			
+			VAR SelectedDate = SELECTEDVALUE(DateCrossJoin[To Month])
+			RETURN
+			CALCULATE(
+			SUMX(
+			    VALUES('Time Entry'[Team.Employee]), -- Replace [Employee] with the column identifying individual rows
+			    [UnbillableHoursSpent_M]
+			),
+			 FILTER(
+			        'Time Entry',
+			        'Time Entry'[Team.Exit Date] = DATE(2050,12,31) ||
+			        'Time Entry'[Team.Exit Date] > SelectedDate
+			    ))
+			
+			```
+		formatString: #,0
+		lineageTag: f801162c-6440-4bfb-bbb5-758c107ab2dc
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Billable 1%' = ```
+			DIVIDE(
+			    [BillableHoursSpent_M2],
+			    CALCULATE(
+			        [Net available(new)],
+			       all('Project Master'[Project Name])
+			    ),
+			    0
+			)
+			
+			```
+		formatString: #,0%;-#,0%;#,0%
+		lineageTag: d427420c-4dc2-4bb5-bb73-9cb69d687faa
+
+	measure BillableHoursSpent_M2 = ```
+			
+			CALCULATE(
+			    SUM('Time Entry 2'[Duration (decimal)]), -- Sum of billable hours
+			    'Time Entry 2'[Billable] = "Yes",       -- Only billable hours
+			    ALLEXCEPT(Team, Team[Employee]),        -- Keep context for employees
+			    FILTER(
+			        ALL('Time Entry 2'),                -- Ignore filters on Time Entry 2
+			        'Time Entry 2'[User] IN 
+			        SELECTCOLUMNS(
+			            FILTER('Time Entry 2', 
+			                'Time Entry 2'[Project Code] IN VALUES('Project Master'[Project Code]) -- Match selected project
+			            ),
+			            "Employee", 'Time Entry 2'[User] -- Get relevant employees for the selected project
+			        )
+			    ),
+			    REMOVEFILTERS('DateCrossJoin'[From Month]), -- Remove "From Month" filter
+			    REMOVEFILTERS('DateCrossJoin'[To Month])   -- Remove "To Month" filter
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: b53854fd-05bf-43de-aa26-f8bc912661b4
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Hours(With Leaves)2 sample' = ```
+			
+			VAR JoiningDate = MIN('Time Entry'[Min Joining Date]) -- Employee's Joining Date
+			VAR ExitDate = MAX('Time Entry'[Max Exit Date]) -- Employee's Exit Date
+			VAR FromMonth = SELECTEDVALUE(DateCrossJoin[From Month])
+			VAR ToMonth = SELECTEDVALUE(DateCrossJoin[To Month])
+			
+			-- Check if the dates are valid
+			VAR IsValidDateRange = NOT(ISBLANK(JoiningDate)) && NOT(ISBLANK(ToMonth))
+			
+			-- Calculate working days between JoiningDate and ToMonth (excluding weekends)
+			VAR WorkingDays = 
+			    IF(
+			        IsValidDateRange  && JoiningDate <= ToMonth,
+			        COUNTROWS(
+			            FILTER(
+			                CALENDAR(JoiningDate, ToMonth), -- Creates a continuous table of dates between JoiningDate and ToMonth
+			                WEEKDAY([Date], 2) <= 5 -- Exclude weekends (Monday=1, Sunday=7)
+			            )
+			        ),
+			        0
+			    )
+			
+			-- Calculate total hours in the valid time period (from the 'Time Period' table)
+			VAR Other = 
+			    IF(
+			        IsValidDateRange,
+			        CALCULATE(
+			            SUM('Time Period'[Hours in Month]), 
+			            REMOVEFILTERS('Time Entry'[Team.Band]), -- Bypass the Team[Band] filter
+			            'Time Period'[Last_date] >= MAX(JoiningDate, FromMonth), 
+			            'Time Period'[First_date] <= MIN(ToMonth, ExitDate),
+			            FILTER(
+			                ALL('Time Entry'), -- Remove all filters on 'Time Entry 2'
+			                'Time Entry'[User] IN 
+			                SELECTCOLUMNS(
+			                    FILTER('Time Entry', 
+			                        'Time Entry'[Project Code] IN VALUES('Project Master'[Project Code]) -- Match selected project
+			                    ),
+			                    "Employee", 'Time Entry'[User] -- Get relevant employees for the selected project
+			                )
+			            )
+			        ),
+			        0
+			    )
+			
+			-- Return total hours worked with leaves by multiplying the working days by 8 (assuming 8 hours per day),
+			-- or return the calculated sum from the 'Time Period' table
+			RETURN
+			    IF(
+			        JoiningDate > ToMonth, 
+			        0, 
+			        IF(
+			            JoiningDate > FromMonth, 
+			            CALCULATE(WorkingDays * 8, ALL('Time Entry'[Team.Band])), -- Bypass Team[Band] filter for this part
+			            Other
+			        )
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 30cc8fa1-60d5-42e9-930a-b179b0292c68
+
+	measure 'Net Available 1 sample' = CALCULATE([Test] - [Leave Marked 1] - [Holiday Marked 1], 'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band]))
+		formatString: 0
+		lineageTag: 7beba89d-738d-49d3-afbf-9dae022d39f5
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Net Available Sample' = ```
+			
+			VAR SelectedDate = SELECTEDVALUE(DateCrossJoin[To Month])
+			
+			return 
+			
+			CALCULATE(
+			SUMX(
+			    VALUES('Time Entry'[Team.Employee]), 
+			    [Net Available 1 sample]
+			),
+			    FILTER(
+			        'Time Entry',
+			        'Time Entry'[Team.Exit Date] = DATE(2050,12,31) ||
+			        'Time Entry'[Team.Exit Date] > SelectedDate
+			    )
+			)
+			
+			```
+		lineageTag: 6d77057a-7b33-430b-85aa-b504f66dc927
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Hours (With Leaves) final' = ```
+			
+			VAR JoiningDate = MIN('Time Entry'[Min Joining Date]) -- Employee's Joining Date
+			VAR ExitDate = MAX('Time Entry'[Max Exit Date]) -- Employee's Exit Date
+			VAR FromMonth = SELECTEDVALUE(DateCrossJoin[From Month]) -- Start of the filter period
+			VAR ToMonth = SELECTEDVALUE(DateCrossJoin[To Month]) -- End of the filter period
+			VAR EndDate = MAX('Time Entry'[End Date])
+			
+			-- Validate the date range
+			VAR IsValidDateRange = NOT(ISBLANK(JoiningDate)) && NOT(ISBLANK(ToMonth))
+			
+			-- Adjusted Start and End Dates
+			VAR AdjustedStartDate = MAX(JoiningDate, FromMonth)
+			VAR AdjustedEndDate = 
+			    IF(
+			        NOT(ISBLANK(ExitDate)) && ExitDate <= ToMonth, -- Employee exited in the past
+			        ExitDate,
+			        IF(
+			            COUNTROWS(FILTER('Time Entry', 'Time Entry'[User] = MAX('Time Entry'[User]))) > 0, -- Check if time entries exist
+			            MAXX(
+			                FILTER(
+			                    'Time Entry', 
+			                    'Time Entry'[User] = MAX('Time Entry'[User])
+			                ), 
+			                'Time Entry'[End Date]
+			            ), -- Use the max end date of time entry
+			            ToMonth -- Default to the selected filter end date
+			        )
+			    )
+			
+			-- Working Days Logic (Excluding Weekends)
+			VAR WorkingDays = 
+			    IF(
+			        IsValidDateRange && JoiningDate <= ToMonth,
+			        COUNTROWS(
+			            FILTER(
+			                CALENDAR(AdjustedStartDate, AdjustedEndDate), 
+			                WEEKDAY([Date], 2) <= 5 -- Exclude weekends
+			            )
+			        ),
+			        0
+			    )
+			
+			-- Hours from Time Period Table (Logged Hours)
+			VAR HoursFromTimePeriod = 
+			    IF(
+			        IsValidDateRange,
+			        SUMX(
+			            FILTER(
+			                'Time Period',
+			                'Time Period'[First_date] >= AdjustedStartDate &&
+			                'Time Period'[Last_date] <= AdjustedEndDate
+			            ),
+			            'Time Period'[Hours in Month]
+			        ),
+			        0
+			    )
+			
+			-- Logic for Employees without Time Entries
+			VAR ExpectedHours = 
+			    IF(
+			    ISBLANK(EndDate),
+			    COUNTROWS(FILTER('Time Entry', 'Time Entry'[User] = MAX('Time Entry'[User]))), 
+			    SUMX(
+			        FILTER(
+			            'Time Period',
+			            'Time Period'[First_date] >= AdjustedStartDate &&
+			            'Time Period'[Last_date] <= ToMonth
+			        ),
+			        'Time Period'[Hours in Month]
+			    )
+			)
+			
+			
+			-- Final Output
+			RETURN 
+			    IF(
+			        JoiningDate > ToMonth, 
+			        0, 
+			        IF(
+			            JoiningDate > FromMonth, 
+			            WorkingDays * 8, -- Assume 8 hours per day for valid working days
+			            IF(
+			                COUNTROWS(FILTER('Time Entry', 'Time Entry'[User] = MAX('Time Entry'[User]))) > 0, 
+			                MAX(HoursFromTimePeriod, WorkingDays * 8), -- Logged Hours or Calculated Hours
+			                ExpectedHours -- Use expected hours if no time entries exist
+			            )
+			        )
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 7af8a245-4a57-40dd-ba2b-920984de38ff
+
+	measure LatestCountry = ```
+			
+			VAR LatestExitDate = MAX('Time Entry'[Team.Exit Date])
+			RETURN
+			MAXX(
+			    FILTER(
+			        'Time Entry',
+			        'Time Entry'[Team.Exit Date] = LatestExitDate
+			    ),
+			    'Time Entry'[Team.Country]
+			)
+			
+			```
+		lineageTag: 3fd06e9c-65ce-495a-bdf8-32e14ff19b87
+
+	measure LatestFunction = ```
+			
+			VAR LatestExitDate = MAX('Time Entry'[Team.Exit Date])
+			RETURN
+			MAXX(
+			    FILTER(
+			        'Time Entry',
+			        'Time Entry'[Team.Exit Date] = LatestExitDate
+			    ),
+			    'Time Entry'[Team.Function]
+			)
+			
+			```
+		lineageTag: 4e69010d-470f-4986-b35f-08889d9bb79b
+
+	measure 'Total Hours(With Leaves) fixed' = ```
+			
+			VAR JoiningDate = MIN('Time Entry'[Min Joining Date]) -- Employee's Joining Date
+			VAR ExitDate = MAX('Time Entry'[Max Exit Date]) -- Employee's Exit Date
+			VAR FromMonth = SELECTEDVALUE(DateCrossJoin[From Month])
+			VAR ToMonth = SELECTEDVALUE(DateCrossJoin[To Month])
+			
+			-- Check if the dates are valid
+			VAR IsValidDateRange = NOT(ISBLANK(JoiningDate)) && NOT(ISBLANK(ToMonth))
+			
+			-- Check if the employee is within the selected time period
+			VAR IsInTimePeriod = 
+			    JoiningDate <= ToMonth && (ISBLANK(ExitDate) || ExitDate >= FromMonth)
+			
+			-- Calculate working days between JoiningDate and ToMonth (excluding weekends)
+			VAR WorkingDays = 
+			    IF(
+			        IsValidDateRange && JoiningDate <= ToMonth,
+			        COUNTROWS(
+			            FILTER(
+			                CALENDAR(JoiningDate, ToMonth), -- Creates a continuous table of dates between JoiningDate and ToMonth
+			                WEEKDAY([Date], 2) <= 5 -- Exclude weekends (Monday=1, Sunday=7)
+			            )
+			        ),
+			        BLANK()
+			    )
+			
+			-- Calculate total hours in the valid time period (from the 'Time Period' table)
+			VAR Other = 
+			    IF(
+			        IsValidDateRange,
+			        CALCULATE(
+			            SUM('Time Period'[Hours in Month]), 
+			            REMOVEFILTERS('Time Entry'[Team.Band]), -- Bypass the Team[Band] filter
+			            'Time Period'[Last_date] >= MAX(JoiningDate, FromMonth), 
+			            'Time Period'[First_date] <= MIN(ToMonth, ExitDate),
+			            FILTER(
+			                ALL('Time Entry'), -- Remove all filters on 'Time Entry'
+			                'Time Entry'[User] IN 
+			                SELECTCOLUMNS(
+			                    FILTER('Time Entry', 
+			                        'Time Entry'[Project Code] IN VALUES('Project Master'[Project Code]) -- Match selected project
+			                    ),
+			                    "Employee", 'Time Entry'[User] -- Get relevant employees for the selected project
+			                )
+			            )
+			        ),
+			        BLANK()
+			    )
+			
+			-- Return total hours worked with leaves or BLANK() for irrelevant employees
+			RETURN
+			    IF(
+			        JoiningDate > ToMonth,
+			        0,
+			        IF(
+			        NOT(IsInTimePeriod), 
+			        BLANK(), -- Exclude employees not in the time period
+			        IF(
+			            JoiningDate > FromMonth, 
+			            CALCULATE(WorkingDays * 8, ALL('Time Entry'[Team.Band])), -- Bypass Team[Band] filter for this part
+			            Other
+			        )
+			    )
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 68e2e44d-888f-4312-a498-6d059c6f633b
+
+	measure 'Total Billable Hours (80 % and below)' = ```
+			
+			SUMX(
+			    FILTER(
+			        VALUES('Time Entry'[Team.Employee]),
+			        [Monthly Utilization Sample (%)] <= 0.8
+			    ),
+			    [BillableHoursSpent_M]
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: e738e80d-636d-4719-80c7-7c7954554157
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Net Available Sample (80% and below)' = ```
+			
+			SUMX(
+			    FILTER(
+			        VALUES('Time Entry'[Team.Employee]),
+			        [Monthly Utilization Sample (%)]<= 0.8
+			    ),
+			    [Net Available 1 sample] 
+			)
+			
+			
+			```
+		lineageTag: f2917463-1ad5-4934-9cae-2b12de9019f7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total UnBillable Hours  (80 % and below)' = ```
+			
+			SUMX(
+			    FILTER(
+			        VALUES('Time Entry'[Team.Employee]),
+			        [Monthly Utilization Sample (%)] <= 0.8
+			    ),
+			    [UnbillableHoursSpent_M]
+			)
+			
+			```
+		lineageTag: db3c297d-9114-49f1-ac8e-6c8e124bc8df
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Billable Hours (80% - 120%)' = ```
+			
+			SUMX(
+			    FILTER(
+			        VALUES('Time Entry'[Team.Employee]),
+			        [Monthly Utilization Sample (%)] > 0.80 && [Monthly Utilization Sample (%)] <= 1.20
+			    ),
+			    [BillableHoursSpent_M]
+			)
+			
+			```
+		lineageTag: 70c13ac9-c686-4718-b8ea-8db1d752a29c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Net Available Sample (80%-120%)' = ```
+			
+			SUMX(
+			    FILTER(
+			        VALUES('Time Entry'[Team.Employee]),
+			        [Monthly Utilization Sample (%)] > 0.80 && [Monthly Utilization Sample (%)] <= 1.20
+			    ),
+			    [Net Available 1 sample] 
+			)
+			
+			
+			```
+		lineageTag: 6ceaa1ae-17d9-459b-8c79-aa247311d8bd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total UnBillable Hours  (80%-120%)' = ```
+			
+			SUMX(
+			    FILTER(
+			        VALUES('Time Entry'[Team.Employee]),
+			         [Monthly Utilization Sample (%)] > 0.80 && [Monthly Utilization Sample (%)] <= 1.20
+			    ),
+			    [UnbillableHoursSpent_M]
+			)
+			
+			```
+		lineageTag: aee29660-446c-4488-b11b-3acb3d8a32cd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Billable Hours (120% and above)' = ```
+			
+			SUMX(
+			    FILTER(
+			        VALUES('Time Entry'[Team.Employee]),
+			        [Monthly Utilization Sample (%)] >= 1.20
+			    ),
+			    [BillableHoursSpent_M]
+			)
+			
+			```
+		lineageTag: f66cafd1-da7c-49d5-99ab-0b8694a28369
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Net Available Sample (120% and above)' = ```
+			
+			SUMX(
+			    FILTER(
+			        VALUES('Time Entry'[Team.Employee]),
+			        [Monthly Utilization Sample (%)] >= 1.20
+			    ),
+			    [Net Available 1 sample] 
+			)
+			
+			
+			```
+		lineageTag: 5f2ba71d-cd27-4637-9246-46412958c17e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total UnBillable Hours  (120% and above)' = ```
+			
+			SUMX(
+			    FILTER(
+			        VALUES('Time Entry'[Team.Employee]),
+			        [Monthly Utilization Sample (%)] >= 1.20
+			    ),
+			    [UnbillableHoursSpent_M]
+			)
+			
+			```
+		lineageTag: f50e124c-f288-4a12-98de-a8990c1ad121
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure IsActive = ```
+			
+			VAR CurrentToMonth = SELECTEDVALUE('DateCrossJoin'[To Month]) -- Dynamic upper bound from slicer
+			VAR CurrentFromMonth = SELECTEDVALUE('DateCrossJoin'[From Month]) -- Dynamic lower bound from slicer
+			VAR EmployeeJoiningDate =MIN('Time Entry'[Min Joining Date])-- Employee's Joining Date
+			VAR EmployeeExitDate = MAX('Time Entry'[Max Exit Date]) -- Employee's Exit Date
+			
+			RETURN
+			IF(
+			    EmployeeJoiningDate <= CurrentToMonth && -- Employee joined on or before the upper bound
+			    EmployeeExitDate >= CurrentFromMonth,   -- Employee exited on or after the lower bound
+			    "Active",
+			    "Inactive"
+			)
+			
+			```
+		lineageTag: a85b82ea-1226-4fcf-a6d2-d15a4b459c18
+
+	measure Tes = IF(C29="","0",IF(H29>$K$3,0,IF(H29>$J$3,NETWORKDAYS.INTL($H29,$K$3,1,0)*8,SUMIFS(Calender!F:F,Calender!A:A,">="&MAX($J$3,$H29),Calender!B:B,"<="&MIN($K$3,$I29)))))
+		lineageTag: 3713a8b6-9edb-43f9-a118-8136b0d76d8d
+
+	measure Test =
+			
+			IF (
+			    ISBLANK ( MAX([Team.Employee]) ),
+			     NETWORKDAYS(
+			        SELECTEDVALUE('DateCrossJoin'[From Month]),
+			        SELECTEDVALUE('DateCrossJoin'[To Month]),
+			        1
+			    ) * 8,
+			    IF (
+			        MIN ( 'Time Entry'[Min Joining Date] ) > SELECTEDVALUE ( 'DateCrossJoin'[To Month] ),
+			        0,
+			
+			        IF (
+			            MIN ( 'Time Entry'[Min Joining Date] ) > SELECTEDVALUE ( 'DateCrossJoin'[From Month] ),
+			            NETWORKDAYS (
+			                MIN ( 'Time Entry'[Min Joining Date] ),
+			                SELECTEDVALUE ( 'DateCrossJoin'[To Month] ),1
+			            ) * 8,
+			            CALCULATE (
+			                SUM ( 'Time Period'[Hours in Month] ),
+			                'Time Period'[Last_date] >= MAX ( SELECTEDVALUE('DateCrossJoin'[From Month]), MAX ( 'Time Entry'[Min Joining Date] ) ),
+			                'Time Period'[First_date] <= MIN ( SELECTEDVALUE( 'DateCrossJoin'[To Month] ), MIN ( 'Time Entry'[Max Exit Date] ) )
+			            )
+			        )
+			    )
+			)
+		formatString: 0
+		lineageTag: bc0f6d4a-fba2-4e95-a8a1-fdba722638a0
+
+	measure 'test 1' = ```
+			
+			IF(
+			    ISBLANK(max('Time Entry'[Max Exit Date])) 
+			    || Max('Time Entry'[Max Exit Date]) = DATE(2050, 12, 31)
+			    || max('Time Entry'[Max Exit Date]) > TODAY(), 
+			    "Active", 
+			    "Inactive"
+			)
+			
+			```
+		lineageTag: 3dee35be-b6c9-469d-a1c4-57fad6e9f22d
+
+	measure Unclocked_hrs = IF(([Test]-[BillableHoursSpent_M]-[PUDHoursSpent_M]-[UnbillableHoursSpent_M])>0,([Test]-[BillableHoursSpent_M]-[PUDHoursSpent_M]-[UnbillableHoursSpent_M]),0)
+		formatString: 0.00
+		lineageTag: 29ac4e17-a464-4718-b72d-e4f087afb303
+
+	measure Working_Days = ```
+			
+			IF (
+			    ISBLANK ( MAX([Team.Employee]) ),
+			    NETWORKDAYS(
+			        SELECTEDVALUE('DateCrossJoin'[From Month]),
+			        SELECTEDVALUE('DateCrossJoin'[To Month]),
+			        1
+			    ),
+			    IF (
+			        MIN ( 'Time Entry'[Min Joining Date] ) > SELECTEDVALUE ( 'DateCrossJoin'[To Month] ),
+			        0,
+			        IF (
+			            MIN ( 'Time Entry'[Min Joining Date] ) > SELECTEDVALUE ( 'DateCrossJoin'[From Month] ),
+			            NETWORKDAYS (
+			                MIN ( 'Time Entry'[Min Joining Date] ),
+			                SELECTEDVALUE ( 'DateCrossJoin'[To Month] ), 1
+			            ),
+			            CALCULATE (
+			                SUM ( 'Time Period'[WorkingDays] ),
+			                'Time Period'[Last_date] >= MAX ( SELECTEDVALUE('DateCrossJoin'[From Month]), MAX ( 'Time Entry'[Min Joining Date] ) ),
+			                'Time Period'[First_date] <= MIN ( SELECTEDVALUE( 'DateCrossJoin'[To Month] ), MIN ( 'Time Entry'[Max Exit Date] ) )
+			            )
+			        )
+			    )
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 01110970-0828-4de2-8d61-f7d0ed328fb1
+
+	measure Logged_Days = ```
+			
+			COALESCE(CALCULATE (
+			    DISTINCTCOUNT ( 'Time Entry'[Start Date Mod] ),
+			    'Time Entry'[Start Date Mod] >= MAX( SELECTEDVALUE('DateCrossJoin'[From Month]), MAX('Time Entry'[Min Joining Date]) ),
+			    'Time Entry'[Start Date Mod] <= MIN( SELECTEDVALUE('DateCrossJoin'[To Month]), MIN('Time Entry'[Max Exit Date]) ),
+			    ALLEXCEPT('Time Entry', 'Time Entry'[Team.Employee])
+			),0)
+			
+			```
+		formatString: 0
+		lineageTag: 38ee0a10-a96a-44ef-9814-4947768a9f48
+
+	measure 'Measure 5'
+		lineageTag: a254424c-3905-48eb-aba4-acc1a0d53290
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure Logged_Hours = ```
+			
+			COALESCE(ROUND(
+			    CALCULATE (
+			        SUM ( 'Time Entry'[Duration (decimal)] ), 
+			        'Time Entry'[Start Date Mod] >= MAX( SELECTEDVALUE('DateCrossJoin'[From Month]), MAX('Time Entry'[Min Joining Date]) ),
+			        'Time Entry'[Start Date Mod] <= MIN( SELECTEDVALUE('DateCrossJoin'[To Month]), MIN('Time Entry'[Max Exit Date]) ),
+			        'Time Entry'[Activity Status] = "Active",  // Filter for Active status
+			        ALLEXCEPT('Time Entry', 'Time Entry'[Team.Employee], 'Time Entry'[Start Date Mod])
+			    ),0
+			),0)
+			
+			
+			```
+		formatString: 0
+		lineageTag: 1bbdcaa1-4024-40f9-8056-7605c2c22171
+
+	measure 'Measure 6'
+		lineageTag: 1e41e13f-e4be-45a8-aaac-4c61e3782b45
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure Work_Category_new = ```
+			
+			VAR LoggedHours = [Logged_Hours] 
+			VAR LoggedDays = [Logged_Days] 
+			VAR WorkingDays = [Working_Days] 
+			VAR ExpectedWorkingHours = [Test] 
+			VAR MaxHours = WorkingDays * 12
+			
+			RETURN 
+			SWITCH(
+			    TRUE(),
+			    LoggedHours > MaxHours || LoggedDays > WorkingDays, "Over-Utilized",
+			    LoggedHours >= ExpectedWorkingHours && LoggedHours <= MaxHours && LoggedDays = WorkingDays, "Normal",
+			    LoggedDays < WorkingDays || LoggedHours < ExpectedWorkingHours, "Defaulter",
+			    "Unknown"
+			)
+			
+			```
+		lineageTag: e7f0546a-5bea-406a-95df-aa7dcb82a0f9
+
+	measure Activity =
+			
+			VAR SelectedDate = SELECTEDVALUE(DateCrossJoin[To Month])
+			RETURN
+			CALCULATE(
+			    IF(
+			        MAX('Time Entry'[Team.Exit Date]) = DATE(2050,12,31) ||
+			        MAX('Time Entry'[Team.Exit Date]) > SelectedDate,
+			        1,0))
+		formatString: 0
+		lineageTag: eaf17cc8-839a-49d3-aea0-69fdc5c0e3e5
+
+	column 'Project Name & Code'
+		dataType: string
+		lineageTag: 68c98c6a-5277-4764-83cc-a378ebd75cbb
+		summarizeBy: none
+		sourceColumn: Project Name & Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Billable-Clockify
+		dataType: string
+		lineageTag: dff06861-6915-4663-82dd-063fd1a34fd1
+		summarizeBy: none
+		sourceColumn: Billable-Clockify
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Duration (h)'
+		dataType: string
+		lineageTag: 2c4f8ed6-76ae-40b9-afab-8f796465b471
+		summarizeBy: none
+		sourceColumn: Duration (h)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Duration (decimal)'
+		dataType: double
+		formatString: #,0
+		lineageTag: 417e9e3e-96e0-42e5-82a9-ab28c01a4679
+		summarizeBy: sum
+		sourceColumn: Duration (decimal)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column 'Billable Rate (USD)'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0c7df0fc-bf4f-4903-83aa-a086353d0bc0
+		summarizeBy: sum
+		sourceColumn: Billable Rate (USD)
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Billable Amount (USD)'
+		dataType: int64
+		formatString: 0
+		lineageTag: e131b8c9-3d55-4048-869a-b2e9c63b8ef4
+		summarizeBy: sum
+		sourceColumn: Billable Amount (USD)
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month-Year-Start
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d878be8b-0649-4c96-a79e-c4b8db019bb9
+		summarizeBy: none
+		sourceColumn: Month-Year-Start
+
+		variation Variation
+			isDefault
+			relationship: 682af40c-11dd-45f3-9449-72ac842d9784
+			defaultHierarchy: LocalDateTable_fceefbda-ff33-4b45-be7f-ef36c6008b78.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Month-Year-End
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3f7f76ad-f0aa-4d8e-9614-ab093e121711
+		summarizeBy: none
+		sourceColumn: Month-Year-End
+
+		variation Variation
+			isDefault
+			relationship: fc780edc-5b9f-49d2-a69a-1f092dff04f9
+			defaultHierarchy: LocalDateTable_bb1cccb5-9f3d-44c6-9c45-e2aec41760c5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Week-End-Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 78438a9c-0e61-4ee5-b757-91c2cc7a6af9
+		summarizeBy: none
+		sourceColumn: Week-End-Date
+
+		variation Variation
+			isDefault
+			relationship: b4c79701-75ec-43c0-8598-e5cc56a523fc
+			defaultHierarchy: LocalDateTable_ace3f414-463e-48d7-b356-d94e117f1b02.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Month_Year_F = FORMAT([Start Date], "MMM-YYYY")
+		lineageTag: 6410aab4-30f3-4bed-b90f-3b622400e8b8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Billable Hours_C' = ```
+			
+			     IF('Time Entry'[Billable] = "Yes", 
+			    'Time Entry'[Duration (decimal)],0)
+			```
+		dataType: double
+		formatString: #,0
+		lineageTag: e523238e-a994-4dce-82c4-90ecb1def105
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column Monthly_Utilization(%) = ```
+			
+			Var U = ('Time Entry'[Total Billable Hours_C] / 'Time Entry'[Net Available] )
+			RETURN U*100
+			
+			```
+		dataType: double
+		formatString: 0%;-0%;0%
+		lineageTag: 64841311-87d3-48c4-9179-8b88806d42b0
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Leave Marked' = ```
+			
+			// Total Billable Hours_C = 
+			//     IF('Time Entry'[Billable] = "Yes", 
+			//     'Time Entry'[Duration (decimal)], 0)
+			IF
+			    ('Time Entry'[Project Type] = "Leave" &&
+			    'Time Entry'[Start Date Mod] >= 'Time Entry'[Month-Year-Start] &&
+			    'Time Entry'[End Date Mod] >= 'Time Entry'[Month-Year-End],
+			    'Time Entry'[Duration (decimal)], 0 )
+			```
+		dataType: int64
+		lineageTag: d818198a-ff76-48f4-89a0-ba3d279e3494
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Holiday Marked' = ```
+			
+			// Total Billable Hours_C = 
+			//     IF('Time Entry'[Billable] = "Yes", 
+			//     'Time Entry'[Duration (decimal)], 0)
+			IF
+			    ('Time Entry'[Project Type] = "Holiday" &&
+			    'Time Entry'[Start Date Mod] >= 'Time Entry'[Month-Year-Start] &&
+			    'Time Entry'[End Date Mod] >= 'Time Entry'[Month-Year-End],
+			    'Time Entry'[Duration (decimal)], 0 )
+			```
+		dataType: int64
+		lineageTag: 48e13686-7805-427e-acde-89e3fd02cbcc
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Net Available' =
+			
+			VAR Result = 'Time Entry'[Working Hours] - 'Time Entry'[Leave Marked] - 'Time Entry'[Holiday Marked]
+			RETURN Result
+		dataType: int64
+		formatString: 0
+		lineageTag: 43950ad2-62f5-4724-8a9f-288dd30ce0a8
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Hours' = ```
+			
+			// IF('Time Entry'[Billable] = "PUD", 0, 'Time Entry'[Total UnBillable Hours_C] + 'Time Entry'[Total Billable Hours_C])
+			'Time Entry'[Total UnBillable Hours_C] + 'Time Entry'[Total Billable Hours_C] + 'Time Entry'[Total PUD Hours_C]
+			
+			
+			```
+		formatString: #,0
+		lineageTag: 95a39b69-dca4-41ef-9d89-7f516abb6472
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total UnBillable Hours_C' = ```
+			
+			     IF('Time Entry'[Billable] = "No", 
+			    'Time Entry'[Duration (decimal)], 0)
+			```
+		dataType: int64
+		formatString: #,0
+		lineageTag: 50231f79-7299-48e8-8624-9d64dd581dd0
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unbillable% = ```
+			
+			DIVIDE(
+			    'Time Entry'[Total UnBillable Hours_C], 
+			    'Time Entry'[Total Hours], 
+			    BLANK()
+			)
+			
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: 404ae215-8991-4be7-a329-ff6ecaf6290b
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Billable% = (('Time Entry'[Total Billable Hours_C])/('Time Entry'[Total Hours]))
+		lineageTag: 6749acbf-d4c8-40bf-b2fd-d8aa7450d810
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TeamJoin = 'Time Entry'[Email] & "-" & 'Time Entry'[Band]
+		lineageTag: 3e81a750-d9a3-41fc-8d34-8a5f8233d200
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrimaryKey = 'Time Entry'[Email] & "-" & 'Time Entry'[Start Date]
+		lineageTag: 855e8424-5256-45ca-b0c5-de3988bdcace
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Working Hours' = ```
+			
+			// VAR FromMonth = MIN('DateCrossJoin'[From Month])
+			VAR JoiningDate = MIN('Team'[Joining Date])
+			// VAR TodayDate = TODAY()
+			
+			// VAR StartDate = MAX(FromMonth, JoiningDate)
+			
+			// Var EffectiveStartDate = IF(StartDate > TodayDate, TodayDate, StartDate)
+			
+			VAR DaysWorked = DATEDIFF(JoiningDate, TODAY(), DAY)
+			
+			// VAR WorkingHoursPerDay = 8
+			
+			// Var TotalWorkingHours = DaysWorked * WorkingHoursPerDay
+			
+			VAR WorkingDays = 
+			    COUNTROWS(
+			        FILTER(
+			            CALENDAR(JoiningDate, TODAY()),
+			            WEEKDAY([Date], 2) <= 5  
+			            
+			        )
+			    )
+			// RETURN IF(DaysWorked < 0, 0, TotalWorkingHours)
+			
+			RETURN WorkingDays 
+			```
+		formatString: 0
+		lineageTag: 51058fd8-9fbf-4d8e-a49f-b2bd9b13718b
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total PUD Hours_C' = ```
+			
+			     IF('Time Entry'[Billable] = "PUD", 
+			    'Time Entry'[Duration (decimal)], 0)
+			```
+		dataType: int64
+		lineageTag: 34649dc0-68ad-4e50-bbc2-a927f4a50b99
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Monthly_Utilization(%)_2 =
+			
+			Var U = ('Time Entry'[Total Billable Hours_C] / 'Time Entry'[Net Available] )
+			RETURN U*100
+		lineageTag: 6c3916a7-27f6-4309-b435-8664cc50272d
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PK2 = 'Time Entry'[Email] & "-" & 'Time Entry'[Band]
+		lineageTag: 0d6f1bda-a884-4636-a668-962b33ffb5d4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'User Band' = 'Time Entry'[User] & " " & 'Time Entry'[Band]
+		lineageTag: 7c2945f5-e8a3-4009-8366-d6d44de7852a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Owner New' = RELATED('Project Master'[Owner])
+		lineageTag: 742cf7b1-d248-440b-8ff5-ba8110f6b7a0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthYearNumber = ```
+			YEAR([Start Date Mod]) * 100 + MONTH([Start Date Mod].[Date])
+			
+			```
+		dataType: string
+		lineageTag: 8d51410a-cb74-4365-b795-c27515b8ff74
+		summarizeBy: none
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalHoursWithLeaves = ```
+			
+			VAR JoiningDate = MIN('Team'[Joining Date]) -- Employee's Joining Date
+			VAR ExitDate = MAX('Team'[Exit Date]) -- Employee's Exit Date
+			VAR FromDate = MAX('Time Period'[First_Date]) -- Start of the selected time period
+			VAR ToDate = MIN('Time Period'[Last_Date]) -- End of the selected time period
+			
+			-- Determine the actual working period for the employee
+			VAR EffectiveStartDate = MAX(JoiningDate, FromDate)
+			VAR EffectiveEndDate = IF(ISBLANK(ExitDate), ToDate, MIN(ExitDate, ToDate))
+			
+			-- Ensure the effective period is valid
+			VAR IsValidPeriod = EffectiveStartDate <= EffectiveEndDate
+			
+			-- Calculate working days (Monday to Friday)
+			VAR WorkingDays = 
+			    IF(
+			        IsValidPeriod,
+			        COUNTROWS(
+			            FILTER(
+			                CALENDAR(EffectiveStartDate, EffectiveEndDate), 
+			                WEEKDAY([Date], 2) <= 5 -- Weekdays only (Monday to Friday)
+			            )
+			        ),
+			        0
+			    )
+			
+			-- Assuming 8 working hours per day
+			VAR DailyWorkingHours = 8
+			
+			
+			
+			-- Total working hours including leaves
+			RETURN 
+			    (WorkingDays * DailyWorkingHours) 
+			
+			```
+		formatString: 0
+		lineageTag: 044fc631-dcf8-4315-8406-63d214a37a6f
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Hours(With Leaves)C' = ```
+			
+			VAR JoiningDate = MIN('Time Entry'[Team.Joining Date]) -- Employee's Joining Date
+			VAR ExitDate = MAX('Time Entry'[Team.Exit Date]) -- Employee's Exit Date
+			VAR FromMonth = MIN(DateCrossJoin[From Month]) -- Start of selected time frame
+			VAR ToMonth = MAX(DateCrossJoin[To Month]) -- End of selected time frame
+			
+			-- Define the actual date range for calculation
+			VAR ActualStartDate = MAX(JoiningDate, FromMonth) -- The later of JoiningDate or FromMonth
+			VAR ActualEndDate = MIN(ExitDate, ToMonth) -- The earlier of ExitDate or ToMonth
+			
+			-- Calculate total working days across the entire time range
+			VAR WorkingDays = 
+			    CALCULATE(
+			        COUNTROWS(
+			            FILTER(
+			                CALENDAR(ActualStartDate, ActualEndDate), -- Generate a table of dates within the range
+			                WEEKDAY([Date], 2) <= 5 -- Exclude weekends (Monday=1, Sunday=7)
+			            )
+			        )
+			    )
+			
+			-- Calculate total hours across all records in the Time Period table (ignoring project names)
+			VAR TotalHours = 
+			    CALCULATE(
+			        SUM('Time Period'[Hours in Month]),
+			        'Time Period'[Last_date] >= ActualStartDate,
+			        'Time Period'[First_date] <= ActualEndDate
+			    )
+			
+			-- Return total hours worked with default assumption of 8 hours per working day
+			RETURN
+			    IF(
+			        ActualStartDate > ActualEndDate, 
+			        0, -- No overlapping time period
+			        IF(
+			            ISBLANK(TotalHours),
+			            WorkingDays * 8, -- Calculate hours based on working days if Time Period table is blank
+			            TotalHours -- Use sum from the Time Period table
+			        )
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 0fb4bbfe-9f32-4eb2-89c1-a2870ef9f2bb
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Net Available_C' = 'Time Entry'[Total Hours(With Leaves)C]-'Time Entry'[Leave Marked]-'Time Entry'[Holiday Marked]
+		lineageTag: 67717a58-a5b6-4061-8a50-5a719ab45a12
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '% Time Spent Current Project 1' = ```
+			
+			CALCULATE(
+			    DIVIDE(
+			        SUM('Time Entry'[Duration (decimal)]), 
+			        SUM('Time Entry'[Net Available_C]), 
+			        0
+			    )
+			)
+			
+			```
+		lineageTag: 85a10dc0-5ce9-41b0-931b-9ae22c694db6
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Team.Employee'
+		dataType: string
+		lineageTag: 57be609f-e171-4189-aada-741386bda057
+		summarizeBy: none
+		sourceColumn: Team.Employee
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Joining Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c5e564b8-b9eb-41b7-b3e5-710cb931462b
+		summarizeBy: none
+		sourceColumn: Team.Joining Date
+
+		variation Variation
+			isDefault
+			relationship: 4d2ac52d-095c-40b9-8ee5-99b612aa5c07
+			defaultHierarchy: LocalDateTable_4632ddae-8678-49a9-b086-48d02b02c895.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Team.Exit Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 12212acd-0ffd-445d-9161-de83ff459f7f
+		summarizeBy: none
+		sourceColumn: Team.Exit Date
+
+		variation Variation
+			isDefault
+			relationship: 2799d6d0-1716-4272-a8d1-eeb67273f921
+			defaultHierarchy: LocalDateTable_0b36ef72-3a3d-4e59-945c-4aa06e119e71.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Team.Band'
+		dataType: string
+		lineageTag: 032929f4-a6a7-462d-ad86-5b85fc803e3e
+		summarizeBy: none
+		sourceColumn: Team.Band
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Function'
+		dataType: string
+		lineageTag: 1b41555e-0e7a-42c3-bdfc-7e6f098cb67b
+		summarizeBy: none
+		sourceColumn: Team.Function
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Status'
+		dataType: int64
+		formatString: 0
+		lineageTag: d02b8348-7d3b-4c67-bfa3-038c39ca8ba8
+		summarizeBy: sum
+		sourceColumn: Team.Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Country'
+		dataType: string
+		lineageTag: 8c26a482-b7de-4a0d-b02b-59cbda1c7edd
+		summarizeBy: none
+		sourceColumn: Team.Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min Joining Date' = ```
+			
+			CALCULATE(
+			    MIN('Time Entry'[Team.Joining Date]),
+			    ALLEXCEPT('Time Entry', 'Time Entry'[Email])
+			)
+			
+			```
+		formatString: General Date
+		lineageTag: aad458f5-a8cd-4381-a6e4-2363aafabedd
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 7ddae8f7-f357-4c71-8ed7-541f720d0b55
+			defaultHierarchy: LocalDateTable_67a83123-2b67-4cc3-99fd-79b85117ef34.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Max Exit Date' = ```
+			
+			CALCULATE(
+			    MAX('Time Entry'[Team.Exit Date]),
+			    ALLEXCEPT('Time Entry', 'Time Entry'[Email])
+			)
+			
+			```
+		formatString: General Date
+		lineageTag: ef9939b7-7070-421a-8b3a-b4e91eff14cc
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: eec38ed4-4fff-4976-a420-7dd22af8a024
+			defaultHierarchy: LocalDateTable_73a2dcde-2d4c-4cc0-84df-cdc9f7d62bf6.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Email ID'
+		dataType: string
+		lineageTag: 2f88251e-98e1-4432-a33e-1f5624e831ab
+		summarizeBy: none
+		sourceColumn: Team.Email ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.City'
+		dataType: string
+		lineageTag: 309df942-f169-4f52-9262-14c5786e7ba2
+		summarizeBy: none
+		sourceColumn: Team.City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Designations(Group) = ```
+			
+			SWITCH(
+			    TRUE(),
+			    'Time Entry'[Team.Band] IN {
+			        "Assistant Manager - IT", "Assistant Manager - Marketing", "Assistant Manager - Design", 
+			        "Assistant Manager - HRBP", "Consultant", "Data engineering Project Lead", 
+			        "Engagement Lead", "Manager", "Manager-TA", "Senior Manager", "Sr. Engagement Lead", 
+			        "Sr. Manager - TA & BD", "Senior Specialist - Finance", "Specialist - Admin", 
+			        "Specialist - IT Infrastructure", "Specialist - TA & HR", "Sr. Lead - Finance", 
+			        "Sr. Lead - HRBP", "Sr. Lead - IT", "Sr. Lead - Office Management", "Sr. Lead - TA", 
+			        "Sr. Lead TA", "Sr. Specialist - TA & HR", "Sr. Specialist - Marketing"
+			    }, "EL-SEL",
+			    'Time Entry'[Team.Band] IN {
+			        "Advisor", "Analyst", "Associate", "Associate - HR", "Associate Administrative", 
+			        "Associate Analyst", "Associate Consultant", "Data engineering Associate", 
+			        "Data engineering Specialist", "Data engineering Sr. Specialist", 
+			        "Executive Assistant", "Finance - Intern", "Intern", "Lead - BD", "Lead - HR", 
+			        "Lead - IT", "Lead - TA", "Lead - UI/UX Designer", "Marketing Intern", "Senior Lead",
+			        "Senior Analyst", "Associate Engagement Lead"
+			    }, "AEL and below",
+			    'Time Entry'[Team.Band] IN {
+			        "Director", "Partner", "Executive Director"
+			    }, "Director+",
+			    "Other"
+			)
+			
+			```
+		lineageTag: 34d0f010-f308-4db1-871f-9d28a8652199
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Activity Status'
+		dataType: string
+		lineageTag: bfd0e8b8-4451-4c6b-bbc8-195ddc602cbe
+		summarizeBy: none
+		sourceColumn: Activity Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column Concat = 'Time Entry'[Team.Employee] & FORMAT('Time Entry'[MonthYearNumber], "")
+		lineageTag: 5abff4f5-d672-4955-a84d-ff9e8e6642a2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Client
+		dataType: string
+		lineageTag: 7baa6005-5c98-480d-a541-15461f6f57ce
+		summarizeBy: none
+		sourceColumn: Client
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		dataType: string
+		lineageTag: 47bf5eca-f93d-40ab-8032-81ee7930ce77
+		summarizeBy: none
+		sourceColumn: Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column Task
+		dataType: string
+		lineageTag: 8e10440b-ccc7-4d12-b15d-60c6878ac688
+		summarizeBy: none
+		sourceColumn: Task
+
+		annotation SummarizationSetBy = Automatic
+
+	column User
+		dataType: string
+		lineageTag: c32be7e1-5907-40df-9410-4a9088f09945
+		summarizeBy: none
+		sourceColumn: User
+
+		annotation SummarizationSetBy = Automatic
+
+	column Email
+		dataType: string
+		lineageTag: b934ed62-9a9a-440d-95c1-a6871b964eea
+		summarizeBy: none
+		sourceColumn: Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tags
+		dataType: string
+		lineageTag: 24a5997c-8b3c-4548-9793-d886503379ca
+		summarizeBy: none
+		sourceColumn: Tags
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start Date'
+		dataType: string
+		lineageTag: 2e0a2a68-4d2b-4b0a-998d-5334db9fb4cd
+		summarizeBy: none
+		sourceColumn: Start Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start Time'
+		dataType: string
+		lineageTag: ceefcc67-88ff-415e-b62e-0506df86a826
+		summarizeBy: none
+		sourceColumn: Start Time
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'End Date'
+		dataType: string
+		lineageTag: bcc36835-b53d-493e-816d-59c26370bd01
+		summarizeBy: none
+		sourceColumn: End Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'End Time'
+		dataType: string
+		lineageTag: 5d660b5a-1ba8-45dc-8d4d-70039eaed4c4
+		summarizeBy: none
+		sourceColumn: End Time
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Type'
+		dataType: string
+		lineageTag: 40ab4e4c-7284-4022-adca-7f5db496ce00
+		summarizeBy: none
+		sourceColumn: Project Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Billable
+		dataType: string
+		lineageTag: f43ffcb4-e922-4d86-a3b6-3a19bf00d9e3
+		summarizeBy: none
+		sourceColumn: Billable
+
+		annotation SummarizationSetBy = Automatic
+
+	column Band
+		dataType: string
+		lineageTag: 8a48070f-3bc9-49b4-b1da-93c47be131c6
+		summarizeBy: none
+		sourceColumn: Band
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Band Number'
+		dataType: string
+		lineageTag: 4380482f-b3f5-4fa1-9fba-f2ba994f511c
+		summarizeBy: none
+		sourceColumn: Band Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bill Rate'
+		dataType: double
+		lineageTag: ea967954-e25f-4bca-9b0a-21c5998b1b64
+		summarizeBy: sum
+		sourceColumn: Bill Rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Cost Rate'
+		dataType: double
+		lineageTag: 16effac9-4add-4635-bc15-43d16cd2b99c
+		summarizeBy: sum
+		sourceColumn: Cost Rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Spent Budget'
+		dataType: double
+		lineageTag: d8703b8e-337b-45ec-a00f-586cbe3079bb
+		summarizeBy: sum
+		sourceColumn: Spent Budget
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Cost to Budget'
+		dataType: double
+		lineageTag: 5baafecc-580f-4357-993a-74714a75e65b
+		summarizeBy: sum
+		sourceColumn: Cost to Budget
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Project Code'
+		dataType: string
+		lineageTag: e335d522-d3fe-4f71-b0c1-f55b970a9828
+		summarizeBy: none
+		sourceColumn: Project Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Check'
+		dataType: string
+		lineageTag: b1d93baf-60ec-4c36-bcc7-a36ff9dce474
+		summarizeBy: none
+		sourceColumn: Project Check
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start Date Mod'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6ce9293c-bc67-4019-ab7d-bb3d168b7ba4
+		summarizeBy: none
+		sourceColumn: Start Date Mod
+
+		variation Variation
+			isDefault
+			relationship: 4bbb2111-f9bf-4dc6-867d-758c7957adbc
+			defaultHierarchy: LocalDateTable_168b11e4-a420-4a24-a056-7697ce711c6f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'End Date Mod'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c2ff0181-79c3-4ced-9946-02f54fc118d6
+		summarizeBy: none
+		sourceColumn: End Date Mod
+
+		variation Variation
+			isDefault
+			relationship: 0bb2b92a-372b-424a-ab97-6a0e64575e49
+			defaultHierarchy: LocalDateTable_30334e99-018a-47f1-958e-d48eed003a00.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Cost Band'
+		dataType: string
+		lineageTag: 9e7b334d-1e00-4e70-b106-3e0c2e63c790
+		summarizeBy: none
+		sourceColumn: Cost Band
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Time Entry' = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("A2813805280961-X4.snowflakecomputing.com","DW_WH",[Implementation="2.0"]),
+				    X4_DW_DEV_V2_Database = Source{[Name="X4_DW_DEV_V2",Kind="Database"]}[Data],
+				    DATAMART_Schema = X4_DW_DEV_V2_Database{[Name="DATAMART",Kind="Schema"]}[Data],
+				    TIME_ENTRY_TILL_JUNE_Table = DATAMART_Schema{[Name="TIME_ENTRY_TILL_JUNE",Kind="Table"]}[Data],
+				    RenamedColumns = Table.RenameColumns(TIME_ENTRY_TILL_JUNE_Table, {
+				        {"Project Name & Code", "Project Name & Code"},
+				        {"CLIENT", "Client"},
+				        {"DESCRIPTION", "Description"},
+				        {"TASK", "Task"},
+				        {"USER", "User"},
+				        {"EMAIL", "Email"},
+				        {"TAGS", "Tags"},
+				        {"Billable-Clockify", "Billable-Clockify"},
+				        {"START_DATE", "Start Date"},
+				        {"START_TIME", "Start Time"},
+				        {"END_DATE", "End Date"},
+				        {"END_TIME", "End Time"},
+				        {"Duration (h)", "Duration (h)"},
+				        {"Duration (decimal)", "Duration (decimal)"},
+				        {"Billable Rate (USD)", "Billable Rate (USD)"},
+				        {"Billable Amount (USD)", "Billable Amount (USD)"},
+				        {"PROJECT_TYPE", "Project Type"},
+				        {"BILLABLE", "Billable"},
+				        {"BAND", "Band"},
+				        {"BAND_NUMBER", "Band Number"},
+				        {"BILL_RATE", "Bill Rate"},
+				        {"COST_RATE", "Cost Rate"},
+				        {"SPENT_BUDGET", "Spent Budget"},
+				        {"COST_TO_BUDGET", "Cost to Budget"},
+				        {"Month-Year-Start", "Month-Year-Start"},
+				        {"Month-Year-End", "Month-Year-End"},
+				        {"Week-End-Date", "Week-End-Date"},
+				        {"PROJECT_CODE", "Project Code"},
+				        {"PROJECT_CHECK", "Project Check"},
+				        {"START_DATE_MOD", "Start Date Mod"},
+				        {"END_DATE_MOD", "End Date Mod"},
+				        {"COST_BAND", "Cost Band"}
+				    }),
+				    #"Changed Type1" = Table.TransformColumnTypes(RenamedColumns,{{"End Date Mod", type date}, {"Start Date Mod", type date}, {"Week-End-Date", type date}, {"Month-Year-End", type date}, {"Month-Year-Start", type date}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Changed Type1",{{"Email", Text.Trim, type text}}),
+				    #"Lowercased Text" = Table.TransformColumns(#"Trimmed Text",{{"Email", Text.Lower, type text}}),
+				    #"Trimmed Text1" = Table.TransformColumns(#"Lowercased Text",{{"User", Text.Trim, type text}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Trimmed Text1", {"Email"}, Team, {"Email ID"}, "Team", JoinKind.LeftOuter),
+				    #"Expanded Team1" = Table.ExpandTableColumn(#"Merged Queries", "Team", {"Employee", "Email ID", "Joining Date", "Exit Date", "Band", "Function", "Status", "Country", "City"}, {"Team.Employee", "Team.Email ID", "Team.Joining Date", "Team.Exit Date", "Team.Band", "Team.Function", "Team.Status", "Team.Country", "Team.City"}),
+				    #"Trimmed Text2" = Table.TransformColumns(#"Expanded Team1",{{"Team.Employee", Text.Trim, type text}}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Trimmed Text2",{{"Project Type", type text}, {"Billable", type text}, {"Band", type text}, {"Duration (decimal)", type number}, {"User", type text}}),
+				    #"Trimmed Text3" = Table.TransformColumns(#"Changed Type2",{{"Email", Text.Trim, type text}}),
+				    #"Added Custom1" = Table.AddColumn(#"Trimmed Text3", "Activity Status", each if [Team.Exit Date] = #date(2050, 12, 31) or [Team.Exit Date] > Date.From(DateTime.LocalNow()) then
+				    "Active"
+				else
+				    "Inactive"),
+				    #"Replaced Errors" = Table.ReplaceErrorValues(#"Added Custom1", {{"Billable", "No"}}),
+				    #"Replaced Errors1" = Table.ReplaceErrorValues(#"Replaced Errors", {{"Activity Status", "0"}})
+				in
+				    #"Replaced Errors1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,41 @@
+table Performance
+	lineageTag: f57d7a17-f43b-4b15-b3d7-086d00d7e420
+
+	measure SelectedWorkCategory_Multi = ```
+			
+			VAR SelectedCategories = VALUES(Performance[Work_category]) 
+			
+			RETURN 
+			IF(
+			    ISFILTERED(Performance[Work_category]), 
+			    IF( [Work_Category_new] IN SelectedCategories, 1, 0 ), 
+			    1  -- Show all if no selection is made
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 0734d935-3ebb-4981-9b92-c5f4574af29f
+
+	column Work_category
+		lineageTag: 4c4f6a41-2bea-446a-9351-530abb2bf83c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Work_category]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Performance = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Work_category", STRING,
+				    {
+				        {"Normal"},
+				        {"Over-Utilized"},
+				        {"Defaulter"}
+				    }
+				)
+
+	annotation PBI_Id = e8464bf181bf451d80f0db9bc82f3fbe
+

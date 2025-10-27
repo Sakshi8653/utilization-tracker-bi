@@ -1,0 +1,35 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "1057dc0ebcad3810e36c",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 28000,
+    "height": 30.248931771192282,
+    "width": 39.211578221915921,
+    "tabOrder": 24000
+  },
+  "visual": {
+    "visualType": "image",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "imageUrl": {
+              "expr": {
+                "ResourcePackageItem": {
+                  "PackageName": "RegisteredResources",
+                  "PackageType": 1,
+                  "ItemName": "country_location-removebg-prev13080118200502744.png"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "18ae75d076e4360ec00c",
+  "howCreated": "InsertVisualButton"
+}

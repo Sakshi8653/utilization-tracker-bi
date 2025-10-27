@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "cc6736abce71816ab772",
+  "position": {
+    "x": 391.44465290806755,
+    "y": 196.92307692307693,
+    "z": 9000,
+    "height": 503.11444652908074,
+    "width": 829.71857410881819,
+    "tabOrder": 12000
+  },
+  "visualGroup": {
+    "displayName": "Auxo box",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

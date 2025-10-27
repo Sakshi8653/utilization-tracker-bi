@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "527bc27c72957201a026",
+  "position": {
+    "x": 1171,
+    "y": 25,
+    "z": 40000,
+    "height": 34,
+    "width": 56,
+    "tabOrder": 29000
+  },
+  "visualGroup": {
+    "displayName": "i box project snap show",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

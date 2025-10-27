@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "18c9400e3f8b227044b2",
+  "position": {
+    "x": 1040,
+    "y": 35,
+    "z": 33000,
+    "height": 96.875,
+    "width": 96.250000000000014,
+    "tabOrder": 8000
+  },
+  "visualGroup": {
+    "displayName": "i box hide",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

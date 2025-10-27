@@ -1,0 +1,46 @@
+table DimFromMonth
+	lineageTag: 44a2a8e7-39aa-4571-a4b2-8b0b611f981e
+
+	column 'From Month'
+		dataType: string
+		lineageTag: af7ff08e-0b1f-46a4-918b-7f17b2aa3b12
+		summarizeBy: none
+		sourceColumn: From Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month From Number'
+		dataType: string
+		lineageTag: aa3e6fe3-58da-4bd4-afa9-dd6e40affec3
+		summarizeBy: none
+		sourceColumn: Month From Number
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimFromMonth = m
+		mode: import
+		source =
+				let
+				    Source = #"Time Period",
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Month_Year"}),
+				    #"Added Custom" = Table.AddColumn(#"Removed Other Columns", "From Month", each let
+				    DateValue = [Month_Year], // Replace with the actual name of your date column
+				    MonthYear = Date.ToText(DateValue, "MMM yyyy")
+				in
+				    MonthYear),
+				    #"Added Custom1" = Table.AddColumn(#"Added Custom", "Month From Number", each let
+				    MonthYearText = [From Month], // Replace with the name of your MMM YYYY column
+				    DateValue = Date.FromText("01 " & MonthYearText), // Convert MMM YYYY to a date
+				    Year = Date.Year(DateValue),
+				    Month = Date.Month(DateValue),
+				    NumericFormat = Year * 100 + Month // Concatenate Year and Month as YYYYMM
+				in
+				    NumericFormat),
+				    #"Removed Columns" = Table.RemoveColumns(#"Added Custom1",{"Month_Year"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "0965652b26979f57cfea",
+  "position": {
+    "x": 136.89296954794369,
+    "y": 0.16091884356626451,
+    "z": 6000,
+    "height": 28.549609067216192,
+    "width": 70.159403600218184
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Hours",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#0e1a77"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "72b98eb30901344e20c4"
+}

@@ -1,0 +1,24 @@
+table StatusFilterTable
+	lineageTag: b68a7555-20c9-42f6-bcde-6c28c6bbf982
+
+	column Status
+		lineageTag: e63a1e6a-1b8d-4627-971f-696e0343f69c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Status]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition StatusFilterTable = calculated
+		mode: import
+		source = ```
+				
+				DATATABLE(
+				    "Status", STRING,
+				    { {"Active"}, {"Inactive"} }
+				)
+				
+				```
+
+	annotation PBI_Id = 5293a13ca5ad46af8520abdf38a47bd6
+

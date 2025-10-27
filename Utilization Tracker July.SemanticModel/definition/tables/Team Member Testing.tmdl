@@ -1,0 +1,651 @@
+table 'Team Member Testing'
+	lineageTag: a7d6da3c-b416-4104-b9f4-7ba06b426773
+
+	column 'Project Name & Code'
+		lineageTag: f3a0d6f6-63c6-47bf-ae57-099e5b12a947
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Project Name & Code]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Client
+		lineageTag: b7901818-e8dd-4484-9db5-887456605b4d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Client]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		lineageTag: 85cf3c92-29b1-4492-a6b9-95a663e10617
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Description]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Task
+		lineageTag: 6bbbcde7-b7cc-40dc-a41c-66eaa8b08a86
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Task]
+
+		annotation SummarizationSetBy = Automatic
+
+	column User
+		lineageTag: 56aaef73-7df4-431c-b381-7e4901e636d1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[User]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Email
+		lineageTag: 13b09baa-b672-47a6-a7dd-c8d945e27279
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Email]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tags
+		lineageTag: 49f3cc58-53d6-49f2-9de8-a9a5a4b9b5d2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Tags]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Billable-Clockify
+		lineageTag: e88f6e97-7387-4f22-a9f7-a481a716a224
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Billable-Clockify]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start Date'
+		lineageTag: 0bc50796-a7eb-4e77-b5d1-f5b6aade25f1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Start Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'End Date'
+		lineageTag: f56f48c7-ffc4-4c37-9cfd-572d69555679
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[End Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'End Time'
+		lineageTag: 37ee563e-d70d-42a2-88bc-79ade875ff70
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[End Time]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Duration (h)'
+		lineageTag: 123358d0-bfdb-40fa-9f5e-52f69775b3be
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Duration (h)]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Duration (decimal)'
+		lineageTag: 32b224c8-45b7-41f5-9ae5-930eb25563f5
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Duration (decimal)]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Billable Rate (USD)'
+		formatString: 0
+		lineageTag: 54745bb7-11db-4b21-8f56-cb7841a0387f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Billable Rate (USD)]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Billable Amount (USD)'
+		formatString: 0
+		lineageTag: 5a3e14b6-4204-4508-a255-f120647470c2
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Billable Amount (USD)]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Type'
+		lineageTag: 01f215c6-5d89-40e4-aa4a-956cdeaf427f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Project Type]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Billable
+		lineageTag: c0c04bd2-da6a-405c-9b5d-725da4fb38c5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Billable]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Band
+		lineageTag: f366d265-e8fd-4830-8491-0e7edd034aeb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Band]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Band Number'
+		lineageTag: da1252e5-41e8-4240-b806-b01bd2fe9ce8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Band Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bill Rate'
+		lineageTag: 08f1a36a-22d0-4316-b757-12fe5d2b93b1
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Bill Rate]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Cost Rate'
+		lineageTag: 6f01a05c-8d56-44c8-aa6d-62ddd0edf980
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Cost Rate]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Spent Budget'
+		lineageTag: 94697a02-e93e-4e30-976b-da1cb6d3e287
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Spent Budget]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Cost to Budget'
+		lineageTag: 7a65fa0f-ddbc-4dfd-94c8-4927bc37135f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Cost to Budget]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Month-Year-Start
+		formatString: General Date
+		lineageTag: 40b128c5-3c5a-405d-afe9-ca812db4caea
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Month-Year-Start]
+
+		variation Variation
+			isDefault
+			relationship: 22a996a8-cf43-4c7c-a31a-608112ad39c3
+			defaultHierarchy: LocalDateTable_7ffa8d99-2b19-45dc-8fa4-ff3c98ca1333.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month-Year-End
+		formatString: General Date
+		lineageTag: fbf06833-c9f6-4338-a387-7bd52313effa
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Month-Year-End]
+
+		variation Variation
+			isDefault
+			relationship: 0cf6133b-8816-4183-94c0-6cab6ecfd7dc
+			defaultHierarchy: LocalDateTable_8c966a5d-3827-4d72-af06-9b1dc86bbb76.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Week-End-Date
+		formatString: General Date
+		lineageTag: e39459d0-ea95-46bb-8b4b-c68fd9064e33
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Week-End-Date]
+
+		variation Variation
+			isDefault
+			relationship: 406fd47e-506c-44f3-b4c9-cf1d78d459e7
+			defaultHierarchy: LocalDateTable_a23686c1-ec2b-46eb-8a09-5f22de5147cb.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Code'
+		lineageTag: 715c85a7-f3cd-478b-917f-61523a422afc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Project Code]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Check'
+		lineageTag: e65aa6a0-4b33-4dd6-a077-750d99d792f3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Project Check]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start Date Mod'
+		formatString: General Date
+		lineageTag: fcf3fb9f-246d-4746-ab2e-b039c00a928d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Start Date Mod]
+
+		variation Variation
+			isDefault
+			relationship: 61cfe50f-8f92-44c4-b899-c7670439226f
+			defaultHierarchy: LocalDateTable_3c028714-d95d-4282-81c8-21dc1b2f1d29.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'End Date Mod'
+		formatString: General Date
+		lineageTag: 6309375b-843b-44ae-a0eb-8de05470948c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[End Date Mod]
+
+		variation Variation
+			isDefault
+			relationship: cb7249c1-e973-43c4-acb1-6189beec70cb
+			defaultHierarchy: LocalDateTable_c91ebdc9-e1fa-428d-92a3-fc9005ba8516.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cost Band'
+		lineageTag: 541cc0c2-8a4f-4159-aa45-ea1805bc5290
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Cost Band]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month_Year_F
+		lineageTag: b7dfa2b1-bde5-43ba-802f-a5938327a882
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Month_Year_F]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Billable Hours_C'
+		lineageTag: 57138e22-5c3f-45ab-ba29-af6d6bd1b767
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Total Billable Hours_C]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Monthly_Utilization(%)
+		lineageTag: 3d502ad3-34d4-4cf5-9d44-00a062bf5adf
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Monthly_Utilization(%)]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Leave Marked'
+		formatString: 0
+		lineageTag: 23da694e-2d42-4182-92fa-9182d712cfcf
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Leave Marked]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Holiday Marked'
+		formatString: 0
+		lineageTag: e6d86ccc-a83e-4db7-bcda-a63fa0a8afbf
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Holiday Marked]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Net Available'
+		formatString: 0
+		lineageTag: 2dc0e8e1-6cd5-4f6a-91d0-dd302c7ba81e
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Net Available]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Hours'
+		lineageTag: 81db1be6-7afd-4c68-9648-504ca5891342
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Total Hours]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total UnBillable Hours_C'
+		formatString: 0
+		lineageTag: 3ca09c88-7930-421d-91ff-a389451d07a6
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Total UnBillable Hours_C]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unbillable%
+		lineageTag: 7a0d2fb8-c3c4-4ea9-b348-915b03f497fd
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Unbillable%]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Billable%
+		lineageTag: c89f7772-ba04-4856-834f-5c28c0aaf171
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Billable%]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TeamJoin
+		lineageTag: d587f885-42c3-4a53-ae83-06656d77dbaf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[TeamJoin]
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrimaryKey
+		lineageTag: 63d5753a-ed36-4a87-bc9a-ee40a634380f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[PrimaryKey]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Working Hours'
+		formatString: 0
+		lineageTag: 3a21246a-1602-41fb-b1da-52d1137dd3a7
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Working Hours]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total PUD Hours_C'
+		formatString: 0
+		lineageTag: cbdd4e1a-05a0-4696-ac71-179e23302223
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Total PUD Hours_C]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Monthly_Utilization(%)_2
+		lineageTag: 775d8f73-57b8-47ab-aee8-8a2f313d9b2d
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Monthly_Utilization(%)_2]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PK2
+		lineageTag: 0b38f5da-71bb-49be-abcb-e8753f8e930c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[PK2]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'User Band'
+		lineageTag: 09761a12-3b08-4556-9fbd-ea85ddb4b644
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[User Band]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Owner New'
+		lineageTag: 36a9a6dd-5e09-43e7-b698-170630cebb40
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Owner New]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start Time'
+		lineageTag: 5351c71d-8149-437e-aad2-12fe15676c4a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Start Time]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthYearNumber
+		lineageTag: 2c4ccb82-e49f-4e7b-87ab-cdf17a7fbb74
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[MonthYearNumber]
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalHoursWithLeaves
+		formatString: 0
+		lineageTag: 991f1fe7-916e-4bd0-90f1-30c72bafd1df
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[TotalHoursWithLeaves]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Hours(With Leaves)C'
+		formatString: 0
+		lineageTag: 73a5a6fa-b9ec-4dbe-af15-8062347b830f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Total Hours(With Leaves)C]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Net Available_C'
+		formatString: 0
+		lineageTag: 4cc54edb-33b8-488c-947a-0ce84339031c
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Net Available_C]
+
+		annotation SummarizationSetBy = Automatic
+
+	column '% Time Spent Current Project 1'
+		lineageTag: 4c974d86-fce6-453a-a4cb-d4fce4be181f
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[% Time Spent Current Project 1]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Team.Employee'
+		lineageTag: 1b7a6942-1147-4d89-af35-cf2a97b3210d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Team.Employee]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Joining Date'
+		formatString: General Date
+		lineageTag: ddf62fe8-4469-43c8-af20-82ee5330a2f3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Team.Joining Date]
+
+		variation Variation
+			isDefault
+			relationship: df402e96-0031-432a-8ec3-ff1f6635c0ab
+			defaultHierarchy: LocalDateTable_f62cf398-3d96-4038-b321-70d72c10cdb7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Exit Date'
+		formatString: General Date
+		lineageTag: 0669f6c8-198b-46aa-8acd-b898f2bee49b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Team.Exit Date]
+
+		variation Variation
+			isDefault
+			relationship: d12ee884-65aa-4d48-8219-d42bd3fe9ca6
+			defaultHierarchy: LocalDateTable_15c0f136-c63b-489d-92ea-4043b04d3789.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Band'
+		lineageTag: cf95ab49-2dae-438a-a39a-bc2cd99e903c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Team.Band]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Function'
+		lineageTag: 2b0540a3-b123-45cf-9cc4-8f36b31446f2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Team.Function]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Status'
+		formatString: 0
+		lineageTag: 031d42c0-ee43-4da6-b58e-4ca989d99979
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: Time Entry[Team.Status]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Country'
+		lineageTag: c00627e4-0806-423b-9342-8d2c7529007a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Team.Country]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min Joining Date'
+		formatString: General Date
+		lineageTag: 2bbd0899-4e45-45d8-a6ed-38a55218af0d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Min Joining Date]
+
+		variation Variation
+			isDefault
+			relationship: f131f41a-bdac-482e-9355-b4729552baf6
+			defaultHierarchy: LocalDateTable_61c0af5a-b8c4-4553-b42c-1961aa4eff4e.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Max Exit Date'
+		formatString: General Date
+		lineageTag: 8c29127d-1b4a-4946-89ae-2da7de803d56
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Max Exit Date]
+
+		variation Variation
+			isDefault
+			relationship: d6faf39f-0c42-43a6-888a-6ec44a2f0284
+			defaultHierarchy: LocalDateTable_3ce51aae-1851-432e-a546-0e41e3d803bc.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.Email ID'
+		lineageTag: 4b375fec-0b9a-41fc-aee1-212352434164
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Team.Email ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Team.City'
+		lineageTag: 0ab7bd99-02fc-437a-befb-3864113a206f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Team.City]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Designations(Group)
+		lineageTag: c2070026-28bd-457d-bd65-4bfe05159132
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Designations(Group)]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Activity Status'
+		lineageTag: 0c81db92-d716-4eed-bf92-5d721ac8b06e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Activity Status]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Concat
+		lineageTag: 2d118dbb-c01f-4578-8be0-fa84651520d6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Concat]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Team Member Testing' = calculated
+		mode: import
+		source = 'Time Entry'
+
+	annotation PBI_Id = 38850a6dc0a141bd914605310a6e16a3
+

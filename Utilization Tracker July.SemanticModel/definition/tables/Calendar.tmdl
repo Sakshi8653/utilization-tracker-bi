@@ -1,0 +1,81 @@
+table Calendar
+	lineageTag: 5ad7cf74-2c14-4889-a047-7cc2535a3d51
+
+	column Date
+		formatString: General Date
+		lineageTag: 2fa57de5-c65d-4aa5-bbe3-5502655483bd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: 39eb51b6-455a-449f-8743-81eba8bd5d6f
+			defaultHierarchy: LocalDateTable_89c0dcb7-cfee-4a30-a801-6fefa67b7a07.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weekday
+		formatString: 0
+		lineageTag: 968157e7-a337-4ec8-be17-779f58880f0b
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Weekday]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Workdays = ```
+			
+			IF(
+			    'Calendar'[Weekday] < 6,  -- Include Monday to Friday (Weekday < 6)
+			    1,                       -- Assign 1 for a working day
+			    0                        -- Assign 0 for weekends
+			)
+			
+			```
+		formatString: 0
+		lineageTag: a4ff18be-dc59-4563-8502-09447b5b1283
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Working Hours' = ```
+			
+			VAR StartDate = MIN('DateCrossJoin'[From Month]) -- Earliest date in the slicer
+			VAR EndDate = 
+			    IF(
+			        MAX('DateCrossJoin'[To_Month]) > TODAY(), 
+			        TODAY(), 
+			        MAX('DateCrossJoin'[To_Month]) -- Use today if the end date is in the future
+			    )
+			
+			RETURN
+			SUMX(
+			    FILTER(
+			        'Calendar', 
+			        'Calendar'[Date] >= StartDate &&
+			        'Calendar'[Date] <= EndDate &&
+			        'Calendar'[Weekday] < 6 -- Exclude weekends (Monday to Friday only)
+			    ),
+			    8 -- 8 hours per working day
+			)
+			
+			```
+		formatString: 0
+		lineageTag: ddcbefaa-bcab-4756-8630-5251c5b28d04
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = calculated
+		mode: import
+		source = ```
+				ADDCOLUMNS(
+				    CALENDAR(MIN('DateCrossJoin'[From Month]), MAX('DateCrossJoin'[To_Month])),
+				    "Weekday", WEEKDAY([Date], 2)
+				)
+				
+				```
+
+	annotation PBI_Id = 3d5bea690d6d4636b3b3316cb8807b2c
+

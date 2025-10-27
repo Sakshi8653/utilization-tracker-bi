@@ -1,0 +1,557 @@
+table Team
+	lineageTag: 43a7a947-f27c-440f-8947-efffa99faea1
+
+	measure 'Total Leave Hours1' = ```
+			
+			SUMX(
+			    FILTER(
+			        'Time Entry 2',
+			        'Time Entry 2'[Project Type] = "Leave"
+			    ),
+			    'Time Entry 2'[Duration (decimal)]
+			)
+			
+			```
+		lineageTag: 2c0457d9-a9d0-4a04-ba17-89df9703c7c8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Net available(new)' = ```
+			
+			CALCULATE(
+			    SUM('Team'[Total Hours (With Leaves)C 1]) - SUM('Team'[Total leaves]) - SUM('Team'[Total Holiday Hours]),
+			    
+			    -- Remove filters on the Team table (to not restrict by any employee or team-level filter)
+			    ALL('Team'),
+			    
+			    -- Remove filters on From Month and To Month
+			    REMOVEFILTERS('DateCrossJoin'[From Month]),
+			    REMOVEFILTERS('DateCrossJoin'[To Month]),
+			    
+			    -- The filtering logic for the selected Project Code (similar to BillableHoursSpent_M2)
+			    FILTER(
+			        ALL('Time Entry 2'),  -- Ignore any filters on Time Entry 2
+			        'Time Entry 2'[User] IN 
+			        SELECTCOLUMNS(
+			            FILTER(
+			                'Time Entry 2', 
+			                'Time Entry 2'[Project Code] IN VALUES('Project Master'[Project Code])  -- Match selected project
+			            ),
+			            "Employee", 'Time Entry 2'[User]  -- Get relevant employees for the selected project
+			        )
+			    )
+			)
+			
+			```
+		lineageTag: 2a50b634-60a2-4c0b-a0ee-6c7b61fdf82a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure NetAvailable_New2 = ```
+			
+			CALCULATE(
+			    SUM('Team'[Total Hours (With Leaves)C 1]) 
+			    - SUM('Team'[Total leaves]) 
+			    - SUM('Team'[Total Holiday Hours]),
+			    ALLEXCEPT(Team, Team[Employee]),        -- Keep context for Employee
+			    FILTER(
+			        ALL('Time Entry 2'),                -- Ignore filters on Time Entry 2
+			        'Time Entry 2'[user] IN 
+			        SELECTCOLUMNS(
+			            FILTER('Time Entry 2', 
+			                'Time Entry 2'[Project Code] IN VALUES('Project Master'[Project Code]) -- Match selected project
+			            ),
+			            "Employee", 'Time Entry 2'[user] -- Get relevant employees for the selected project
+			        )
+			    )
+			)
+			
+			```
+		lineageTag: 3627ced0-ce79-4b1f-a796-7449c6cf2a05
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Emp ID'
+		dataType: string
+		lineageTag: d6ee2560-6d9a-408b-814f-a8bd3373b4e7
+		summarizeBy: none
+		sourceColumn: Emp ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Employee
+		dataType: string
+		lineageTag: f94b7625-5be3-419e-abc9-6d8535b8a6cf
+		summarizeBy: none
+		sourceColumn: Employee
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email ID'
+		dataType: string
+		lineageTag: fe28f364-c7b1-4102-b108-db19060c078a
+		summarizeBy: none
+		sourceColumn: Email ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Joining Date'
+		dataType: dateTime
+		formatString: MM-DD-YYYY
+		lineageTag: 5d0f4c64-d2c7-4689-8e5d-af1356388fe6
+		summarizeBy: none
+		sourceColumn: Joining Date
+
+		variation Variation
+			isDefault
+			relationship: c7b5d837-d70a-44ac-a161-18cc73ecd575
+			defaultHierarchy: LocalDateTable_efbe3782-2169-4ff7-972c-eff2f6b24202.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'Exit Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: eb6a230e-742e-4f9a-b0d7-dcef9c029be9
+		summarizeBy: none
+		sourceColumn: Exit Date
+
+		variation Variation
+			isDefault
+			relationship: 20c4ddbe-d0e5-4438-87da-145deda5b0b6
+			defaultHierarchy: LocalDateTable_57f527cb-0599-4091-92fc-200c06c81e2c.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Designation
+		dataType: string
+		lineageTag: 9c4660b2-3270-40fe-ae6a-f311daf8c6a9
+		summarizeBy: none
+		sourceColumn: Designation
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Team","TableItemName":"Designation (groups)_2","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	column Band
+		dataType: string
+		lineageTag: 4ae62bc4-92f9-4d60-94aa-2f8524533288
+		summarizeBy: none
+		sourceColumn: Band
+
+		annotation SummarizationSetBy = Automatic
+
+	column Function
+		dataType: string
+		lineageTag: df30c201-bcb2-4e4b-a50f-4a7876185549
+		summarizeBy: none
+		sourceColumn: Function
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: int64
+		formatString: 0
+		lineageTag: 465ca466-ce7c-4cb7-8ee6-f5e59b7bf466
+		summarizeBy: sum
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 6342d565-a948-44b8-acd0-a9db19355d87
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: bf804673-a568-4ad4-9d4b-37eb12a2cf17
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Band 1'
+		dataType: double
+		lineageTag: 6b0664a0-bd18-472c-b91b-1c827df5e280
+		summarizeBy: sum
+		sourceColumn: Band 1
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Band 2'
+		dataType: double
+		lineageTag: bfc3ae87-dfa4-4f40-a727-6f246f9912a4
+		summarizeBy: sum
+		sourceColumn: Band 2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Band 3'
+		dataType: int64
+		formatString: 0
+		lineageTag: 96bb682e-9626-4897-bc75-0ed8738b2fad
+		summarizeBy: sum
+		sourceColumn: Band 3
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Band 4'
+		dataType: int64
+		formatString: 0
+		lineageTag: e130e127-cee5-4886-9a8d-523f2d624c2c
+		summarizeBy: sum
+		sourceColumn: Band 4
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cost Rate 3'
+		dataType: double
+		lineageTag: e5381ca4-11f7-4a8b-8f01-618d0bab9bd6
+		summarizeBy: sum
+		sourceColumn: Cost Rate 3
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Calculation_Exit_Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 058961ab-52ac-4230-a8d1-3c6fe34fb03d
+		summarizeBy: none
+		sourceColumn: Calculation_Exit_Date
+
+		variation Variation
+			isDefault
+			relationship: cb8a1602-2b18-4e2f-81d6-4c4093658eac
+			defaultHierarchy: LocalDateTable_2ea92e0e-6887-4580-9f2c-edd436d0801f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column KEY
+		dataType: string
+		lineageTag: d71e4099-1f28-4fc5-8a7c-77370fd94ee3
+		summarizeBy: none
+		sourceColumn: KEY
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Designation (groups)_2' =
+			SWITCH(
+				TRUE,
+				ISBLANK('Team'[Designation]),
+				"(Blank)",
+				'Team'[Designation] IN {"Advisor",
+					"Analyst",
+					"Associate",
+					"Associate - Data Engineering",
+					"Associate - Data Science",
+					"Associate - HR",
+					"Associate Adminstrative",
+					"Associate Analyst",
+					"Associate Consultant",
+					"Associate Engagement Lead",
+					"Business Analyst",
+					"Data Science - Intern",
+					"Executive Assistant",
+					"Finance - Intern",
+					"Gen AI",
+					"Gen AI Intern",
+					"Intern",
+					"Intern - Analyst",
+					"Intern - Associate",
+					"Intern - Research",
+					"IT Infrasturcture - Associate",
+					"Knowledge Management",
+					"Lead - BD",
+					"Lead - HR",
+					"Lead - IT",
+					"Lead - TA",
+					"Lead - UI/UX Designer",
+					"Marketing Intern",
+					"Programmer Analyst",
+					"Programmer Analyst Trainee",
+					"Programmer Analyst Trainee - Intern",
+					"Senior Programmer Analyst",
+					"Senior Specialist - Data Engineering",
+					"Senior Specialist - Finance",
+					"Software Development Engineer",
+					"Software Development Engineer - 1",
+					"Software Engineer",
+					"Specialist - Admin",
+					"Specialist - Data Engineering",
+					"Specialist - IT Infrastructure",
+					"Specialist - TA & HR",
+					"Sr Analyst",
+					"Sr Team Lead",
+					"Sr. Lead - Finance",
+					"Sr. Lead - HRBP",
+					"Sr. Lead - IT",
+					"Sr. Lead - Office Management",
+					"Sr. Lead - TA",
+					"Sr. Software Development Engineer",
+					"Sr. Specialist - TA & HR",
+					"Sr. Team Lead",
+					"Sr.Specialist- Marketing",
+					"Team Lead",
+					"Technology Analyst",
+					"UX Developer Intern"},
+				"AEL and below",
+				'Team'[Designation] IN {"Director",
+					"Executive Director",
+					"Partner"},
+				"Director+",
+				'Team'[Designation] IN {"Assisstant Manager - IT",
+					"Assisstant Manager - Marketing",
+					"Assistant Manager - Design",
+					"Assistant Manager - Marketing",
+					"Assistant Manger - HRBP",
+					"Consultant",
+					"Engagement Lead",
+					"External Consultant",
+					"Manager",
+					"Manager-TA",
+					"Product Owner",
+					"Project Lead",
+					"Project Lead - Tech Services",
+					"Sr Engagement Lead",
+					"Sr. Engagement Lead",
+					"Sr. Manager - BD",
+					"Sr. Manager - TA & BD"},
+				"EL, SEL",
+				'Team'[Designation]
+			)
+		lineageTag: 34e412bb-5635-41e3-88c6-287a6950193f
+		summarizeBy: none
+
+		extendedProperty GroupingMetadata =
+				{
+				  "version": 0,
+				  "groupedColumns": [
+				    {
+				      "Column": {
+				        "Expression": {
+				          "SourceRef": {
+				            "Entity": "Team"
+				          }
+				        },
+				        "Property": "Designation"
+				      }
+				    }
+				  ]
+				}
+
+		annotation GroupingDesignState = {"Version":0,"Sources":[{"Name":"t","Entity":"Team"}],"GroupedColumns":[{"Column":{"Expression":{"SourceRef":{"Source":"t"}},"Property":"Designation"}}],"GroupItems":[{"DisplayName":"(Blank)","BlankDefaultPlaceholder":true},{"DisplayName":"AEL and below","Expression":{"In":{"Expressions":[{"Column":{"Expression":{"SourceRef":{"Source":"t"}},"Property":"Designation"}}],"Values":[[{"Literal":{"Value":"'Advisor'"}}],[{"Literal":{"Value":"'Analyst'"}}],[{"Literal":{"Value":"'Associate'"}}],[{"Literal":{"Value":"'Associate - Data Engineering'"}}],[{"Literal":{"Value":"'Associate - Data Science'"}}],[{"Literal":{"Value":"'Associate - HR'"}}],[{"Literal":{"Value":"'Associate Adminstrative'"}}],[{"Literal":{"Value":"'Associate Analyst'"}}],[{"Literal":{"Value":"'Associate Consultant'"}}],[{"Literal":{"Value":"'Associate Engagement Lead'"}}],[{"Literal":{"Value":"'Business Analyst'"}}],[{"Literal":{"Value":"'Data Science - Intern'"}}],[{"Literal":{"Value":"'Executive Assistant'"}}],[{"Literal":{"Value":"'Finance - Intern'"}}],[{"Literal":{"Value":"'Gen AI'"}}],[{"Literal":{"Value":"'Gen AI Intern'"}}],[{"Literal":{"Value":"'Intern'"}}],[{"Literal":{"Value":"'Intern - Analyst'"}}],[{"Literal":{"Value":"'Intern - Associate'"}}],[{"Literal":{"Value":"'Intern - Research'"}}],[{"Literal":{"Value":"'IT Infrasturcture - Associate'"}}],[{"Literal":{"Value":"'Knowledge Management'"}}],[{"Literal":{"Value":"'Lead - BD'"}}],[{"Literal":{"Value":"'Lead - HR'"}}],[{"Literal":{"Value":"'Lead - IT'"}}],[{"Literal":{"Value":"'Lead - TA'"}}],[{"Literal":{"Value":"'Lead - UI/UX Designer'"}}],[{"Literal":{"Value":"'Marketing Intern'"}}],[{"Literal":{"Value":"'Programmer Analyst'"}}],[{"Literal":{"Value":"'Programmer Analyst Trainee'"}}],[{"Literal":{"Value":"'Programmer Analyst Trainee - Intern'"}}],[{"Literal":{"Value":"'Senior Programmer Analyst'"}}],[{"Literal":{"Value":"'Senior Specialist - Data Engineering'"}}],[{"Literal":{"Value":"'Senior Specialist - Finance'"}}],[{"Literal":{"Value":"'Software Development Engineer'"}}],[{"Literal":{"Value":"'Software Development Engineer - 1'"}}],[{"Literal":{"Value":"'Software Engineer'"}}],[{"Literal":{"Value":"'Specialist - Admin'"}}],[{"Literal":{"Value":"'Specialist - Data Engineering'"}}],[{"Literal":{"Value":"'Specialist - IT Infrastructure'"}}],[{"Literal":{"Value":"'Specialist - TA & HR'"}}],[{"Literal":{"Value":"'Sr Analyst'"}}],[{"Literal":{"Value":"'Sr Team Lead'"}}],[{"Literal":{"Value":"'Sr. Lead - Finance'"}}],[{"Literal":{"Value":"'Sr. Lead - HRBP'"}}],[{"Literal":{"Value":"'Sr. Lead - IT'"}}],[{"Literal":{"Value":"'Sr. Lead - Office Management'"}}],[{"Literal":{"Value":"'Sr. Lead - TA'"}}],[{"Literal":{"Value":"'Sr. Software Development Engineer'"}}],[{"Literal":{"Value":"'Sr. Specialist - TA & HR'"}}],[{"Literal":{"Value":"'Sr. Team Lead'"}}],[{"Literal":{"Value":"'Sr.Specialist- Marketing'"}}],[{"Literal":{"Value":"'Team Lead'"}}],[{"Literal":{"Value":"'Technology Analyst'"}}],[{"Literal":{"Value":"'UX Developer Intern'"}}]]}}},{"DisplayName":"Director+","Expression":{"In":{"Expressions":[{"Column":{"Expression":{"SourceRef":{"Source":"t"}},"Property":"Designation"}}],"Values":[[{"Literal":{"Value":"'Director'"}}],[{"Literal":{"Value":"'Executive Director'"}}],[{"Literal":{"Value":"'Partner'"}}]]}}},{"DisplayName":"EL, SEL","Expression":{"In":{"Expressions":[{"Column":{"Expression":{"SourceRef":{"Source":"t"}},"Property":"Designation"}}],"Values":[[{"Literal":{"Value":"'Assisstant Manager - IT'"}}],[{"Literal":{"Value":"'Assisstant Manager - Marketing'"}}],[{"Literal":{"Value":"'Assistant Manager - Design'"}}],[{"Literal":{"Value":"'Assistant Manager - Marketing'"}}],[{"Literal":{"Value":"'Assistant Manger - HRBP'"}}],[{"Literal":{"Value":"'Consultant'"}}],[{"Literal":{"Value":"'Engagement Lead'"}}],[{"Literal":{"Value":"'External Consultant'"}}],[{"Literal":{"Value":"'Manager'"}}],[{"Literal":{"Value":"'Manager-TA'"}}],[{"Literal":{"Value":"'Product Owner'"}}],[{"Literal":{"Value":"'Project Lead'"}}],[{"Literal":{"Value":"'Project Lead - Tech Services'"}}],[{"Literal":{"Value":"'Sr Engagement Lead'"}}],[{"Literal":{"Value":"'Sr. Engagement Lead'"}}],[{"Literal":{"Value":"'Sr. Manager - BD'"}}],[{"Literal":{"Value":"'Sr. Manager - TA & BD'"}}]]}}}]}
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrimaryKey = 'Team'[Email ID] & "-" & 'Team'[Joining Date]
+		lineageTag: ca55cc7e-b531-4daa-97d9-1b14c43902cb
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column PK2 = Team[Email ID] & "-" & Team[Band]
+		lineageTag: 75f22685-93d2-46d5-b57b-7aee881a25ef
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min Joining Date' = ```
+			CALCULATE(MIN(Team[Joining Date]), ALLEXCEPT(Team, Team[Emp ID]))
+			
+			```
+		formatString: Long Date
+		lineageTag: 4c31ccdf-cc51-4789-b745-4021dd3f6260
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 05516f6d-8bf2-4f29-b7b2-557bdda56b79
+			defaultHierarchy: LocalDateTable_01656a44-12f7-4bda-b2e0-22dbe527e45a.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Max Exit Date' = ```
+			CALCULATE(MAX(Team[Exit Date]), ALLEXCEPT(Team, Team[Emp ID]))
+			
+			```
+		formatString: Long Date
+		lineageTag: def161b8-7880-4d52-ba1a-08b7cfaba6a1
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 947e2948-0ade-4755-ab98-29882d9c45dc
+			defaultHierarchy: LocalDateTable_e161a220-dcf9-4b48-958b-5059b5f0cdf9.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column PK3 = Team[Email ID] & "-" & Team[Designation]
+		lineageTag: 5eff84db-c5de-4962-8918-660368d07f80
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column duplicates = CALCULATE(COUNTROWS(Team),ALLEXCEPT(Team,Team[PK3]))
+		formatString: 0
+		lineageTag: 80a34471-ba0a-4395-a6b0-4aa166d8bfcc
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Hours (With Leaves)C 1' = ```
+			
+			VAR JoiningDate = 'Team'[Joining Date] -- Employee's Joining Date
+			VAR ExitDate = 'Team'[Exit Date] -- Employee's Exit D 2ate
+			
+			-- Lookup the maximum End Date for all tries for the current employee
+			VAR ValidEndDate = 
+			    CALCULATE(
+			        MAX('Time Entry'[End Date]),
+			        FILTER(
+			            ALL('Time Entry'), -- Removes any applied row context
+			            'Time Entry'[User] = 'Team'[Employee]
+			        )
+			    )
+			
+			-- Adjust Start and End Dates to the valid range
+			VAR StartDate = MAX(JoiningDate, MINX(FILTER(ALL('Time Entry'), 'Time Entry'[User] = 'Team'[Employee]), 'Time Entry'[Start Date]))
+			VAR EndDate = MIN(ExitDate, ValidEndDate)
+			
+			-- Validate the date range
+			VAR IsValidPeriod = NOT(ISBLANK(StartDate)) && NOT(ISBLANK(EndDate)) && StartDate <= EndDate
+			
+			-- Calculate the total hours for the entire valid period
+			VAR TotalHours = 
+			IF(
+			    IsValidPeriod,
+			    CALCULATE(
+			        SUM('Time Period'[Hours in Month]),
+			        FILTER(
+			            ALL('Time Entry'),
+			            'Time Entry'[Start Date] >= StartDate &&
+			            'Time Entry'[End Date] <= EndDate &&
+			            'Time Entry'[User] = 'Team'[Employee]
+			        )
+			    ),
+			    0
+			)
+			
+			-- Return the aggregated result
+			RETURN
+			IF(
+			    IsValidPeriod,
+			    TotalHours,
+			    0 -- Return 0 for invalid periods
+			)
+			
+			```
+		formatString: 0
+		lineageTag: c56ce193-f733-4cd0-95da-1314fe811989
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total leaves' = ```
+			
+			
+			    CALCULATE(
+			        SUM('Time Entry 2'[Duration (decimal)]),
+			        'Time Entry'[Project Type] = "Leave"
+			    )
+			
+			
+			
+			```
+		lineageTag: ad2ec85e-3673-4704-a5c1-892d1aa35dd3
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total Holiday Hours' = ```
+			
+			VAR JoiningDate = 'Team'[Joining Date] -- Employee's Joining Date
+			VAR ExitDate = 'Team'[Exit Date] -- Employee's Exit D 2ate
+			VAR SelectedUser = SELECTEDVALUE('Team'[Employee]) -- Assuming $C115 corresponds to the selected user
+			VAR StartDate = MIN(Team[Joining Date]) -- Replace with your $J$3 equivalent
+			VAR EndDate = MAX(Team[Exit Date]) -- Replace with your $K$3 equivalent
+			
+			
+			RETURN
+			    CALCULATE(
+			        SUM('Time Entry 2'[Duration (decimal)]),
+			        'Time Entry'[Project Type] = "Holiday"
+			    )
+			
+			```
+		lineageTag: ffec7a36-4880-4d56-b75f-af73f7faee96
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Net available' = SUM('Team'[Total Hours (With Leaves)C 1]) - Team[Total leaves] - Team[Total Holiday Hours]
+		lineageTag: e56f35de-a291-4210-a22a-30ca5debf069
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Team = m
+		mode: import
+		source =
+				let
+				    Source = SharePoint.Files("https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/", [ApiVersion = 15]),
+				    #"Filtered Rows" = Table.SelectRows(Source, each ([Folder Path] = "https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/") and ([Name] = "Team.xlsx")),
+				    #"Team xlsx_https://procdna sharepoint com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/" = #"Filtered Rows"{[Name="Team.xlsx",#"Folder Path"="https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/"]}[Content],
+				    #"Imported Excel Workbook" = Excel.Workbook(#"Team xlsx_https://procdna sharepoint com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/"),
+				    Team_Sheet = #"Imported Excel Workbook"{[Item="Team",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Team_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Emp ID", type text}, {"Employee", type text}, {"Email ID", type text}, {"Joining Date", type date}, {"Exit Date", type date}, {"Designation", type text}, {"Band", type text}, {"Function", type text}, {"Status", type text}, {"Country", type text}, {"City", type text}, {"Band 1", Int64.Type}, {"Band 2", Int64.Type}, {"Band 3", Int64.Type}, {"Band 4", Int64.Type}, {"Cost Rate 3", Int64.Type}, {"Calculation_Exit_Date", type date}, {"KEY", type text}, {"Column19", type text}, {"Column20", type any}, {"Column21", type text}, {"Column22", type number}, {"Column23", type number}, {"Column24", type any}, {"Column25", type text}, {"Column26", type text}, {"Column27", Int64.Type}, {"Column28", type number}, {"Column29", type number}, {"Column30", type any}, {"Column31", type any}, {"Column32", type any}, {"Column33", type any}, {"Column34", type number}, {"Column35", type number}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column19", "Column20", "Column21", "Column22", "Column23", "Column24", "Column25", "Column26", "Column27", "Column28", "Column29", "Column30", "Column31", "Column32", "Column33", "Column34", "Column35"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Removed Columns",{{"Emp ID", type text}, {"Employee", type text}, {"Email ID", type text}, {"Joining Date", type date}, {"Exit Date", type date}, {"Designation", type text}, {"Band", type text}, {"Function", type text}, {"Status", Int64.Type}, {"Country", type text}, {"City", type text}, {"Band 1", type number}, {"Band 2", type number}, {"Band 3", Int64.Type}, {"Band 4", Int64.Type}, {"Cost Rate 3", type number}, {"Calculation_Exit_Date", type date}, {"KEY", type text}}),
+				    #"Filtered Rows1" = Table.SelectRows(#"Changed Type1", each ([Emp ID] <> null and [Emp ID] <> "")),
+				    #"Added Custom" = Table.AddColumn(#"Filtered Rows1", "Custom", each if [Employee] = "Manroop Singh Parmar" and [Designation] = "Intern - Analyst" then "Exclude" else "Include"),
+				    #"Filtered Rows2" = Table.SelectRows(#"Added Custom", each ([Custom] = "Include")),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Filtered Rows2",{"Custom"}),
+				    #"Lowercased Text" = Table.TransformColumns(#"Removed Columns1",{{"Email ID", Text.Lower, type text}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Lowercased Text",{{"Email ID", Text.Trim, type text}, {"Employee", Text.Trim, type text}}),
+				    #"Trimmed Text1" = Table.TransformColumns(#"Trimmed Text",{{"Employee", Text.Trim, type text}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Trimmed Text1",#date(1950, 12, 31),#date(2050, 12, 31),Replacer.ReplaceValue,{"Exit Date"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value",#date(1950, 12, 31),#date(2050, 12, 31),Replacer.ReplaceValue,{"Calculation_Exit_Date"})
+				in
+				    #"Replaced Value1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

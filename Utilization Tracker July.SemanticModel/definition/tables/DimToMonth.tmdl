@@ -1,0 +1,61 @@
+table DimToMonth
+	lineageTag: 04db3a6e-5550-4b6b-be6f-6385c9230a1d
+
+	column 'To Month'
+		dataType: string
+		lineageTag: 78bde7ee-2682-4554-8530-13b1681b9888
+		summarizeBy: none
+		sourceColumn: To Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month To Number'
+		dataType: string
+		lineageTag: 59d94fc9-0511-4f46-a1a5-dd101c459b8d
+		summarizeBy: none
+		sourceColumn: Month To Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Last_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 143a8d3a-1cad-44ce-98bd-fb4a6c35e65d
+		summarizeBy: none
+		sourceColumn: Last_date
+
+		variation Variation
+			isDefault
+			relationship: 0debcf7a-f7e8-41dc-82b3-04e8d4e6d6c9
+			defaultHierarchy: LocalDateTable_0677c425-7be2-4c1d-a68d-ba5fe8fa6353.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition DimToMonth = m
+		mode: import
+		source =
+				let
+				    Source = #"Time Period",
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Last_date"}),
+				    #"Added Custom" = Table.AddColumn(#"Removed Other Columns", "To Month", each let
+				    DateValue = [Last_date], // Replace with the actual name of your date column
+				    MonthYear = Date.ToText(DateValue, "MMM yyyy")
+				in
+				    MonthYear),
+				    #"Added Custom1" = Table.AddColumn(#"Added Custom", "Month To Number", each let
+				    MonthYearText = [To Month], // Replace with the name of your MMM YYYY column
+				    DateValue = Date.FromText("01 " & MonthYearText), // Convert MMM YYYY to a date
+				    Year = Date.Year(DateValue),
+				    Month = Date.Month(DateValue),
+				    NumericFormat = Year * 100 + Month // Concatenate Year and Month as YYYYMM
+				in
+				    NumericFormat)
+				in
+				    #"Added Custom1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

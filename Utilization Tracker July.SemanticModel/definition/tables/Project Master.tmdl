@@ -1,0 +1,1555 @@
+table 'Project Master'
+	lineageTag: 726c85f9-09e6-4ecb-92dd-a277f488eb46
+
+	measure BillableHoursSpent_M = ```
+			
+			    CALCULATE(
+			        IF(ISBLANK(SUM('Time Entry'[Duration (decimal)])),0,SUM('Time Entry'[Duration (decimal)])),
+			        'Time Entry'[Project Code] = 'Time Entry'[Project Code],
+			        'Time Entry'[Month-Year-Start] >= 'Time Entry'[Month-Year-Start],
+			        'Time Entry'[Month-Year-End] <= 'Time Entry'[Month-Year-End],
+			        'Time Entry'[Billable] = "Yes",
+			         'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band])
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 0d877880-1db1-450a-8616-4e38cb5c6551
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure CostToBudget = ```
+			
+			
+			    CALCULATE(
+			        SUM('Time Entry'[Cost to Budget])
+			    )
+			
+			
+			
+			```
+		lineageTag: 8d8593dc-292d-43d9-9aa8-3964e16c2458
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure SpentHoursBudget = ```
+			
+			
+			    CALCULATE(
+			        SUM('Time Entry'[Spent Budget])
+			    )
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 4ac76acb-5607-4754-b0d6-8781caaa44c6
+
+	measure Measure
+		lineageTag: f0e2e81e-e1ea-4b40-9de9-09ddb9eedca1
+
+	measure 'Measure 3'
+		lineageTag: abb86944-2bb5-4fb2-bfa1-ae1bd95ce467
+
+		annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":null}
+
+		annotation 277cc1b9-af89-4597-8e15-cacc25c0886b = To use special characters in a measure name, enclose the entire name in brackets ( [] ) and add a ] to any closing brackets in the name.
+
+	measure 'Prorated Budget 1' = ```
+			
+			Var FromMonth = SELECTEDVALUE(DateCrossJoin[From Month])
+			Var ToMonth = SELECTEDVALUE('DateCrossJoin'[To Month])
+			
+			VAR StartDate = MIN('Project Master'[Start date])
+			VAR EndDate = MAX('Project Master'[End date])
+			
+			VAR Division = 
+			    
+			     DATEDIFF(StartDate, EndDate, MONTH) + 1
+			
+			VAR ProrateMonth = DATEDIFF(FromMonth, ToMonth, month) + 1
+			
+			Var Prorate = IF(ProrateMonth >= Division , Division, ProrateMonth )
+			
+			Var Result = IF(Division <> 0, MAX('Project Master'[Project Budget]) * Prorate / Division, BLANK())
+			
+			VAR IsInRange = OR(
+			    
+			    // FORMAT('Project Master'[Start date],"YYYYMM") >= MinValue,
+			    // FORMAT('Project Master'[End date], "YYYYMM") <= MaxValue
+			
+			    StartDate >= FromMonth,
+			    EndDate >= ToMonth
+			)
+			
+			RETURN
+			IF(
+			    AND(IsInRange,Result), Result
+			)
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 6f4ecb9a-9b6f-4634-a398-5fdfc8b9c118
+
+	measure 'Prorated Hours 1' = ```
+			
+			Var FromMonth = SELECTEDVALUE(DateCrossJoin[From Month])
+			Var ToMonth = SELECTEDVALUE('DateCrossJoin'[To_Month])
+			
+			VAR StartDate = MIN('Project Master'[Start date])
+			VAR EndDate = MAX('Project Master'[End date])
+			
+			VAR Division = 
+			    
+			     DATEDIFF(StartDate, EndDate, MONTH) + 1
+			
+			VAR ProrateMonth = DATEDIFF(FromMonth, ToMonth, month) + 1
+			
+			Var Prorate = IF(ProrateMonth >= Division , Division, ProrateMonth )
+			
+			Var Result = IF(Division <> 0, MAX('Project Master'[Project Hours]) * Prorate / Division, BLANK())
+			
+			VAR IsInRange = OR(
+			    
+			    // FORMAT('Project Master'[Start date],"YYYYMM") >= MinValue,
+			    // FORMAT('Project Master'[End date], "YYYYMM") <= MaxValue
+			
+			    StartDate >= FromMonth,
+			    EndDate >= ToMonth
+			)
+			
+			RETURN
+			IF(
+			    AND(IsInRange,Result), Result
+			)
+			```
+		formatString: #,0
+		lineageTag: 39c2d7fe-32e3-47c3-929e-d5d262d166bc
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Prorate Month' =
+			
+			Var FromMonth = SELECTEDVALUE(DateCrossJoin[From Month])
+			Var ToMonth = SELECTEDVALUE('DateCrossJoin'[To_Month])
+			
+			VAR ProrateMonth = DATEDIFF(FromMonth, ToMonth, month) + 1
+			RETURN
+			ProrateMonth
+		formatString: 0
+		lineageTag: 1e5eae02-289a-4032-b7a0-8a70f9cc3e4a
+
+	measure 'Gross Margin 1' = [Prorated Budget 1]- [CostToBudget]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 8d96d7e7-f951-44ff-aee0-b719eafe7e52
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Gross Margin 1 %' = ```
+			
+			VAR GM = 
+			    DIVIDE(
+			        'Project Master'[Prorated Budget 1] - 'Project Master'[CostToBudget], 
+			        'Project Master'[Prorated Budget 1], 
+			        0
+			    )
+			RETURN GM
+			
+			```
+		formatString: 0.00%;(0.00%)
+		lineageTag: c04b4bd9-c509-4e5b-8f42-993652305f06
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'BiddingShortfall 1' = ```
+			
+			VAR MaxValue = MAXX(
+			    'Project Master', 
+			    MAX('Project Master'[SpentHoursBudget2], [CostToBudget2])
+			)
+			RETURN
+			    IF(
+			        SELECTEDVALUE('Project Master'[Billable]) = "Yes",
+			        -(MaxValue - SUM('Project Master'[Project Budget])),
+			        BLANK() 
+			    )
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: ccf9e6f3-6eb9-422b-b808-f8fa83de7443
+
+	measure 'Average Gross Margin %' = ```
+			
+			AVERAGEX(
+			    'Project Master', 
+			    [Gross Margin 1 %]
+			)
+			
+			```
+		formatString: 0.00%;(0.00%)
+		lineageTag: f82ec380-5edb-4213-aa74-c26d2f4317f5
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Total Bidding Shortfall' = ```
+			
+			CALCULATE(
+			SUMX(
+			    'Project Master',
+			    [BiddingShortfall 1]
+			), FILTER('Project Master',[StatusBasedOnTimeEntry1] = SELECTEDVALUE(StatusFilterTable[Status])))
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: cb56d61c-50f7-456c-bdd7-65b1d03ba47f
+
+	measure RankByGrossMargin = ```
+			RANKX(ALLSELECTED('Project Master'[Project Name],'Project Master'[Project Code],'Project Master'[Owner]), [Gross Margin(new)],, DESC, Dense)
+			
+			```
+		formatString: 0
+		lineageTag: 2d628f87-3b91-49d4-ab79-a5b7973bfffc
+
+	measure IsTop5 = IF([RankByGrossMargin] <= 5, 1, 0)
+		formatString: 0
+		lineageTag: e86402d2-6412-4ea3-979b-64821dd7612f
+
+	measure IsBottom5 = ```
+			
+			IF(ISBLANK([Gross Margin(new)]),0,IF([RankByGrossMargin] >= MAXX(ALLSELECTED('Project Master'[Project Name],'Project Master'[Project Code],'Project Master'[Owner]), [RankByGrossMargin]) - 4, 1, 0))
+			
+			```
+		formatString: 0
+		lineageTag: d5f2312c-8695-4113-9528-b4320923069b
+
+	measure Marquee =
+			
+			"
+			<marquee direction = 'left'> Right-click on any project name to drill through for more detailed insights. <marquee>
+			"
+		lineageTag: 6fd22d59-25c7-443e-90a2-325e5fdc2be4
+
+	measure Bottom5Threshold = ```
+			
+			CALCULATE(
+			    MINX(
+			        TOPN(5, ALL('Time Entry'), [Gross Margin 1 %], ASC), 
+			        [Gross Margin 1 %]
+			    )
+			)
+			
+			```
+		lineageTag: 84a431f7-a361-45be-813e-37734bb5ed3d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Prorated Budget' = SUMX('Project Master',[Prorated Budget(new)])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 008fcc57-6bab-44b9-a042-502785b3fae3
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Total Prorated Hours' = SUMX('Project Master',[Prorated Hours 2])
+		formatString: #,0
+		lineageTag: 814c3b3d-c9f2-417a-a618-1b82c8870e63
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure SummaryTable = ```
+			
+			SUMMARIZECOLUMNS(
+			    DateCrossJoin[MonthYearDate],
+			    "CostToBudget", [CostToBudget],
+			    "Prorated Budget", SUM('Project Master'[Prorated Budget]),
+			    "Gross Margin", SUM('Project Master'[Gross Margin]),
+			    "Gross Margin Percent", AVERAGE('Project Master'[Gross Margin %])  
+			)
+			
+			```
+		lineageTag: 77a10dbd-fed0-4f15-af74-9b06385874ed
+
+	measure 'Gross Margin New' = SUM('Project Master'[Prorated Budget]) -'Project Master'[CostToBudget]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: a14df8cb-874d-4f49-9614-a91b631d9fea
+
+	measure 'Gross Margin 3 %' = ```
+			
+			VAR GM = 
+			    DIVIDE(
+			       [Gross Margin 3], 
+			        'Project Master'[Prorated Budget 3], 
+			        0
+			    )
+			RETURN GM
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: c30fa4af-3840-4400-a70d-b0031b9cb86f
+
+	measure PUDHoursSpent_M = ```
+			
+			
+			    CALCULATE(
+			        IF(ISBLANK(SUM('Time Entry'[Duration (decimal)])),0,SUM('Time Entry'[Duration (decimal)])),
+			        'Time Entry'[Project Code] = 'Time Entry'[Project Code],
+			        'Time Entry'[Month-Year-Start] >= 'Time Entry'[Month-Year-Start],
+			        'Time Entry'[Month-Year-End] <= 'Time Entry'[Month-Year-End],
+			        'Time Entry'[Billable] = "PUD",
+			         'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band])
+			    )
+			
+			```
+		formatString: #,0
+		lineageTag: 6e908e64-47a5-4c29-992f-dfa0d7d5bae6
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure UnbillableHoursSpent_M = ```
+			
+			
+			    CALCULATE(
+			        IF(ISBLANK(SUM('Time Entry'[Duration (decimal)])),0,SUM('Time Entry'[Duration (decimal)])),
+			        'Time Entry'[Project Code] = 'Time Entry'[Project Code],
+			        'Time Entry'[Month-Year-Start] >= 'Time Entry'[Month-Year-Start],
+			        'Time Entry'[Month-Year-End] <= 'Time Entry'[Month-Year-End],
+			        'Time Entry'[Billable] = "No",
+			         'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band])
+			    )
+			
+			```
+		formatString: #,0
+		lineageTag: 88a26803-f313-47d9-89cd-ea54b3dff75e
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Hours 1' = [BillableHoursSpent_M] + [UnbillableHoursSpent_M] + [PUDHoursSpent_M]
+		formatString: #,0
+		lineageTag: ab5de65e-d319-4283-b587-603d047fc8dd
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Unbillable Hours (%)' = ```
+			
+			CALCULATE(
+			DIVIDE(
+			    [UnbillableHoursSpent_M], 
+			    [SpentHours(Monthly)],
+			    BLANK()
+			),
+			 'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band]))
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: f36020a6-47dd-47d9-9a41-44720a16ad71
+
+	measure 'Monthly Utilization (%)' = ```
+			
+			DIVIDE(
+			    [BillableHoursSpent_M], 
+			    [Net Available 1],
+			    BLANK()
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 94b85bb5-dac1-4a9b-95ae-5389c668fa99
+
+	measure 'Prorated Hours 2' = ```
+			
+			VAR FromMonth = SELECTEDVALUE('DateCrossJoin'[From Month])
+			VAR ToMonth = SELECTEDVALUE('DateCrossJoin'[To Month])
+			VAR StartDate = MIN('Project Master'[Start Date])
+			VAR EndDate = MAX('Project Master'[End Date])
+			 
+			-- Adjust overlapping range
+			VAR AdjustedStart = MAX(FromMonth, StartDate)
+			VAR AdjustedEnd = MIN(ToMonth, EndDate)
+			 
+			-- Calculate total duration (in days)
+			VAR TotalDuration = DATEDIFF(StartDate, EndDate, DAY) + 1
+			 
+			-- Loop over each selected month
+			RETURN 
+			SUMX(
+			    FILTER(
+			        'DateCrossJoin',
+			        'DateCrossJoin'[MonthYearDate] >= AdjustedStart && 'DateCrossJoin'[MonthYearDate] <= AdjustedEnd  -- Ensure only selected months are used
+			    ),
+			    VAR CurrentMonthStart = 'DateCrossJoin'[MonthYearDate]
+			    VAR CurrentMonthEnd = EOMONTH(CurrentMonthStart, 0)  -- Get the end of the current month
+			    VAR ProratedStart = MAX(CurrentMonthStart, StartDate)
+			    VAR ProratedEnd = MIN(CurrentMonthEnd, EndDate)
+			 
+			    -- Calculate the duration for the current month
+			    VAR ProratedDuration = DATEDIFF(ProratedStart, ProratedEnd, DAY) + 1
+			    -- Avoid negative or invalid durations
+			    VAR ValidDuration = IF(ProratedDuration > 0, ProratedDuration, 0)
+			    -- Calculate prorated hours for the current month
+			    VAR ProjectHours = MAX('Project Master'[Project Hours])
+			    RETURN IF(TotalDuration > 0, ProjectHours * ValidDuration / TotalDuration, 0)
+			)
+			```
+		formatString: #,0
+		lineageTag: 962b3442-b296-4662-88d7-9b2e2ebd036d
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Prorated Budget 2' = ```
+			
+			    [Prorated Hours 2]* SUM('Project Master'[Budget Blended Rate ($/hr) 1])  -- Get the related rate from Project Master
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 9bb597e3-d408-4c06-9c6f-6f8fe0c758cd
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure blended = SUM('Project Master'[Budget Blended Rate ($/hr)]) * [Prorated Hours 2]
+		formatString: 0
+		isHidden
+		lineageTag: 4f5efc94-8ae5-41d3-b131-1e7c6ea5f3b4
+
+		changedProperty = IsHidden
+
+	measure 'Total Monthly Utilization (%)' = ```
+			
+			DIVIDE(
+			    [Total Billable Hours], 
+			    [Total Net Available],
+			    BLANK()
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 152b9960-32ca-4e9c-8649-a0d6c0c7240f
+
+	measure '80 % and Below' = ```
+			
+			IF(
+			 [Monthly Utilization Sample (%)] <= 0.80,1,0)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 0d5d8718-bae2-4b8a-afae-fb5cd367194a
+
+	measure 'Gross Margin 2' = [Prorated Budget 2]- [CostToBudget2]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 3ee834ec-c145-489e-a14d-8a528839b4ae
+
+	measure 'Gross Margin 2 %' = ```
+			
+			VAR GM = 
+			    DIVIDE(
+			        'Project Master'[Prorated Budget 2] - [CostToBudget2], 
+			        'Project Master'[Prorated Budget 2], 
+			        0
+			    )
+			RETURN GM
+			
+			```
+		formatString: 0.00%;(0.00%)
+		lineageTag: 1f7ac05c-af0f-4837-8708-0b0caff0eaf8
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Total Gross Margin' = [Total Prorated Budget] - SUM('Time Entry 2'[Cost to Budget])
+		lineageTag: eb3e49ca-f4b2-4ef7-8bbc-77cf0298bd8e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Gross Margin %' = DIVIDE([Total Gross Margin], [Total Prorated Budget],0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: bfdfd910-353a-41cb-80cf-a741667a643a
+
+	measure 'Prorated Budget 3' = ```
+			
+			VAR FromMonth = MIN('DateCrossJoin'[MonthYearDate]) -- Start of slicer range
+			VAR ToMonth = MAX('DateCrossJoin'[MonthYearDate]) -- End of slicer range
+			
+			VAR ProjectStartDate = MIN('Project Master'[Start Date]) -- Project start date
+			VAR ProjectEndDate = MAX('Project Master'[End Date]) -- Project end date
+			
+			VAR TotalMonths = DATEDIFF(ProjectStartDate, ProjectEndDate, MONTH) + 1 -- Total project months
+			VAR SelectedMonths = DATEDIFF(FromMonth, ToMonth, MONTH) + 1 -- Total selected months in slicer range
+			
+			VAR MonthlyProrate = DIVIDE(SUM('Project Master'[Project Budget]), TotalMonths, 0) -- Prorated amount per month
+			
+			VAR StartOfSelectedRange = DATE(YEAR(FromMonth), MONTH(FromMonth), 1) -- First day of the selected range
+			VAR EndOfSelectedRange = EOMONTH(FromMonth, MONTH(ToMonth) - MONTH(FromMonth)) -- Last day of the selected range
+			
+			VAR IsInRange = 
+			    (StartOfSelectedRange <= ProjectEndDate && EndOfSelectedRange >= ProjectStartDate) -- Check if selected range overlaps with project range
+			
+			RETURN
+			IF(
+			    IsInRange,
+			    MonthlyProrate, -- Return the prorated amount for each month
+			    0 -- If outside the project range, return 0
+			)
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: af8985f1-01a6-4d8b-81e0-d212e45b4ba7
+
+	measure 'Gross Margin 3' = [Prorated Budget 3]- [CostToBudget]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 9449968b-159b-4644-9d95-32dc89ee5cba
+
+	measure '80% - 120%' = ```
+			
+			IF(
+			    AND(
+			        [Monthly Utilization Sample (%)] > 0.80, 
+			        [Monthly Utilization Sample (%)] <= 1.20
+			    ),
+			    1, 
+			    0
+			)
+			```
+		formatString: 0
+		lineageTag: c39dbebc-33ee-4cc6-835c-9d5c38abd226
+
+	measure '120% and Above' = ```
+			
+			IF(
+			    [Monthly Utilization Sample (%)] >= 1.20
+			,1,0)
+			
+			```
+		formatString: 0
+		lineageTag: 3f5994e9-2907-4a13-81a3-ac3061d06ca8
+
+	measure 'Prorated Hours(new)' = ```
+			
+			VAR FromMonth = SELECTEDVALUE('DateCrossJoin'[From Month])
+			VAR ToMonth = SELECTEDVALUE('DateCrossJoin'[To Month])
+			VAR StartDate = MIN('Project Master'[Start Date])
+			VAR EndDate = MAX('Project Master'[End Date])
+			
+			-- Adjust overlapping range
+			VAR AdjustedStart = MAX(FromMonth, StartDate)
+			VAR AdjustedEnd = MIN(ToMonth, EndDate)
+			
+			-- Calculate total duration (in days)
+			VAR TotalDuration = DATEDIFF(StartDate, EndDate, DAY) + 1
+			
+			-- Loop over each selected month
+			RETURN 
+			IF(ISBLANK(SUMX(
+			    FILTER(
+			        'DateCrossJoin',
+			        'DateCrossJoin'[MonthYearDate] >= DATE(YEAR(AdjustedStart), MONTH(AdjustedStart), 1) 
+			        && 'DateCrossJoin'[MonthYearDate] <= DATE(YEAR(AdjustedEnd), MONTH(AdjustedEnd), 1)  -- Adjusted to the start of the months
+			    ),
+			    VAR CurrentMonthStart = 'DateCrossJoin'[MonthYearDate]
+			    VAR CurrentMonthEnd = EOMONTH(CurrentMonthStart, 0)  -- Get the end of the current month
+			    VAR ProratedStart = MAX(CurrentMonthStart, StartDate)
+			    VAR ProratedEnd = MIN(CurrentMonthEnd, EndDate)
+			
+			    -- Calculate the duration for the current month
+			    VAR ProratedDuration = DATEDIFF(ProratedStart, ProratedEnd, DAY) + 1
+			    -- Avoid negative or invalid durations
+			    VAR ValidDuration = IF(ProratedDuration > 0, ProratedDuration, 0)
+			    -- Calculate prorated hours for the current month
+			    VAR ProjectHours = MAX('Project Master'[Project Hours])
+			    RETURN IF(TotalDuration > 0, ProjectHours * ValidDuration / TotalDuration, 0)
+			)),0,SUMX(
+			    FILTER(
+			        'DateCrossJoin',
+			        'DateCrossJoin'[MonthYearDate] >= DATE(YEAR(AdjustedStart), MONTH(AdjustedStart), 1) 
+			        && 'DateCrossJoin'[MonthYearDate] <= DATE(YEAR(AdjustedEnd), MONTH(AdjustedEnd), 1)  -- Adjusted to the start of the months
+			    ),
+			    VAR CurrentMonthStart = 'DateCrossJoin'[MonthYearDate]
+			    VAR CurrentMonthEnd = EOMONTH(CurrentMonthStart, 0)  -- Get the end of the current month
+			    VAR ProratedStart = MAX(CurrentMonthStart, StartDate)
+			    VAR ProratedEnd = MIN(CurrentMonthEnd, EndDate)
+			
+			    -- Calculate the duration for the current month
+			    VAR ProratedDuration = DATEDIFF(ProratedStart, ProratedEnd, DAY) + 1
+			    -- Avoid negative or invalid durations
+			    VAR ValidDuration = IF(ProratedDuration > 0, ProratedDuration, 0)
+			    -- Calculate prorated hours for the current month
+			    VAR ProjectHours = MAX('Project Master'[Project Hours])
+			    RETURN IF(TotalDuration > 0, ProjectHours * ValidDuration / TotalDuration, 0)
+			)
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: cc585c6c-0616-414e-97d8-9e88b08adc19
+
+	measure 'Prorated Budget(new)' = ```
+			
+			    [Prorated Hours(new)]* SUM('Project Master'[Budget Blended Rate ($/hr) 1])  -- Get the related rate from Project Master
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: f0a07810-6db2-420b-9af8-8a989554cb18
+
+	measure 'Gross Margin(new)' = [Prorated Budget(new)]- [CostToBudget2]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: cd668e23-4927-4caa-911b-652bb6c6cce5
+
+	measure 'Gross Margin(new) %' = ```
+			
+			VAR GM = 
+			    DIVIDE(
+			        [Gross Margin(new)], 
+			        'Project Master'[Prorated Budget(new)], 
+			        0
+			    )
+			RETURN GM
+			
+			```
+		formatString: 0.00%;(0.00%)
+		lineageTag: 14f84324-beef-40a8-91a4-a3da6f09de52
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure BillableHoursSpent_M1 = ```
+			
+			IF(ISBLANK(
+			    CALCULATE(
+			        SUM('Time Entry 2'[Duration (decimal)]),
+			        'Time Entry 2'[Project Code] = 'Time Entry 2'[Project Code],
+			        'Time Entry 2'[Month-Year-Start] >= 'Time Entry 2'[Month-Year-Start],
+			        'Time Entry 2'[Month-Year-End] <= 'Time Entry 2'[Month-Year-End],
+			        'Time Entry 2'[Billable] = "Yes"
+			    )),0,CALCULATE(
+			        SUM('Time Entry 2'[Duration (decimal)]),
+			        'Time Entry 2'[Project Code] = 'Time Entry 2'[Project Code],
+			        'Time Entry 2'[Month-Year-Start] >= 'Time Entry 2'[Month-Year-Start],
+			        'Time Entry 2'[Month-Year-End] <= 'Time Entry 2'[Month-Year-End],
+			        'Time Entry 2'[Billable] = "Yes"
+			    ))
+			
+			```
+		formatString: #,0
+		lineageTag: 41568791-97e6-4574-be17-784e6801afc8
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Cost to Budget' = ```
+			
+			IF(
+			    ISBLANK(SELECTEDVALUE('Time Entry'[Project Code])),
+			    0,
+			    CALCULATE(
+			        SUM('Time Entry'[Cost to Budget]),
+			        'Time Entry'[Project Code] = SELECTEDVALUE('Time Entry'[Project Code]),
+			        'Time Entry'[Month-Year-Start] >= SELECTEDVALUE(DateCrossJoin[From Month]),
+			        'Time Entry'[Month-Year-End] <= SELECTEDVALUE(DateCrossJoin[To Month])
+			    )
+			)
+			
+			```
+		lineageTag: f1f057a6-c50a-41c0-b633-4d6a5ca3e0c7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure SpentHoursBudget2 = ```
+			
+			
+			    CALCULATE(
+			        SUM('Time Entry 2'[Spent Budget])
+			    )
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 86f96d95-7c59-4a6c-b5ec-34dfcfc57d26
+
+	measure 'Monthly Utilization Sample (%)' = ```
+			
+			DIVIDE(
+			    [BillableHoursSpent_M], 
+			    [Net Available 1 sample],
+			    BLANK()
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 43f031a6-8eac-4d4c-89eb-1f00ce923cfb
+
+	measure 'Total Monthly Utilization Sample(%)' = ```
+			
+			VAR SelectedDate = SELECTEDVALUE(DateCrossJoin[To Month])
+			RETURN
+			CALCULATE(
+			DIVIDE(
+			    [Total Billable Hours], 
+			    [Total Net Available Sample],
+			    BLANK()
+			),
+			 FILTER(
+			        'Time Entry',
+			        'Time Entry'[Team.Exit Date] = DATE(2050,12,31) ||
+			        'Time Entry'[Team.Exit Date] > SelectedDate
+			    ))
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: c740f225-5ba1-4272-8f35-f7ae1b2cfa3c
+
+	measure 'Total Prorated Budget (new)' = ```
+			
+			VAR ProratedBudget =
+			    CALCULATE(
+			        SUMX('Project Master', [Prorated Budget(new)]),
+			        FILTER(
+			            'Project Master',
+			            'Project Master'[StatusBasedOnTimeEntry1] IN VALUES(StatusFilterTable[Status])
+			        )
+			    )
+			RETURN
+			    IF(ISBLANK(ProratedBudget), 0, ProratedBudget)
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 9242b9aa-a9a5-4e96-b9c7-923edf566e9b
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Total Prorated Hours (new)' = ```
+			
+			CALCULATE(
+			    SUMX('Project Master', [Prorated Hours(new)]),
+			    FILTER(
+			        'Project Master',
+			        'Project Master'[StatusBasedOnTimeEntry1] IN VALUES(StatusFilterTable[Status])
+			    )
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: c07db1f6-ab88-4c90-a041-281d47e66dbe
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Gross Margin (new)' = ```
+			
+			CALCULATE(
+			    [Total Prorated Budget] - [CostToBudget2],
+			    FILTER(
+			        'Project Master',
+			        'Project Master'[StatusBasedOnTimeEntry1] IN VALUES(StatusFilterTable[Status])
+			    )
+			)
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: a1510be2-c7c3-4c99-b65f-81c9d0d3346c
+
+	measure 'Total Gross Margin (new) %' = ```
+			
+			CALCULATE(
+			    DIVIDE([Total Gross Margin (new)], [Total Prorated Budget (new)], 0),
+			    FILTER(
+			        'Project Master',
+			        'Project Master'[StatusBasedOnTimeEntry1] IN VALUES(StatusFilterTable[Status])
+			    )
+			)
+			
+			```
+		formatString: 0.00%;(0.00%)
+		lineageTag: c5eac9ce-74bf-4b77-82fb-4241b908c1fc
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'ToleranceStatus new' =
+			
+			IF(
+			    [Prorated Budget(new)] * 1.15 < [CostToBudget2],
+			    "Out of Tolerance",
+			    "Inside Tolerance"
+			)
+		lineageTag: a6209919-370c-42f1-bfe0-4b40b0bb0c54
+
+	measure 'Total Monthly Utilization Sample (80% and below)(%)' = ```
+			
+			DIVIDE(
+			    [Total Billable Hours (80 % and below)], 
+			    [Total Net Available Sample (80% and below)],
+			    BLANK()
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 5dcc2908-1168-4b80-a232-11c40f1437a4
+
+	measure 'Total Monthly Utilization Sample (80%-120%)(%)' = ```
+			
+			DIVIDE(
+			    [Total Billable Hours (80% - 120%)], 
+			    [Total Net Available Sample (80%-120%)],
+			    BLANK()
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: a6aa06c2-a6c1-4f6c-9fdf-fecfc882ae76
+
+	measure 'Total Monthly Utilization Sample (120% and above)(%)' = ```
+			
+			DIVIDE(
+			    [Total Billable Hours (120% and above)], 
+			    [Total Net Available Sample (120% and above)],
+			    BLANK()
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: f0dfc0a5-639c-43ff-b140-5ee20bf3c787
+
+	measure 'Status based on time entry' = ```
+			
+			VAR CurrentToMonth = SELECTEDVALUE('DateCrossJoin'[To Month]) -- Dynamic value from the slicer for To Month
+			VAR CurrentFromMonth = SELECTEDVALUE('DateCrossJoin'[From Month]) -- Dynamic value from the slicer for From Month
+			VAR ProjectEndDate = MAX('Project Master'[End Date]) -- End Date of the project
+			VAR MaxEndDateMod = 
+			    CALCULATE(
+			        MAX('Time Entry 2'[End Date Mod]),
+			        FILTER(
+			            'Time Entry 2',
+			            'Time Entry 2'[Project Code] = SELECTEDVALUE('Project Master'[Project Code])
+			        )
+			    )
+			RETURN
+			
+			IF(
+			    ProjectEndDate >= CurrentToMonth,
+			    "Active",
+			    IF(
+			        MaxEndDateMod >= CurrentFromMonth,
+			        "Active",
+			        "Inactive"
+			    )
+			)
+			
+			```
+		lineageTag: 2af9d2ba-c2ac-47de-b9b8-ecdf516237c7
+
+	measure 'Total Blended Rate' = SUMX('Project Master','Project Master'[Budget Blended Rate ($/hr) 1])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 8bf43c0f-95fe-44f8-ae62-33cb504a5a8f
+
+	measure StatusBasedOnTimeEntry1 = ```
+			
+			VAR CurrentToMonth = SELECTEDVALUE('DateCrossJoin'[To Month]) -- Dynamic value from the slicer for To Month
+			VAR CurrentFromMonth = SELECTEDVALUE('DateCrossJoin'[From Month]) -- Dynamic value from the slicer for From Month
+			VAR ProjectEndDate = MAX('Project Master'[End Date]) -- End Date of the project
+			VAR MaxEndDateMod = 
+			    CALCULATE(
+			        MAX('Time Entry 2'[End Date Mod]),
+			        FILTER(
+			            'Time Entry 2',
+			            'Time Entry 2'[Project Code] = SELECTEDVALUE('Project Master'[Project Code])
+			        )
+			    )
+			RETURN
+			IF(
+			    ProjectEndDate >= CurrentToMonth,
+			    "Active",
+			    IF(
+			        MaxEndDateMod >= CurrentFromMonth,
+			        "Active",
+			        "Inactive"
+			    )
+			)
+			
+			```
+		lineageTag: 2294aced-8c15-4c58-a821-6bf4a47c4b29
+
+	measure StatusFilterMeasure = ```
+			
+			IF(
+			    SELECTEDVALUE(StatusFilterTable[Status]) = [StatusBasedOnTimeEntry1],
+			    1,
+			    0
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 07d1d2f7-aa70-4e11-8cc7-8c01c9b7ad6f
+
+	measure 'Budget Blended Rate ($/hr) sample' = ```
+			
+			CALCULATE(
+			    DIVIDE(
+			        SUM('Project Master'[Project Budget]),
+			        SUM('Project Master'[Project Hours]),
+			        0
+			    ),
+			    FILTER(
+			        'Project Master',
+			        'Project Master'[StatusBasedOnTimeEntry1] IN VALUES(StatusFilterTable[Status])
+			    )
+			)
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: a59efbe2-8487-48a6-9875-40c26dfbdb3e
+
+	measure 'Total Project Budget' = ```
+			
+			CALCULATE(
+			    SUMX('Project Master', 'Project Master'[Project Budget]),
+			    FILTER(
+			        'Project Master',
+			        'Project Master'[StatusBasedOnTimeEntry1] IN VALUES(StatusFilterTable[Status])
+			    )
+			)
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 1edb5e89-7fd1-434d-ba14-31912dbab4ef
+
+	measure 'Total Project Hours' = ```
+			
+			CALCULATE(
+			    SUMX('Project Master', 'Project Master'[Project Hours]),
+			    FILTER(
+			        'Project Master',
+			        'Project Master'[StatusBasedOnTimeEntry1] IN VALUES(StatusFilterTable[Status])
+			    )
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: 8c22a435-14f7-4d3e-9bf1-387275edcd7c
+
+	measure 'Total Cost Incurred' = ```
+			
+			CALCULATE(
+			    SUMX('Time Entry 2', 'Time Entry 2'[Cost to Budget]),
+			    FILTER(
+			        'Project Master',
+			        'Project Master'[StatusBasedOnTimeEntry1] IN VALUES(StatusFilterTable[Status])
+			    )
+			)
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 50f66f54-d653-4cfb-897b-4d28a49d57cd
+
+	measure 'Total Duration (decimal)' = ```
+			
+			CALCULATE(
+			    SUMX('Time Entry 2', 'Time Entry 2'[Duration (decimal)]),
+			    FILTER(
+			        'Project Master',
+			        'Project Master'[StatusBasedOnTimeEntry1] IN VALUES(StatusFilterTable[Status])
+			    )
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: 8f58e4fa-2d9b-4d07-a2fd-c25845ab8be1
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total gross margin(new) 1%' = DIVIDE([Total Gross Margin], [Total Prorated Budget],0)
+		formatString: 0%;-0%;0%
+		lineageTag: 7f397a6d-02ce-4018-9d43-47daeb4d0181
+
+	measure 'Total Gross Margin(new) 1' = ```
+			([Total Prorated Budget] - [CostToBudget2]) 
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 8eae62d8-044e-4520-9de9-b401089f8819
+
+	measure 'Billable Hours (%)' = ```
+			
+			CALCULATE(
+			DIVIDE(
+			    [billableHoursSpent_M], 
+			    [SpentHours(Monthly)],
+			    BLANK()
+			),
+			 'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band]))
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 55941850-670f-48e3-81bf-f5870022e3f9
+
+	measure 'Billable_Hours_AllProjects testing' = ```
+			
+			 
+			VAR SelectedClient = SELECTEDVALUE('Time Entry'[Client])
+			
+			-- Get only the team members for selected client
+			VAR TeamMembersForClient =
+			    CALCULATETABLE(
+			        VALUES('Time Entry'[Team.Employee]),
+			        ALL('Time Entry'),                        -- Reset all filters
+			        'Time Entry'[Client] = SelectedClient     -- Apply only client filter to get team members
+			    )
+			
+			RETURN
+			CALCULATE(
+			    SUMX(
+			        'Time Entry',
+			        IF('Time Entry'[Billable] = "Yes", 'Time Entry'[Duration (decimal)], 0)
+			    ),
+			
+			    -- Apply only team member filter
+			    TREATAS(TeamMembersForClient, 'Time Entry'[Team.Employee]),
+			
+			    -- Remove client filter so project is unaffected
+			    REMOVEFILTERS('Time Entry'[Client]),
+			
+			    -- Keep your existing logic
+			    'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band])
+			)
+			```
+		lineageTag: 2d075f46-ee25-4ae1-9d92-3c3faec69383
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BillableHoursSpent_TeamWiseBreakup = ```
+			
+			
+			    CALCULATE(
+			        SUM('Time Entry'[Duration (decimal)]),
+			        'Time Entry'[Project Code] = 'Time Entry'[Project Code],
+			        'Time Entry'[Month-Year-Start] >= 'Time Entry'[Month-Year-Start],
+			        'Time Entry'[Month-Year-End] <= 'Time Entry'[Month-Year-End],
+			        'Time Entry'[Billable] = "Yes",
+			         'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band])
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: cbd72161-45fb-4753-b3f0-6a12d1ff4cf6
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure UnbillableHoursSpent_TeamWiseBreakup = ```
+			
+			
+			    CALCULATE(
+			        SUM('Time Entry'[Duration (decimal)]),
+			        'Time Entry'[Project Code] = 'Time Entry'[Project Code],
+			        'Time Entry'[Month-Year-Start] >= 'Time Entry'[Month-Year-Start],
+			        'Time Entry'[Month-Year-End] <= 'Time Entry'[Month-Year-End],
+			        'Time Entry'[Billable] = "No",
+			         'Time Entry'[Team.Band] = MAX('Time Entry'[Team.Band])
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 14dae0c2-92d9-4805-9439-693926bf473c
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Billable Hours (Card)' = ```
+			
+			SUMX(
+			    VALUES('Time Entry'[Team.Employee]),
+			    [BillableHoursSpent_TeamWiseBreakup]
+			)
+			
+			```
+		lineageTag: afca9969-6462-4673-abfe-a0e948d6f098
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Project Code'
+		dataType: string
+		lineageTag: c6ac31cc-abc4-4bc7-b88c-3c42b98a5047
+		summarizeBy: none
+		sourceColumn: Project Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Name & Code'
+		dataType: string
+		lineageTag: 16042882-c5ae-45f5-a898-0a4d721130cc
+		summarizeBy: none
+		sourceColumn: Project Name & Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Name'
+		dataType: string
+		lineageTag: ce4e29cc-66b9-4c8e-a115-9544c24de58d
+		summarizeBy: none
+		sourceColumn: Project Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Purchase Order of Client'
+		dataType: string
+		lineageTag: e2ca0cc7-4de4-41ae-9748-a8580864cfeb
+		summarizeBy: none
+		sourceColumn: Purchase Order of Client
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Type'
+		dataType: string
+		lineageTag: dee26fc7-d892-4441-b634-8d59d34d7997
+		summarizeBy: none
+		sourceColumn: Project Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Billing Method'
+		dataType: string
+		lineageTag: 753dd067-34ca-4d86-a22e-c7fd58e623d2
+		summarizeBy: none
+		sourceColumn: Billing Method
+
+		annotation SummarizationSetBy = Automatic
+
+	column Billable
+		dataType: string
+		lineageTag: e2fb0563-eda3-4203-bba8-db5f746177a1
+		summarizeBy: none
+		sourceColumn: Billable
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Client Code'
+		dataType: string
+		lineageTag: b302f3e6-26aa-4021-bf42-1153b9273523
+		summarizeBy: none
+		sourceColumn: Client Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Client
+		dataType: string
+		lineageTag: b56d78ad-9321-409f-9e42-34f849eaf27d
+		summarizeBy: none
+		sourceColumn: Client
+
+		annotation SummarizationSetBy = Automatic
+
+	column Owner
+		dataType: string
+		lineageTag: 1cdf5c80-1597-4664-bc64-cb72fff31cab
+		summarizeBy: none
+		sourceColumn: Owner
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Hours'
+		dataType: int64
+		formatString: #,0
+		lineageTag: edfe00b9-d51d-4e22-abbc-526c77da1b45
+		summarizeBy: sum
+		sourceColumn: Project Hours
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column 'Budget Blended Rate ($/hr)'
+		dataType: double
+		formatString: 0
+		lineageTag: add54ca5-6da2-4009-ae29-e70b4db6c41f
+		summarizeBy: sum
+		sourceColumn: Budget Blended Rate ($/hr)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column 'Project Budget'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 0fc8ceec-b917-4179-998b-2d17a0d1f4ca
+		summarizeBy: sum
+		sourceColumn: Project Budget
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column 'Cost Blended Rate ($/hr)2'
+		dataType: string
+		lineageTag: 43784c97-ef79-4ab1-b10c-908f33d50f04
+		summarizeBy: none
+		sourceColumn: Cost Blended Rate ($/hr)2
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Cost'
+		dataType: int64
+		formatString: 0
+		lineageTag: 61416e55-7478-4348-98b1-7b93337e5231
+		summarizeBy: sum
+		sourceColumn: Project Cost
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Planned Margin'
+		dataType: string
+		lineageTag: fee49aa8-3d6d-470e-9ef0-7f95ac3cb3fa
+		summarizeBy: none
+		sourceColumn: Planned Margin
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start date'
+		dataType: dateTime
+		formatString: MM/DD/YYYY
+		lineageTag: b86a70e6-967d-4ba4-9ea4-80f8fc345de0
+		summarizeBy: none
+		sourceColumn: Start date
+
+		variation Variation
+			isDefault
+			relationship: f2fa387c-33f1-4515-aea8-51da36cfd405
+			defaultHierarchy: LocalDateTable_65494732-62e0-47af-8a76-d70ca612a02e.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'End date'
+		dataType: dateTime
+		formatString: mm/dd/yyyy
+		lineageTag: ef420ce6-23b2-4c73-ab17-481f0986c75c
+		summarizeBy: none
+		sourceColumn: End date
+
+		variation Variation
+			isDefault
+			relationship: a4e368b4-5e99-410b-b2f0-8f5174cab758
+			defaultHierarchy: LocalDateTable_70107c39-c3a7-4309-ae2c-cba1b253bd58.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Extended Date'
+		dataType: string
+		lineageTag: 20ab0f25-9121-4bcf-b6c1-06b06e7708ea
+		summarizeBy: none
+		sourceColumn: Extended Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column Aborted
+		dataType: string
+		lineageTag: a73bf87c-39d2-4cc7-ba17-74d20012577c
+		summarizeBy: none
+		sourceColumn: Aborted
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 79773024-942c-467b-b75b-6919fa7a4568
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Clockify Status'
+		dataType: string
+		lineageTag: cd3b8b57-013d-473e-85d1-a462692316fb
+		summarizeBy: none
+		sourceColumn: Clockify Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column BiddingShortfall = ```
+			
+			VAR BS = 'Project Master'[CostToBudget]-'Project Master'[Project Budget]
+			RETURN          
+			  IF( 'Project Master'[Billable] = "Yes",
+			        BS
+			    )
+			```
+		dataType: double
+		formatString: #,##0;(#,##0)
+		lineageTag: e15c24e4-279e-4601-aeb1-62f4755392a0
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Month_End_Date
+		type: calculated
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 355a1b0d-7648-478d-8269-9b78c0cf3ed5
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: be4f3ab6-563e-4cb6-8e5e-52da0e5ea880
+			defaultHierarchy: LocalDateTable_d9acf49b-c3f1-45e2-9ed1-26bcfb43fa55.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":null}
+
+		annotation 277cc1b9-af89-4597-8e15-cacc25c0886b = To use special characters in a column name, enclose the entire name in brackets ( [] ) and add a ] to any closing brackets in the name.
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column YearM = YEAR('Project Master'[Month_End_Date])
+		formatString: 0
+		lineageTag: d4780d68-ae52-42a8-9aa1-f2a1ea9e7d5f
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column CostToBudget_C = ```
+			
+			
+			    CALCULATE(
+			        SUM('Time Entry'[Cost to Budget]),
+			        'Time Entry'[Project Code] = 'Time Entry'[Project Code],
+			        'Time Entry'[Month-Year-Start] >= 'Time Entry'[Start Date Mod],
+			        'Time Entry'[Month-Year-End] <= 'Time Entry'[End Date Mod]
+			    )
+			```
+		lineageTag: 4e3058a9-677a-4877-9acb-fce2edf928fa
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Billable Budget TD' = IF('Project Master'[Status] = "Inactive", 'Project Master'[Project Budget], MIN('Project Master'[BillableHoursSpent_M]*'Project Master'[Budget Blended Rate ($/hr)], 'Project Master'[Project Budget]))
+		dataType: int64
+		formatString: 0
+		lineageTag: f8176d2e-06b1-4155-bc3e-22c5d0d59800
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillableHoursSpent_C = ```
+			
+			
+			    CALCULATE(
+			        SUM('Time Entry'[Duration (decimal)]),
+			        'Time Entry'[Project Code] = 'Time Entry'[Project Code],
+			        'Time Entry'[Month-Year-Start] >= 'Time Entry'[Month-Year-Start],
+			        'Time Entry'[Month-Year-End] <= 'Time Entry'[Month-Year-End],
+			        'Time Entry'[Billable] = "Yes"
+			    )
+			
+			```
+		dataType: int64
+		lineageTag: 753af875-b728-4642-8860-85395bbee277
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Prorated Hours' = ```
+			
+			//VAR MinValue = CALCULATE(SUMMARIZE('DateCrossJoin',DateCrossJoin[Month From Number]),
+			//DateCrossJoin[From Month]= SELECTEDVALUE(DateCrossJoin[From Month]))
+			
+			//VAR MaxValue = CALCULATE(SUMMARIZE('DateCrossJoin',DateCrossJoin[Month To Number]),
+			//DateCrossJoin[To Month]= SELECTEDVALUE(DateCrossJoin[To Month]))
+			
+			Var FromMonth = SELECTEDVALUE('DateCrossJoin'[Month From Number])
+			Var ToMonth = SELECTEDVALUE('DateCrossJoin'[Month To Number])
+			
+			VAR Division = DATEDIFF('Project Master'[End date], 'Project Master'[Start date], MONTH)
+			
+			//VAR Prorate = IF(MaxValue - MinValue + 1 >= Division,  Division, (MaxValue - MinValue + 1))
+			
+			VAR Prorate = IF(ToMonth - FromMonth + 1 >= Division,  Division, (ToMonth - FromMonth + 1))
+			
+			Var Result = IF(Division <> 0, 'Project Master'[Project Hours] * Prorate / Division, BLANK())
+			
+			VAR IsInRange = OR(
+			    
+			    // FORMAT('Project Master'[Start date],"YYYYMM") >= MinValue,
+			    // FORMAT('Project Master'[End date], "YYYYMM") <= MaxValue
+			
+			    FORMAT('Project Master'[Start date],"YYYYMM") >= FromMonth,
+			    FORMAT('Project Master'[End date],"YYYYMM") >= ToMonth
+			)
+			
+			RETURN
+			IF(
+			    AND(IsInRange,Result), Result, 0
+			)
+			```
+		lineageTag: 570f7f56-23e2-47b3-9e0b-d80d464412c5
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Prorated Budget' = ```
+			
+			// VAR MinValue = CALCULATE(SUMMARIZE('DateCrossJoin',DateCrossJoin[Month From Number]),
+			// DateCrossJoin From Month]= SELECTEDVALUE(DateCrossJoin[From Month]))
+			//VAR MaxValue = CALCULATE(SUMMARIZE('DateCrossJoin',DateCrossJoin[Month To Number]),
+			//DateCrossJoin[To Month]= SELECTEDVALUE(DateCrossJoin[To Month]))
+			
+			Var FromMonth = SELECTEDVALUE(DateCrossJoin[From Month])
+			Var ToMonth = SELECTEDVALUE('DateCrossJoin'[To Month])
+			
+			VAR Division = DATEDIFF('Project Master'[Start date], 'Project Master'[End date], MONTH) + 1
+			
+			//VAR Prorate = IF(MaxValue - MinValue + 1 >= Division, Division, (MaxValue - MinValue + 1))
+			
+			VAR ProrateMonth = DATEDIFF(FromMonth, ToMonth, MONTH)
+			
+			Var Prorate = IF(ProrateMonth +1 >= Division , Division, ProrateMonth + 1)
+			
+			Var Result = IF(Division <> 0, 'Project Master'[Project Budget] * Prorate / Division, BLANK())  
+			
+			VAR IsInRange = AND(
+			    
+			    // FORMAT('Project Master'[Start date],"YYYYMM") >= MinValue,
+			    // FORMAT('Project Master'[End date], "YYYYMM") <= MaxValue
+			
+			    'Project Master'[Start Date] >= FromMonth,
+			    'Project Master'[End Date] >= ToMonth
+			)
+			
+			RETURN
+			
+			IF(
+			    AND(IsInRange,Result), Result, 0
+			)
+			
+			// RETURN
+			// If(ISNUMBER(Result), Result, 0)
+			
+			```
+		formatString: 0
+		lineageTag: 5f525a1c-9006-4fde-996e-b1ec61755fab
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column ToleranceStatus =
+			
+			IF(
+			    [Prorated Budget] * 1.15 < [CostToBudget2],
+			    "Out of Tolerance",
+			    "Inside Tolerance"
+			)
+		lineageTag: 00f950d3-644e-43ec-a502-5bfa30f67c91
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gross Margin' = 'Project Master'[Prorated Budget] -'Project Master'[CostToBudget]
+		lineageTag: ede17a3c-d3f8-4405-889f-13c2d93d7d02
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Gross Margin %' = ```
+			
+			Var GM = ('Project Master'[Prorated Budget] - 'Project Master'[CostToBudget])/'Project Master'[Prorated Budget]
+			RETURN IF('Project Master'[Prorated Budget] = 0, 0, GM) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 2e5f6df0-ba93-4d49-927c-d704bcfcc10b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = User
+
+	column FormattedStartDate = FORMAT('Project Master'[Start date], "mmm yyyy")
+		dataType: dateTime
+		formatString: Mmm yyyy
+		lineageTag: a6f52856-9e84-480a-8525-23abd131772f
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 189ed2d6-f72e-49af-84ac-a6c6caa1eed3
+			defaultHierarchy: LocalDateTable_4ba22ad9-1777-4360-89aa-0a5ecf8b5133.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column FormattedEndDate = FORMAT('Project Master'[End date], "mmm yyyy")
+		dataType: dateTime
+		formatString: Mmm yyyy
+		lineageTag: bd2f9361-7573-4378-915c-4e4f1d801843
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: dc29ac82-5b9e-49d1-92f6-4a60df1cb0a8
+			defaultHierarchy: LocalDateTable_5fc009ba-e6a2-482f-84e1-7ca99805bd00.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 'Budget Blended Rate ($/hr) 1' = CALCULATE(DIVIDE(SUM('Project Master'[Project Budget]),SUM('Project Master'[Project Hours]),0))
+		lineageTag: 4a383fad-bc4c-42e7-9c08-133477c1615c
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Billable Bucket' = IF('Project Master'[Billable] = "Yes", "Billable", IF('Project Master'[Billable]="No", "UnBillable","PUD"))
+		lineageTag: c6422374-9349-46b7-be9e-131cd83c610c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Date Hierarchy'
+		lineageTag: e094a403-388a-4e6c-a15a-38be5cdbf8c9
+
+		level Month_End_Date
+			lineageTag: 79353d84-2ac5-4943-8325-3ac569bbdefe
+			column: Month_End_Date
+
+	partition 'Project Master' = m
+		mode: import
+		source =
+				let
+				    Source = SharePoint.Files("https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/", [ApiVersion = 15]),
+				    #"Filtered Rows" = Table.SelectRows(Source, each ([Folder Path] = "https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/") and ([Name] = "Project Master.xlsx")),
+				    #"Project Master xlsx_https://procdna sharepoint com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/" = #"Filtered Rows"{[Name="Project Master.xlsx",#"Folder Path"="https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/"]}[Content],
+				    #"Imported Excel Workbook" = Excel.Workbook(#"Project Master xlsx_https://procdna sharepoint com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/"),
+				    #"Project Master_Sheet" = #"Imported Excel Workbook"{[Item="Project Master",Kind="Sheet"]}[Data],
+				    #"Removed Top Rows" = Table.Skip(#"Project Master_Sheet",1),
+				    #"Removed Columns" = Table.RemoveColumns(#"Removed Top Rows",{"Column25", "Column26", "Column27"}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Columns", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Project Code", type text}, {"Project Name & Code", type text}, {"Project Name", type text}, {"Purchase Order of Client", type any}, {"Project Type", type text}, {"Billing Method", type text}, {"Billable", type text}, {"Client Code", type any}, {"Client", type text}, {"Owner", type text}, {"Project Hours", type number}, {"Budget Blended Rate ($/hr)", type number}, {"Budget in SOW", Int64.Type}, {"Direct Cost", type any}, {"Project Budget", type any}, {"Cost Blended Rate ($/hr)2", type text}, {"Project Cost", Int64.Type}, {"Planned Margin", type text}, {"Start date", type date}, {"End date", type date}, {"Extended Date", type text}, {"Aborted", type text}, {"Status", type text}, {"Clockify Status", type text}}),
+				    #"Removed Columns2" = Table.RemoveColumns(#"Changed Type",{"Budget in SOW", "Direct Cost"}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Removed Columns2",{{"Project Budget", type number}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Changed Type2",null,0,Replacer.ReplaceValue,{"Project Budget"}),
+				    #"Replaced Errors1" = Table.ReplaceErrorValues(#"Replaced Value", {{"Project Budget", 0}}),
+				    #"Replaced Errors" = Table.ReplaceErrorValues(#"Replaced Errors1", {{"Billable", "No"}})
+				in
+				    #"Replaced Errors"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

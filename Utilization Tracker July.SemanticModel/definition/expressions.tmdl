@@ -1,0 +1,46 @@
+expression Parameter1 = #"Sample File" meta [IsParameterQuery=true, BinaryIdentifier=#"Sample File", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: 5934d9c9-38cd-489b-b639-098622b1b3fe
+	queryGroup: 'Transform File from Query1\Helper Queries'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transform Sample File' =
+		let
+		    Source = Excel.Workbook(Parameter1, null, true),
+		    #"Project Master_Sheet" = Source{[Item="Project Master",Kind="Sheet"]}[Data]
+		in
+		    #"Project Master_Sheet"
+	lineageTag: 2e8c3be3-2ebc-4ea5-9970-79b1efece9a3
+	queryGroup: 'Transform File from Query1'
+
+	annotation PBI_ResultType = Table
+
+expression 'Sample File' =
+		let
+		    Source = SharePoint.Files("https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/", [ApiVersion = 15]),
+		    #"Filtered Rows" = Table.SelectRows(Source, each ([Folder Path] = "https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/") and ([Name] = "Project Master.xlsx")),
+		    #"Project Master xlsx_https://procdna sharepoint com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/" = #"Filtered Rows"{[Name="Project Master.xlsx",#"Folder Path"="https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/"]}[Content]
+		in
+		    #"Project Master xlsx_https://procdna sharepoint com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/"
+	lineageTag: 05a91d17-f3a5-4a86-b6cd-bac1f48b0c6b
+	queryGroup: 'Transform File from Query1\Helper Queries'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transform File' =
+		let
+		    Source = (Parameter1 as binary) => let
+		    Source = Excel.Workbook(Parameter1, null, true),
+		    #"Project Master_Sheet" = Source{[Item="Project Master",Kind="Sheet"]}[Data]
+		in
+		    #"Project Master_Sheet"
+		in
+		    Source
+	mAttributes: [ FunctionQueryBinding = "{""exemplarFormulaName"":""Transform Sample File""}" ]
+	lineageTag: b6807d7b-4978-4029-9f52-7575cf4915d5
+	queryGroup: 'Transform File from Query1\Helper Queries'
+
+	annotation PBI_ResultType = Function
+

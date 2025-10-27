@@ -1,0 +1,147 @@
+table 'Time Period'
+	lineageTag: 8afad0bb-1b8b-4b55-9594-9a0863c3bc44
+
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: ad4cd2a2-5df4-4a15-a26e-138530e926cd
+		summarizeBy: sum
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 3faf830a-c29b-4bc4-92e6-41f0e0b852f4
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column First_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cfdfd966-5b47-468f-affb-c3aa3ae1bbc2
+		summarizeBy: none
+		sourceColumn: First_date
+
+		variation Variation
+			isDefault
+			relationship: f88dd00e-76b6-4983-960b-a3f411fbf9ee
+			defaultHierarchy: LocalDateTable_549603f0-1284-4d98-853f-9e555db91449.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Last_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f9420871-a9b0-4995-a044-1e608a853d43
+		summarizeBy: none
+		sourceColumn: Last_date
+
+		variation Variation
+			isDefault
+			relationship: 2cac2626-0714-45c3-a3f7-ce5bdfa0aba1
+			defaultHierarchy: LocalDateTable_81db1fbb-03b9-4b5e-b113-39ced979b5cd.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Month_Year
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e4f81b03-6ccc-4dd6-b8b3-4d16a63ec225
+		summarizeBy: none
+		sourceColumn: Month_Year
+
+		variation Variation
+			isDefault
+			relationship: 5f53de3a-651a-434e-9df7-adb7a04c0124
+			defaultHierarchy: LocalDateTable_ad8e1bce-f5bc-4700-bebc-08bb3b6dc122.'Date Hierarchy'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Month Year'
+		dataType: string
+		lineageTag: 9afdf107-fb94-4800-8f13-5feee390a41f
+		summarizeBy: none
+		sourceColumn: Month Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthYearNumber
+		dataType: string
+		lineageTag: c2cba065-eb09-487c-a01a-99d0d2874744
+		summarizeBy: none
+		sourceColumn: MonthYearNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column WorkingDays = ```
+			
+			VAR StartDate = 'Time Period'[First_date]
+			VAR EndDate = 'Time Period'[Last_date]
+			RETURN
+			    CALCULATE(
+			        COUNTROWS(
+			            FILTER(
+			                CALENDAR(StartDate, EndDate),
+			                WEEKDAY([Date], 2) < 6  -- This keeps Monday to Friday as working days
+			            )
+			        )
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: bb589750-bd47-44db-a3ed-342aaabe1c45
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Hours in Month' = 'Time Period'[WorkingDays] * 8
+		formatString: 0
+		lineageTag: cc325db6-fec6-494b-b58d-aae0b270d496
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Time Period' = m
+		mode: import
+		source =
+				let
+				    Source = SharePoint.Files("https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/", [ApiVersion = 15]),
+				    #"Filtered Rows" = Table.SelectRows(Source, each ([Folder Path] = "https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/")),
+				    #"Time Period xlsx_https://procdna sharepoint com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/" = #"Filtered Rows"{[Name="Time Period.xlsx",#"Folder Path"="https://procdna.sharepoint.com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/"]}[Content],
+				    #"Imported Excel Workbook" = Excel.Workbook(#"Time Period xlsx_https://procdna sharepoint com/sites/00_ProcDNAAccounts/Shared Documents/General/20 Utilization/PowerBI Report Inputs/"),
+				    #"Time Period_Sheet" = #"Imported Excel Workbook"{[Item="Time Period",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Time Period_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Month", Int64.Type}, {"Year", Int64.Type}, {"First_date", type date}, {"Last_date", type date}, {"Month_Year", type date}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type", "MonthYearNumber", each let
+				    DateValue = [Month_Year], // Replace with the actual name of your date column
+				    MonthYear = Date.ToText(DateValue, "MMM yyyy")
+				in
+				    MonthYear),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Custom",{{"MonthYearNumber", "Month Year"}}),
+				    #"Added Custom1" = Table.AddColumn(#"Renamed Columns", "MonthYearNumber", each let
+				    MonthYearText = [Month Year], // Replace with the name of your MMM YYYY column
+				    DateValue = Date.FromText("01 " & MonthYearText), // Convert MMM YYYY to a date
+				    Year = Date.Year(DateValue),
+				    Month = Date.Month(DateValue),
+				    NumericFormat = Year * 100 + Month // Concatenate Year and Month as YYYYMM
+				in
+				    NumericFormat)
+				in
+				    #"Added Custom1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

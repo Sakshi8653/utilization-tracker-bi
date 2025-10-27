@@ -1,0 +1,40 @@
+table 'Last Refresh'
+	lineageTag: 49668569-91e1-4385-b703-9e3194733371
+
+	measure 'Last Refresh date' = VALUES('Last Refresh'[Date Time])
+		formatString: General Date
+		lineageTag: cc3b3190-c52e-4325-9ba4-05707492ffa9
+
+	measure 'Last Date' = DATE(2025,1,7)
+		formatString: Short Date
+		lineageTag: e422d4bb-d6f0-45c7-8711-6a3dc3d0efb7
+
+	column 'Date Time'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d0bb6ddd-5217-451e-9ae9-1835c4c02f0a
+		summarizeBy: none
+		sourceColumn: Date Time
+
+		variation Variation
+			isDefault
+			relationship: c1b329e6-6668-4f94-96f9-c3bba428ed4a
+			defaultHierarchy: LocalDateTable_80670a79-ff61-492a-9ee4-c9e3833a2e43.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Last Refresh' = m
+		mode: import
+		source =
+				let
+				    Source = DateTime.LocalNow(),
+				    #"Converted to Table" = #table(1, {{Source}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Converted to Table",{{"Column1", "Date Time"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Date Time", type datetime}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

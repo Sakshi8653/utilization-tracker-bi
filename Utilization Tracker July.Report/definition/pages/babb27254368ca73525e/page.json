@@ -1,0 +1,42 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "babb27254368ca73525e",
+  "displayName": "Duplicate of Team Wise Breakup",
+  "displayOption": "ActualSize",
+  "height": 800,
+  "width": 1470,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#E8EBFA'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visibility": "HiddenInViewMode",
+  "visualInteractions": [
+    {
+      "source": "f0f5cd44d53a553214fd",
+      "target": "1e86948ebe1fc2349c1e",
+      "type": "DataFilter"
+    }
+  ]
+}

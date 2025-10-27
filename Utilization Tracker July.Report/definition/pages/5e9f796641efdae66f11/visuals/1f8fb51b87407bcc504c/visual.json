@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "1f8fb51b87407bcc504c",
+  "position": {
+    "x": 1171,
+    "y": 25,
+    "z": 45000,
+    "height": 34.4845142129826,
+    "width": 56,
+    "tabOrder": 73000
+  },
+  "visualGroup": {
+    "displayName": "i box project drill hide",
+    "groupMode": "ScaleMode"
+  }
+}

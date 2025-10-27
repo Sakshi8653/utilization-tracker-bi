@@ -1,0 +1,33 @@
+table ClientList
+	lineageTag: c3cf36dc-d4de-48ad-b9b1-be46a7b1055d
+
+	column Client
+		lineageTag: 066514f1-6f0d-402b-a26e-4a640c1d7fcc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Client]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Name & Code'
+		lineageTag: 08a922e1-db30-4b14-8e44-a92d5da62fac
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Time Entry[Project Name & Code]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ClientList = calculated
+		mode: import
+		source = ```
+				
+				SUMMARIZE(
+				    'Time Entry',
+				    'Time Entry'[Client],
+				    'Time Entry'[Project Name & Code]
+				)
+				
+				```
+
+	annotation PBI_Id = bc60d9d93bce43ddbf54a153e793a218
+

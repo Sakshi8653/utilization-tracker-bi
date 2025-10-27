@@ -1,0 +1,236 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "5e9f796641efdae66f11",
+  "displayName": "Project Snap Drill",
+  "displayOption": "FitToPage",
+  "height": 680,
+  "width": 1270,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "3b69c9e86a6c53a1720e",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Project Master"
+              }
+            },
+            "Property": "Project Name"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "p",
+              "Entity": "Project Master",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "p"
+                          }
+                        },
+                        "Property": "Project Name"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'X4 Advisory and Other Engagement Support'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "74fe97920db5489de9db",
+    "type": "Drillthrough",
+    "parameters": [
+      {
+        "name": "94104287e797ce2aeddd",
+        "boundFilter": "3b69c9e86a6c53a1720e",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Project Master"
+              }
+            },
+            "Property": "Project Name"
+          }
+        }
+      }
+    ],
+    "acceptsFilterContext": "None"
+  },
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#E8EBFA'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visibility": "HiddenInViewMode",
+  "visualInteractions": [
+    {
+      "source": "bbd189c754a7bc9601dd",
+      "target": "57fd8a75590f24961576",
+      "type": "DataFilter"
+    },
+    {
+      "source": "dc6b6e330e284599ff92",
+      "target": "57fd8a75590f24961576",
+      "type": "DataFilter"
+    },
+    {
+      "source": "bbd189c754a7bc9601dd",
+      "target": "ae07212c6917e672860d",
+      "type": "NoFilter"
+    },
+    {
+      "source": "bbd189c754a7bc9601dd",
+      "target": "d32f748840afec11a6bb",
+      "type": "NoFilter"
+    },
+    {
+      "source": "dc6b6e330e284599ff92",
+      "target": "ae07212c6917e672860d",
+      "type": "DataFilter"
+    },
+    {
+      "source": "dc6b6e330e284599ff92",
+      "target": "d32f748840afec11a6bb",
+      "type": "NoFilter"
+    },
+    {
+      "source": "bbd189c754a7bc9601dd",
+      "target": "0e88cafeffa681b57bac",
+      "type": "DataFilter"
+    },
+    {
+      "source": "dc6b6e330e284599ff92",
+      "target": "0e88cafeffa681b57bac",
+      "type": "DataFilter"
+    },
+    {
+      "source": "bbd189c754a7bc9601dd",
+      "target": "43f74036dc9c6ffcda10",
+      "type": "DataFilter"
+    },
+    {
+      "source": "dc6b6e330e284599ff92",
+      "target": "43f74036dc9c6ffcda10",
+      "type": "DataFilter"
+    },
+    {
+      "source": "dc6b6e330e284599ff92",
+      "target": "4797ec2944ce083624ea",
+      "type": "DataFilter"
+    },
+    {
+      "source": "bbd189c754a7bc9601dd",
+      "target": "4797ec2944ce083624ea",
+      "type": "DataFilter"
+    },
+    {
+      "source": "dc6b6e330e284599ff92",
+      "target": "85b5515885bda561d970",
+      "type": "DataFilter"
+    },
+    {
+      "source": "bbd189c754a7bc9601dd",
+      "target": "85b5515885bda561d970",
+      "type": "DataFilter"
+    },
+    {
+      "source": "43f74036dc9c6ffcda10",
+      "target": "db3459678e8fda89368c",
+      "type": "DataFilter"
+    },
+    {
+      "source": "4797ec2944ce083624ea",
+      "target": "c37d8ab0784f30061298",
+      "type": "DataFilter"
+    },
+    {
+      "source": "43f74036dc9c6ffcda10",
+      "target": "c37d8ab0784f30061298",
+      "type": "NoFilter"
+    },
+    {
+      "source": "43f74036dc9c6ffcda10",
+      "target": "4797ec2944ce083624ea",
+      "type": "NoFilter"
+    },
+    {
+      "source": "db3459678e8fda89368c",
+      "target": "4797ec2944ce083624ea",
+      "type": "NoFilter"
+    },
+    {
+      "source": "db3459678e8fda89368c",
+      "target": "c37d8ab0784f30061298",
+      "type": "NoFilter"
+    },
+    {
+      "source": "c37d8ab0784f30061298",
+      "target": "43f74036dc9c6ffcda10",
+      "type": "NoFilter"
+    },
+    {
+      "source": "c37d8ab0784f30061298",
+      "target": "db3459678e8fda89368c",
+      "type": "NoFilter"
+    },
+    {
+      "source": "4797ec2944ce083624ea",
+      "target": "43f74036dc9c6ffcda10",
+      "type": "NoFilter"
+    },
+    {
+      "source": "4797ec2944ce083624ea",
+      "target": "db3459678e8fda89368c",
+      "type": "NoFilter"
+    }
+  ]
+}

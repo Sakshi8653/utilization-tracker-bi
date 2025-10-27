@@ -1,0 +1,83 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup 'Transform File from Query1'
+
+	annotation PBI_QueryGroupOrder = 15
+
+queryGroup 'Transform File from Query1\Helper Queries'
+
+	annotation PBI_QueryGroupOrder = 0
+
+annotation PBI_QueryOrder = ["Band Rate","Team","Project Master","Time Entry","Time Period","DimFromMonth","DimToMonth","Last Refresh","Time Entry 2","Parameter1","Transform Sample File","Sample File","Transform File"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DaxQueryView_Desktop","DevMode"]
+
+ref table DateTableTemplate_a0daf89d-e6ac-4901-82ef-55b5b13c878c
+ref table 'Band Rate'
+ref table LocalDateTable_a288e66f-9b26-4953-8933-b4285027d70f
+ref table Team
+ref table LocalDateTable_57f527cb-0599-4091-92fc-200c06c81e2c
+ref table LocalDateTable_2ea92e0e-6887-4580-9f2c-edd436d0801f
+ref table 'Project Master'
+ref table LocalDateTable_65494732-62e0-47af-8a76-d70ca612a02e
+ref table LocalDateTable_70107c39-c3a7-4309-ae2c-cba1b253bd58
+ref table 'Time Entry'
+ref table LocalDateTable_d9acf49b-c3f1-45e2-9ed1-26bcfb43fa55
+ref table 'Time Period'
+ref table LocalDateTable_549603f0-1284-4d98-853f-9e555db91449
+ref table LocalDateTable_81db1fbb-03b9-4b5e-b113-39ced979b5cd
+ref table LocalDateTable_ad8e1bce-f5bc-4700-bebc-08bb3b6dc122
+ref table DimFromMonth
+ref table DimToMonth
+ref table DateCrossJoin
+ref table Calendar
+ref table LocalDateTable_ebfabc9d-a129-4245-908d-62209f2af0a1
+ref table LocalDateTable_d85e356a-67b0-4fca-b34c-174aa5780c23
+ref table LocalDateTable_9e9a0c89-33b2-4431-b248-44ee8a05f8e2
+ref table LocalDateTable_efbe3782-2169-4ff7-972c-eff2f6b24202
+ref table LocalDateTable_fceefbda-ff33-4b45-be7f-ef36c6008b78
+ref table LocalDateTable_bb1cccb5-9f3d-44c6-9c45-e2aec41760c5
+ref table LocalDateTable_ace3f414-463e-48d7-b356-d94e117f1b02
+ref table 'Last Refresh'
+ref table LocalDateTable_80670a79-ff61-492a-9ee4-c9e3833a2e43
+ref table LocalDateTable_89c0dcb7-cfee-4a30-a801-6fefa67b7a07
+ref table LocalDateTable_0677c425-7be2-4c1d-a68d-ba5fe8fa6353
+ref table LocalDateTable_ca49b333-e143-4808-bde2-daca89af94a0
+ref table LocalDateTable_01656a44-12f7-4bda-b2e0-22dbe527e45a
+ref table LocalDateTable_e161a220-dcf9-4b48-958b-5059b5f0cdf9
+ref table LocalDateTable_4632ddae-8678-49a9-b086-48d02b02c895
+ref table LocalDateTable_0b36ef72-3a3d-4e59-945c-4aa06e119e71
+ref table LocalDateTable_67a83123-2b67-4cc3-99fd-79b85117ef34
+ref table LocalDateTable_73a2dcde-2d4c-4cc0-84df-cdc9f7d62bf6
+ref table 'Time Entry 2'
+ref table LocalDateTable_90044d43-f449-4e5c-ae14-74e583fdbb6f
+ref table StatusFilterTable
+ref table LocalDateTable_5fc009ba-e6a2-482f-84e1-7ca99805bd00
+ref table LocalDateTable_4ba22ad9-1777-4360-89aa-0a5ecf8b5133
+ref table Performance
+ref table ClientList
+ref table 'Team Member Testing'
+ref table LocalDateTable_7ffa8d99-2b19-45dc-8fa4-ff3c98ca1333
+ref table LocalDateTable_8c966a5d-3827-4d72-af06-9b1dc86bbb76
+ref table LocalDateTable_a23686c1-ec2b-46eb-8a09-5f22de5147cb
+ref table LocalDateTable_f62cf398-3d96-4038-b321-70d72c10cdb7
+ref table LocalDateTable_15c0f136-c63b-489d-92ea-4043b04d3789
+ref table LocalDateTable_61c0af5a-b8c4-4553-b42c-1961aa4eff4e
+ref table LocalDateTable_3ce51aae-1851-432e-a546-0e41e3d803bc
+ref table LocalDateTable_5e047bec-d317-4610-b176-ee017fb63a93
+ref table LocalDateTable_2c3d8d18-6233-4688-a6af-565a0dc774e7
+ref table LocalDateTable_168b11e4-a420-4a24-a056-7697ce711c6f
+ref table LocalDateTable_30334e99-018a-47f1-958e-d48eed003a00
+ref table LocalDateTable_3c028714-d95d-4282-81c8-21dc1b2f1d29
+ref table LocalDateTable_c91ebdc9-e1fa-428d-92a3-fc9005ba8516
+
+ref cultureInfo en-US
+

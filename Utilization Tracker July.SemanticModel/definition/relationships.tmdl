@@ -1,0 +1,249 @@
+relationship 5b30be08-7983-4bf8-8f19-ff1fb8d1d190
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Band Rate'.'Effective from'
+	toColumn: LocalDateTable_a288e66f-9b26-4953-8933-b4285027d70f.Date
+
+relationship 20c4ddbe-d0e5-4438-87da-145deda5b0b6
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Team.'Exit Date'
+	toColumn: LocalDateTable_57f527cb-0599-4091-92fc-200c06c81e2c.Date
+
+relationship cb8a1602-2b18-4e2f-81d6-4c4093658eac
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Team.Calculation_Exit_Date
+	toColumn: LocalDateTable_2ea92e0e-6887-4580-9f2c-edd436d0801f.Date
+
+relationship f2fa387c-33f1-4515-aea8-51da36cfd405
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Project Master'.'Start date'
+	toColumn: LocalDateTable_65494732-62e0-47af-8a76-d70ca612a02e.Date
+
+relationship a4e368b4-5e99-410b-b2f0-8f5174cab758
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Project Master'.'End date'
+	toColumn: LocalDateTable_70107c39-c3a7-4309-ae2c-cba1b253bd58.Date
+
+relationship be4f3ab6-563e-4cb6-8e5e-52da0e5ea880
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Project Master'.Month_End_Date
+	toColumn: LocalDateTable_d9acf49b-c3f1-45e2-9ed1-26bcfb43fa55.Date
+
+relationship f88dd00e-76b6-4983-960b-a3f411fbf9ee
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Period'.First_date
+	toColumn: LocalDateTable_549603f0-1284-4d98-853f-9e555db91449.Date
+
+relationship 2cac2626-0714-45c3-a3f7-ce5bdfa0aba1
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Period'.Last_date
+	toColumn: LocalDateTable_81db1fbb-03b9-4b5e-b113-39ced979b5cd.Date
+
+relationship 5f53de3a-651a-434e-9df7-adb7a04c0124
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Period'.Month_Year
+	toColumn: LocalDateTable_ad8e1bce-f5bc-4700-bebc-08bb3b6dc122.Date
+
+relationship de64770c-a2ae-4b7e-d915-89ed1dc96f7c
+	crossFilteringBehavior: bothDirections
+	fromColumn: DateCrossJoin.MonthYearNumber
+	toColumn: 'Time Period'.MonthYearNumber
+
+relationship 43ce9be9-0b91-474b-a86a-209f734ae0b3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DateCrossJoin.'From Month'
+	toColumn: LocalDateTable_ebfabc9d-a129-4245-908d-62209f2af0a1.Date
+
+relationship d3303e24-bf10-49f9-b876-04b16e85a05e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DateCrossJoin.To_Month
+	toColumn: LocalDateTable_d85e356a-67b0-4fca-b34c-174aa5780c23.Date
+
+relationship 1fc609ca-3b0d-4f76-bfb0-d109e35cd3f4
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DateCrossJoin.MonthYearDate
+	toColumn: LocalDateTable_9e9a0c89-33b2-4431-b248-44ee8a05f8e2.Date
+
+relationship c7b5d837-d70a-44ac-a161-18cc73ecd575
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Team.'Joining Date'
+	toColumn: LocalDateTable_efbe3782-2169-4ff7-972c-eff2f6b24202.Date
+
+relationship 682af40c-11dd-45f3-9449-72ac842d9784
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry'.Month-Year-Start
+	toColumn: LocalDateTable_fceefbda-ff33-4b45-be7f-ef36c6008b78.Date
+
+relationship fc780edc-5b9f-49d2-a69a-1f092dff04f9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry'.Month-Year-End
+	toColumn: LocalDateTable_bb1cccb5-9f3d-44c6-9c45-e2aec41760c5.Date
+
+relationship b4c79701-75ec-43c0-8598-e5cc56a523fc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry'.Week-End-Date
+	toColumn: LocalDateTable_ace3f414-463e-48d7-b356-d94e117f1b02.Date
+
+relationship b38829aa-4f46-1e67-3039-6efd868d14f1
+	fromColumn: 'Time Entry'.MonthYearNumber
+	toColumn: 'Time Period'.MonthYearNumber
+
+relationship c1b329e6-6668-4f94-96f9-c3bba428ed4a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Last Refresh'.'Date Time'
+	toColumn: LocalDateTable_80670a79-ff61-492a-9ee4-c9e3833a2e43.Date
+
+relationship 39eb51b6-455a-449f-8743-81eba8bd5d6f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Calendar.Date
+	toColumn: LocalDateTable_89c0dcb7-cfee-4a30-a801-6fefa67b7a07.Date
+
+relationship 0debcf7a-f7e8-41dc-82b3-04e8d4e6d6c9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DimToMonth.Last_date
+	toColumn: LocalDateTable_0677c425-7be2-4c1d-a68d-ba5fe8fa6353.Date
+
+relationship 20210d64-f1bd-4254-a878-4d3caddac2ad
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DateCrossJoin.'To Month'
+	toColumn: LocalDateTable_ca49b333-e143-4808-bde2-daca89af94a0.Date
+
+relationship 05516f6d-8bf2-4f29-b7b2-557bdda56b79
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Team.'Min Joining Date'
+	toColumn: LocalDateTable_01656a44-12f7-4bda-b2e0-22dbe527e45a.Date
+
+relationship 947e2948-0ade-4755-ab98-29882d9c45dc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Team.'Max Exit Date'
+	toColumn: LocalDateTable_e161a220-dcf9-4b48-958b-5059b5f0cdf9.Date
+
+relationship 4d2ac52d-095c-40b9-8ee5-99b612aa5c07
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry'.'Team.Joining Date'
+	toColumn: LocalDateTable_4632ddae-8678-49a9-b086-48d02b02c895.Date
+
+relationship 2799d6d0-1716-4272-a8d1-eeb67273f921
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry'.'Team.Exit Date'
+	toColumn: LocalDateTable_0b36ef72-3a3d-4e59-945c-4aa06e119e71.Date
+
+relationship 7ddae8f7-f357-4c71-8ed7-541f720d0b55
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry'.'Min Joining Date'
+	toColumn: LocalDateTable_67a83123-2b67-4cc3-99fd-79b85117ef34.Date
+
+relationship eec38ed4-4fff-4976-a420-7dd22af8a024
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry'.'Max Exit Date'
+	toColumn: LocalDateTable_73a2dcde-2d4c-4cc0-84df-cdc9f7d62bf6.Date
+
+relationship fddbe11b-450c-4592-b8f9-48034bbd0462
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry 2'.Week-End-Date
+	toColumn: LocalDateTable_90044d43-f449-4e5c-ae14-74e583fdbb6f.Date
+
+relationship ea32deb0-e092-2789-293a-3901d22c638c
+	fromColumn: 'Time Entry 2'.MonthYearNumber
+	toColumn: 'Time Period'.MonthYearNumber
+
+relationship 7de8cf04-17f3-4e9e-995e-efb9b9620492
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: Team.PK2
+	toColumn: 'Time Entry 2'.PK2
+
+relationship dc29ac82-5b9e-49d1-92f6-4a60df1cb0a8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Project Master'.FormattedEndDate
+	toColumn: LocalDateTable_5fc009ba-e6a2-482f-84e1-7ca99805bd00.Date
+
+relationship 189ed2d6-f72e-49af-84ac-a6c6caa1eed3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Project Master'.FormattedStartDate
+	toColumn: LocalDateTable_4ba22ad9-1777-4360-89aa-0a5ecf8b5133.Date
+
+relationship 22a996a8-cf43-4c7c-a31a-608112ad39c3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Team Member Testing'.Month-Year-Start
+	toColumn: LocalDateTable_7ffa8d99-2b19-45dc-8fa4-ff3c98ca1333.Date
+
+relationship 0cf6133b-8816-4183-94c0-6cab6ecfd7dc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Team Member Testing'.Month-Year-End
+	toColumn: LocalDateTable_8c966a5d-3827-4d72-af06-9b1dc86bbb76.Date
+
+relationship 406fd47e-506c-44f3-b4c9-cf1d78d459e7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Team Member Testing'.Week-End-Date
+	toColumn: LocalDateTable_a23686c1-ec2b-46eb-8a09-5f22de5147cb.Date
+
+relationship df402e96-0031-432a-8ec3-ff1f6635c0ab
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Team Member Testing'.'Team.Joining Date'
+	toColumn: LocalDateTable_f62cf398-3d96-4038-b321-70d72c10cdb7.Date
+
+relationship d12ee884-65aa-4d48-8219-d42bd3fe9ca6
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Team Member Testing'.'Team.Exit Date'
+	toColumn: LocalDateTable_15c0f136-c63b-489d-92ea-4043b04d3789.Date
+
+relationship f131f41a-bdac-482e-9355-b4729552baf6
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Team Member Testing'.'Min Joining Date'
+	toColumn: LocalDateTable_61c0af5a-b8c4-4553-b42c-1961aa4eff4e.Date
+
+relationship d6faf39f-0c42-43a6-888a-6ec44a2f0284
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Team Member Testing'.'Max Exit Date'
+	toColumn: LocalDateTable_3ce51aae-1851-432e-a546-0e41e3d803bc.Date
+
+relationship db1f271a-0619-7fd0-ad87-7abe8d500ddc
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: 'Team Member Testing'.Concat
+	toColumn: 'Time Entry'.Concat
+
+relationship f0bb0239-04a3-7d69-4ed1-c9220ad2abf8
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: 'Team Member Testing'.'Project Name & Code'
+	toColumn: ClientList.'Project Name & Code'
+
+relationship 06f1234b-ef5d-4e48-8eec-d42b86df6393
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry 2'.'Start Date Mod'
+	toColumn: LocalDateTable_5e047bec-d317-4610-b176-ee017fb63a93.Date
+
+relationship f30a054a-63d9-4ca3-adc5-ee030c87d53b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry 2'.'End Date Mod'
+	toColumn: LocalDateTable_2c3d8d18-6233-4688-a6af-565a0dc774e7.Date
+
+relationship AutoDetected_34729498-308f-4e2a-96e8-37402879f9dc
+	fromColumn: 'Time Entry 2'.'Project Code'
+	toColumn: 'Project Master'.'Project Code'
+
+relationship 4bbb2111-f9bf-4dc6-867d-758c7957adbc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry'.'Start Date Mod'
+	toColumn: LocalDateTable_168b11e4-a420-4a24-a056-7697ce711c6f.Date
+
+relationship 0bb2b92a-372b-424a-ab97-6a0e64575e49
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Entry'.'End Date Mod'
+	toColumn: LocalDateTable_30334e99-018a-47f1-958e-d48eed003a00.Date
+
+relationship 61cfe50f-8f92-44c4-b899-c7670439226f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Team Member Testing'.'Start Date Mod'
+	toColumn: LocalDateTable_3c028714-d95d-4282-81c8-21dc1b2f1d29.Date
+
+relationship cb7249c1-e973-43c4-acb1-6189beec70cb
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Team Member Testing'.'End Date Mod'
+	toColumn: LocalDateTable_c91ebdc9-e1fa-428d-92a3-fc9005ba8516.Date
+
+relationship AutoDetected_bf9eb1fc-4202-4edb-8c84-c477723929e4
+	fromColumn: 'Time Entry'.'Project Code'
+	toColumn: 'Project Master'.'Project Code'
+

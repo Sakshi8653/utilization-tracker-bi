@@ -1,0 +1,563 @@
+table 'Time Entry 2'
+	lineageTag: 7a97901c-a317-41ee-b6dd-96d4d5df28aa
+
+	measure CostToBudget2 = ```
+			
+			ROUND(
+			    CALCULATE(
+			        IF(ISBLANK(SUM('Time Entry 2'[Cost to Budget])),0,SUM('Time Entry 2'[Cost to Budget]))
+			    ),0)
+			
+			
+			
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: a52fdbe3-d458-4579-b6db-02b7fd6b1177
+
+	measure 'Time Entries Note' = ```
+			
+			IF(
+			    FORMAT(MAX(DateCrossJoin[To Month]), "YYYYMM") > FORMAT(MAX('Project Master'[End date]), "YYYYMM") &&
+			    NOT(ISBLANK(CALCULATE('Time Entry 2'[CostToBudget2]))),
+			    "Time entries have been recorded after project end date", 
+			    ""
+			)
+			
+			```
+		lineageTag: 9113686f-e571-4ad0-ab37-bf3afbe1c167
+
+	measure 'Max band 1' = MAX('Time Entry'[Team.Band])
+		lineageTag: a8e06504-66f4-4852-bb06-3bbca0a53f61
+
+	measure test_dur_dec = IF(ISBLANK(SUM('Time Entry 2'[Duration (decimal)])),0,SUM('Time Entry 2'[Duration (decimal)]))
+		formatString: #,0
+		lineageTag: 64777d9b-a6aa-45a8-bb36-1454c5d15ef1
+
+	measure test_cost_budget
+		lineageTag: 98b620ed-f106-43aa-8842-7ce29aa9b919
+
+	measure 'US Hours' = ```
+			
+			CALCULATE(
+			    SUM('Time Entry 2'[Duration (decimal)]),
+			    'Team'[Country] = "US"
+			)
+			
+			```
+		lineageTag: 533d6bd8-c066-4ba8-a78d-76da87b1b49f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'India Hours' = ```
+			
+			CALCULATE(
+			    SUM('Time Entry 2'[Duration (decimal)]),
+			    'Team'[Country] = "India"
+			)
+			
+			```
+		lineageTag: 499c92b0-dd46-4f5d-ac8c-1da002f42d10
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Hours' = ```
+			[India Hours] + [US Hours]
+			
+			```
+		lineageTag: 53b16369-7e3c-406c-91c9-0e515128eef1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'India Utilization %' = ```
+			
+			DIVIDE([India Hours], [Total Hours])
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 5fab1956-abca-4240-a0ee-048d1fcfe924
+
+	measure 'US Utilization %' = ```
+			
+			DIVIDE([US Hours], [Total Hours])
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 36bc3c5e-43f8-48f1-b7f1-57ed18563198
+
+	measure CostToBudgetFiltered =
+			
+			VAR SelectedUser = SELECTEDVALUE('Time Entry 2'[User])
+			VAR SelectedMonth = SELECTEDVALUE('DateCrossJoin'[MonthYearDate])
+			VAR SelectedLocation = SELECTEDVALUE('Team'[Country])  -- Optional if needed
+			RETURN
+			CALCULATE(
+			   IF(
+			       ISBLANK(SUM('Time Entry 2'[Cost to Budget])),
+			       0,
+			       SUM('Time Entry 2'[Cost to Budget])
+			   ),
+			   'Time Entry 2'[User] = SelectedUser,
+			   'DateCrossJoin'[MonthYearDate] = SelectedMonth,
+			   'Team'[Country] = SelectedLocation  -- Include only if you need this level of filtering
+			)
+		lineageTag: 286dd242-34c6-443e-95c4-b37308e1a410
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure CostToBudgetDefault = ```
+			
+			
+			SUM('Time Entry'[Cost to Budget])
+			
+			
+			```
+		lineageTag: 5671aff3-f6e5-45c5-bc4b-a63d424c57e1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CostToBudget Flag' =
+			
+			var userselected = ISFILTERED('Time Entry 2'[User])
+			var band = ISFILTERED('Time Entry 2'[Band])
+			VAR loc = ISFILTERED(Team[Country])
+			
+			RETURN
+			IF(
+			    userselected ,[CostToBudgetFiltered],[CostToBudget2])
+		formatString: #,0
+		lineageTag: e91b6214-8341-46ce-b4b5-00c7853e2091
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Time Duration Filtered' =
+			
+			VAR SelectedUser = SELECTEDVALUE('Time Entry 2'[User])
+			VAR SelectedMonth = SELECTEDVALUE('DateCrossJoin'[MonthYearDate])
+			VAR SelectedLocation = SELECTEDVALUE('Team'[Country])  -- Optional if needed
+			RETURN
+			CALCULATE(
+			   IF(
+			       ISBLANK(SUM('Time Entry 2'[Cost to Budget])),
+			       0,
+			       SUM('Time Entry 2'[Cost to Budget])
+			   ),
+			   'Time Entry 2'[User] = SelectedUser,
+			   'DateCrossJoin'[MonthYearDate] = SelectedMonth,
+			   'Team'[Country] = SelectedLocation  -- Include only if you need this level of filtering
+			)
+		lineageTag: f87a741c-fc9f-4cda-a0ff-fd6814a75617
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure TotalHoursFiltered =
+			
+			VAR SelectedUser = SELECTEDVALUE('Time Entry 2'[User])
+			VAR SelectedMonth = SELECTEDVALUE('DateCrossJoin'[MonthYearDate])
+			VAR SelectedLocation = SELECTEDVALUE('Team'[Country])  -- Optional if needed
+			RETURN
+			CALCULATE(
+			   IF(
+			       ISBLANK(SUM('Time Entry 2'[Duration (decimal)])),
+			       0,
+			       SUM('Time Entry 2'[Duration (decimal)])
+			   ),
+			   'Time Entry 2'[User] = SelectedUser,
+			   'DateCrossJoin'[MonthYearDate] = SelectedMonth,
+			   'Team'[Country] = SelectedLocation  -- Include only if you need this level of filtering
+			)
+		lineageTag: 4bf59596-7b25-4628-ab24-08e01f517567
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Hours Flag' =
+			
+			var userselected = ISFILTERED('Time Entry 2'[User])
+			var band = ISFILTERED('Time Entry 2'[Band])
+			VAR loc = ISFILTERED(Team[Country])
+			
+			RETURN
+			IF(
+			    userselected ,[TotalHoursFiltered],[test_dur_dec])
+		formatString: #,0
+		lineageTag: a9dcfc88-9dfe-42c2-a2b1-ea3f05c0ca6b
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column 'Project Name & Code'
+		dataType: string
+		lineageTag: f90632de-a426-43a1-b222-fa92d0ba2305
+		summarizeBy: none
+		sourceColumn: Project Name & Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Billable-Clockify
+		dataType: string
+		lineageTag: cf8a5663-9db7-4621-801e-4e8336b99afb
+		summarizeBy: none
+		sourceColumn: Billable-Clockify
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Duration (h)'
+		dataType: string
+		lineageTag: 53367c42-e0ea-4328-8f4d-e9bd929ddb08
+		summarizeBy: none
+		sourceColumn: Duration (h)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Duration (decimal)'
+		dataType: double
+		formatString: #,0
+		lineageTag: 9a406532-0f85-42a2-a9cd-b11046d25d7a
+		summarizeBy: sum
+		sourceColumn: Duration (decimal)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column 'Billable Rate (USD)'
+		dataType: double
+		lineageTag: 7a56a4e4-8f3b-4696-99d0-97f73ea7fb56
+		summarizeBy: sum
+		sourceColumn: Billable Rate (USD)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Billable Amount (USD)'
+		dataType: double
+		lineageTag: 8ed2ba78-fdc3-4573-9492-0b5bee6bfbfe
+		summarizeBy: sum
+		sourceColumn: Billable Amount (USD)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Month-Year-Start
+		dataType: string
+		lineageTag: f75f463a-9a14-49c3-8974-2c19b1aae62e
+		summarizeBy: none
+		sourceColumn: Month-Year-Start
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month-Year-End
+		dataType: string
+		lineageTag: fdfe95a7-49e4-4602-8a27-7bef04940679
+		summarizeBy: none
+		sourceColumn: Month-Year-End
+
+		annotation SummarizationSetBy = Automatic
+
+	column Week-End-Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 2b24ff7d-3ed3-40a4-a47c-36715963943f
+		summarizeBy: none
+		sourceColumn: Week-End-Date
+
+		variation Variation
+			isDefault
+			relationship: fddbe11b-450c-4592-b8f9-48034bbd0462
+			defaultHierarchy: LocalDateTable_90044d43-f449-4e5c-ae14-74e583fdbb6f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column MonthYearNumber = ```
+			YEAR([Start Date Mod]) * 100 + MONTH([Start Date Mod])
+			
+			```
+		formatString: 0
+		lineageTag: d23b710d-72aa-4914-9e84-04abb5730022
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column PK2 = 'Time Entry 2'[Email] & "-" & 'Time Entry 2'[Band]
+		lineageTag: 494e039b-d3d5-4ab8-b237-8a0420743745
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Billable Hours_C' = ```
+			
+			     IF('Time Entry 2'[Billable] = "Yes", 
+			    'Time Entry 2'[Duration (decimal)],0)
+			```
+		lineageTag: d425cd43-fa17-49d8-a2e1-bfbd23b30593
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Billable Bucket' = IF('Time Entry 2'[Billable] = "Yes", "Billable", IF('Time Entry 2'[Billable]="No", "UnBillable","PUD"))
+		lineageTag: 7b8e11dd-8410-4aa3-ac89-022aaeb13748
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Client
+		dataType: string
+		lineageTag: 221cf027-e9af-447d-9bbf-615bf4578057
+		summarizeBy: none
+		sourceColumn: Client
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		dataType: string
+		lineageTag: 66501a09-3108-4cc4-ac6f-2c3a993dc5a7
+		summarizeBy: none
+		sourceColumn: Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column Task
+		dataType: string
+		lineageTag: 123fee10-2d9d-4b0e-a925-a1ffcda034d7
+		summarizeBy: none
+		sourceColumn: Task
+
+		annotation SummarizationSetBy = Automatic
+
+	column User
+		dataType: string
+		lineageTag: feb02357-df97-47b1-932f-2ed72e4e4665
+		summarizeBy: none
+		sourceColumn: User
+
+		annotation SummarizationSetBy = Automatic
+
+	column Email
+		dataType: string
+		lineageTag: f1097c44-16ff-42a2-a71f-2869a2983137
+		summarizeBy: none
+		sourceColumn: Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tags
+		dataType: string
+		lineageTag: 59e00a26-2aa7-4343-890a-a0d2ec3f7da3
+		summarizeBy: none
+		sourceColumn: Tags
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start Date'
+		dataType: string
+		lineageTag: a0bb76fc-c66d-4a19-9bd5-66fda13f7f6f
+		summarizeBy: none
+		sourceColumn: Start Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start Time'
+		dataType: string
+		lineageTag: 9a0cd6b8-0865-4795-befc-d8fa55285ba3
+		summarizeBy: none
+		sourceColumn: Start Time
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'End Date'
+		dataType: string
+		lineageTag: 9ccdd412-dd69-43be-afe2-edf30bab0620
+		summarizeBy: none
+		sourceColumn: End Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'End Time'
+		dataType: string
+		lineageTag: 68b52c53-d4b8-41ef-a362-40057bd30a24
+		summarizeBy: none
+		sourceColumn: End Time
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Type'
+		dataType: string
+		lineageTag: f4502279-6d6c-47e9-8dad-5a1e300cf7f6
+		summarizeBy: none
+		sourceColumn: Project Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Billable
+		dataType: string
+		lineageTag: 38b161ec-1eaf-4720-b563-6c5559f7aa9c
+		summarizeBy: none
+		sourceColumn: Billable
+
+		annotation SummarizationSetBy = Automatic
+
+	column Band
+		dataType: string
+		lineageTag: f9161cac-8362-46b4-b874-fbc47bb8704c
+		summarizeBy: none
+		sourceColumn: Band
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Band Number'
+		dataType: string
+		lineageTag: a940af5b-1743-4b74-8290-9a4dda98b87c
+		summarizeBy: none
+		sourceColumn: Band Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bill Rate'
+		dataType: double
+		lineageTag: 869e3813-5696-4418-845d-40fee073b5cb
+		summarizeBy: sum
+		sourceColumn: Bill Rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Cost Rate'
+		dataType: double
+		lineageTag: f676faad-dfb8-4446-bd95-bbce6bb8b20e
+		summarizeBy: sum
+		sourceColumn: Cost Rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Spent Budget'
+		dataType: double
+		lineageTag: d42969ea-301e-484f-876f-8e1cc5491ca3
+		summarizeBy: sum
+		sourceColumn: Spent Budget
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Cost to Budget'
+		dataType: double
+		lineageTag: a43ac460-488e-4a93-a781-a3fce63cddb8
+		summarizeBy: sum
+		sourceColumn: Cost to Budget
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Project Code'
+		dataType: string
+		lineageTag: 5440e146-c3f3-4071-8c9c-df5410b9f995
+		summarizeBy: none
+		sourceColumn: Project Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Check'
+		dataType: string
+		lineageTag: b300d0e1-eecc-4da6-9d5d-4b3eae16326c
+		summarizeBy: none
+		sourceColumn: Project Check
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Start Date Mod'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d5bab72f-8063-40d8-a8fc-b7ebcee3627f
+		summarizeBy: none
+		sourceColumn: Start Date Mod
+
+		variation Variation
+			isDefault
+			relationship: 06f1234b-ef5d-4e48-8eec-d42b86df6393
+			defaultHierarchy: LocalDateTable_5e047bec-d317-4610-b176-ee017fb63a93.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'End Date Mod'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ca691bd5-9ab5-496e-85bc-55f4b60a607c
+		summarizeBy: none
+		sourceColumn: End Date Mod
+
+		variation Variation
+			isDefault
+			relationship: f30a054a-63d9-4ca3-adc5-ee030c87d53b
+			defaultHierarchy: LocalDateTable_2c3d8d18-6233-4688-a6af-565a0dc774e7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Cost Band'
+		dataType: string
+		lineageTag: ac541bfd-c200-4b99-8772-d92291f711bb
+		summarizeBy: none
+		sourceColumn: Cost Band
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Time Entry 2' = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("A2813805280961-X4.snowflakecomputing.com","DW_WH",[Implementation="2.0"]),
+				    X4_DW_DEV_V2_Database = Source{[Name="X4_DW_DEV_V2",Kind="Database"]}[Data],
+				    DATAMART_Schema = X4_DW_DEV_V2_Database{[Name="DATAMART",Kind="Schema"]}[Data],
+				    TIME_ENTRY_TILL_JUNE_Table = DATAMART_Schema{[Name="TIME_ENTRY_TILL_JUNE",Kind="Table"]}[Data],
+				    RenamedColumns = Table.RenameColumns(TIME_ENTRY_TILL_JUNE_Table, {
+				        {"Project Name & Code", "Project Name & Code"},
+				        {"CLIENT", "Client"},
+				        {"DESCRIPTION", "Description"},
+				        {"TASK", "Task"},
+				        {"USER", "User"},
+				        {"EMAIL", "Email"},
+				        {"TAGS", "Tags"},
+				        {"Billable-Clockify", "Billable-Clockify"},
+				        {"START_DATE", "Start Date"},
+				        {"START_TIME", "Start Time"},
+				        {"END_DATE", "End Date"},
+				        {"END_TIME", "End Time"},
+				        {"Duration (h)", "Duration (h)"},
+				        {"Duration (decimal)", "Duration (decimal)"},
+				        {"Billable Rate (USD)", "Billable Rate (USD)"},
+				        {"Billable Amount (USD)", "Billable Amount (USD)"},
+				        {"PROJECT_TYPE", "Project Type"},
+				        {"BILLABLE", "Billable"},
+				        {"BAND", "Band"},
+				        {"BAND_NUMBER", "Band Number"},
+				        {"BILL_RATE", "Bill Rate"},
+				        {"COST_RATE", "Cost Rate"},
+				        {"SPENT_BUDGET", "Spent Budget"},
+				        {"COST_TO_BUDGET", "Cost to Budget"},
+				        {"Month-Year-Start", "Month-Year-Start"},
+				        {"Month-Year-End", "Month-Year-End"},
+				        {"Week-End-Date", "Week-End-Date"},
+				        {"PROJECT_CODE", "Project Code"},
+				        {"PROJECT_CHECK", "Project Check"},
+				        {"START_DATE_MOD", "Start Date Mod"},
+				        {"END_DATE_MOD", "End Date Mod"},
+				        {"COST_BAND", "Cost Band"}
+				    })
+				in
+				    RenamedColumns
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
